@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>담당 인물 설정</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 🟢 구글 폰트 '나눔 명조' 추가 -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        function confirmCharacter(characterName, characterPage) {
+            let answer = confirm(characterName + " 담당 플레이어가 맞습니까?");
+            if (answer) {
+                window.location.href = characterPage; // 해당 캐릭터 페이지로 이동
+            }
+        }
+    </script>      
+</head>
+<body class="index-page">  <!-- 🟢 여기 class="index-page" 추가! -->
+
+    <h1>봉인이 무너지기 전에 <br> 담당 인물 설정 페이지</h1>
+
+    <div class="character-container">
+        <div class="character">
+            <img src="길라.jpg" alt="길라">
+            <p>길라(15세, 남성)</p>
+            <button onclick="confirmCharacter('길라', 'character1.html')">길라 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="나린.jpg" alt="나린">
+            <p>나린(17세, 여성)</p>
+            <button onclick="confirmCharacter('나린', 'character2.html')">나린 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="다올.jpg" alt="다올">
+            <p>다올(19세, 남성)</p>
+            <button onclick="confirmCharacter('다올', 'character3.html')">다올 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="라온.jpg" alt="라온">
+            <p>라온(16세, 남성)</p>
+            <button onclick="confirmCharacter('라온', 'character4.html')">라온 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="마루.jpg" alt="마루">
+            <p>마루(18세, 남성)</p>
+            <button onclick="confirmCharacter('마루', 'character5.html')">마루 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="벼리.jpg" alt="벼리">
+            <p>벼리(19세, 여성)</p>
+            <button onclick="confirmCharacter('벼리', 'character6.html')">벼리 설정서 보기</button>
+        </div>
+
+        <div class="character">
+            <img src="새나.jpg" alt="새나">
+            <p>새나(17세, 여성)</p>
+            <button onclick="confirmCharacter('새나', 'character7.html')">새나 설정서 보기</button>
+        </div>
+    </div>
+
+</body>
+</html>

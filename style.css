@@ -1,0 +1,188 @@
+/* 기본 스타일 */
+body {
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-family: "Arial", sans-serif; /* 기본 폰트 */
+}
+
+/* 제목 스타일 */
+h1 {
+    font-size: 28px;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+/* 메인 페이지에서만 가로 정렬 */
+.index-page .character-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+/* 캐릭터 개별 스타일 */
+.character {
+    width: 250px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 캐릭터 이미지 스타일 */
+.character img {
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* 버튼 스타일 */
+button {
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 80%;
+    max-width: 200px;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+/* 세부 페이지 이미지 크기 조정 */
+.character-page img {
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: 20px auto;
+}
+
+/* 세부 페이지 왼쪽 정렬 */
+.character-page {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* "길라(15세, 남성)" 부분만 가운데 정렬 */
+.character-page .character-info {
+    text-align: center; /* 가운데 정렬 */
+    font-size: 18px;
+    font-weight: normal; /* 기본 글씨체 */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* 세부 페이지 제목 (h2) 왼쪽 정렬 */
+.character-page h2 {
+    font-size: 22px;
+    color: #FFD700;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #FFD700;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+/* 세부 페이지 섹션 박스 */
+.character-page .section-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+}
+
+/* 구분선 스타일 */
+.character-page .custom-hr {
+    border: none;
+    height: 2px;
+    background: white;
+    margin: 30px 0;
+    width: 100%;
+}
+
+/* 등장인물 정보 왼쪽 정렬 */
+.character-page .character-info {
+    text-align: left; /* 왼쪽 정렬 */
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* "이름:" 텍스트 숨기기 */
+.character-page .character-info strong {
+    display: none; /* "이름:" 텍스트 숨기기 */
+}
+
+/* 등장인물 이름의 굵은 글씨 제거 */
+.character-page .character-info li strong {
+    font-weight: normal; /* 이름의 굵은 글씨 제거 */
+}
+
+/* 등장인물 정보 리스트 스타일 */
+.character-page .character-info li {
+    margin-bottom: 10px;
+}
+
+/* "이름:" 텍스트 숨기지 않고, 굵게만 제거 */
+.character-page .character-info strong {
+    font-weight: normal; /* "이름:" 굵게 제거 */
+}
+
+/* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
+.character-page p,
+.character-page ul,
+.character-page li {
+    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    text-align: justify;  /* 양쪽 정렬 */
+    font-weight: normal;  /* 기본 글씨체 */
+    font-size: 12px;  /* 기본 글씨 크기 */
+    line-height: 1.8;  /* 줄 간격 설정 */
+    margin-bottom: 20px;  /* 각 문단 간격 */
+}
+
+/* 세부 페이지의 버튼 가운데 정렬 */
+.character-page .button-container {
+    text-align: center; /* 버튼을 가운데 정렬 */
+    margin-top: 20px; /* 버튼 위쪽 간격 */
+}
+
+/* 버튼 스타일 */
+button {
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 80%;
+    max-width: 200px;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: gray;
+}
