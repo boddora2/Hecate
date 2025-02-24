@@ -32,6 +32,17 @@ h1 {
     padding: 20px;
 }
 
+/* 메인 페이지 주의 문구 스타일 */
+.index-page .main-notice {
+    background: none;  /* 배경 없음 */
+    font-size: 1.2em;  /* 글자 크기 키우기 */
+    font-weight: bold;  /* 굵게 */
+    color: #FFD700;  /* 옐로우 노랑 (강조) */
+    text-align: center;  /* 가운데 정렬 */
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
 /* 캐릭터 개별 스타일 */
 .character {
     width: 250px;
@@ -142,6 +153,28 @@ button:hover {
     display: none; /* "이름:" 텍스트 숨기기 */
 }
 
+/* 길라 플레이어 안내 - 부제목 스타일 */
+.character-page .player-notice-title {
+    font-size: 20px;  /* 제목 크기 키우기 */
+    font-weight: bold;  /* 굵게 */
+    color: #FFD700;  /* 골드 색상 (강조) */
+    text-align: center;  /* ✅ 가운데 정렬 유지 */
+    margin-top: 20px;  /* 위쪽 여백 */
+    margin-bottom: 5px;  /* 아래쪽 여백 */
+    display: block;  /* ✅ 블록 요소로 변경 → 가운데 정렬 정상 작동 */
+    padding-bottom: 5px;  /* 구분선과 간격 */
+    width: 100%;  /* ✅ 전체 너비 차지 */
+    border-bottom: none;  /* ✅ 밑줄 제거 */
+}
+
+/* 길라 플레이어 안내 - 내용 스타일 */
+.character-page .player-notice-text {
+    font-size: 16px;  /* 글자 크기 */
+    font-weight: normal;  /* 기본 글씨체 */
+    text-align: center;  /* 가운데 정렬 */
+    margin-bottom: 20px;  /* 아래쪽 여백 */
+}
+
 /* 등장인물 이름의 굵은 글씨 제거 */
 .character-page .character-info li strong {
     font-weight: normal; /* 이름의 굵은 글씨 제거 */
@@ -150,11 +183,6 @@ button:hover {
 /* 등장인물 정보 리스트 스타일 */
 .character-page .character-info li {
     margin-bottom: 10px;
-}
-
-/* "이름:" 텍스트 숨기지 않고, 굵게만 제거 */
-.character-page .character-info strong {
-    font-weight: normal; /* "이름:" 굵게 제거 */
 }
 
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
