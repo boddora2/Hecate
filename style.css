@@ -1,9 +1,15 @@
-/* 기본 스타일 */
+/* 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+html {
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
 body {
     background-color: black;
     color: white;
     text-align: center;
-    font-family: "Arial", sans-serif; /* 기본 폰트 */
 }
 
 /* 제목 스타일 */
@@ -14,6 +20,7 @@ h1 {
     margin-top: 30px;
     margin-bottom: 20px;
     padding: 10px 0;
+    font-family: 'Nanum Gothic', sans-serif;
 }
 
 /* 메인 페이지에서만 가로 정렬 */
@@ -45,7 +52,7 @@ h1 {
 
 /* 버튼 스타일 */
 button {
-    font-family: "Arial", sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
     background-color: white;
     color: black;
@@ -75,6 +82,7 @@ button:hover {
 
 /* 세부 페이지 왼쪽 정렬 */
 .character-page {
+    font-family: 'Nanum Myeongjo', serif;
     text-align: left;
     padding-left: 20px;
     padding-right: 20px;
@@ -150,8 +158,19 @@ button:hover {
 }
 
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
-.character-page p,
-.character-page ul,
+.character-page p {
+    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    text-align: justify;  /* 양쪽 정렬 */
+    font-weight: normal;  /* 기본 글씨체 */
+    font-size: 12px;  /* 기본 글씨 크기 */
+    line-height: 1.8;  /* 줄 간격 설정 */
+    margin-bottom: 20px;  /* 각 문단 간격 */
+}
+.character-page ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 .character-page li {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
     text-align: justify;  /* 양쪽 정렬 */
@@ -169,7 +188,7 @@ button:hover {
 
 /* 버튼 스타일 */
 button {
-    font-family: "Arial", sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
     background-color: white;
     color: black;
