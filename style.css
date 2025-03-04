@@ -111,7 +111,7 @@ button:hover {
 /* 세부 페이지 제목 (h2) 왼쪽 정렬 */
 .character-page h2 {
     font-size: 22px;
-    color: #FFD700
+    color: #FFD700;
     text-align: left;
     font-weight: bold;
     margin-bottom: 10px;
