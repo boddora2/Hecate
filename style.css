@@ -93,7 +93,6 @@ button:hover {
 
 /* 세부 페이지 왼쪽 정렬 */
 .character-page {
-    font-family: 'Nanum Myeongjo', serif;
     text-align: left;
     padding-left: 20px;
     padding-right: 20px;
@@ -122,6 +121,8 @@ button:hover {
 
 /* 세부 페이지 섹션 박스 */
 .character-page .section-box {
+    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    word-spacing: -8px;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 15px;
     margin: 20px auto;
@@ -188,6 +189,7 @@ button:hover {
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    word-spacing: -8px;
     text-align: left;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -201,6 +203,7 @@ button:hover {
 }
 .character-page li {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    word-spacing: -8px;
     text-align: left;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
