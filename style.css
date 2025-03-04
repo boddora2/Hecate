@@ -188,7 +188,7 @@ button:hover {
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
-    text-align: justify;  /* 양쪽 정렬 */
+    text-align: left;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
     line-height: 1.8;  /* 줄 간격 설정 */
@@ -201,7 +201,7 @@ button:hover {
 }
 .character-page li {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
-    text-align: justify;  /* 양쪽 정렬 */
+    text-align: left;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
     line-height: 1.8;  /* 줄 간격 설정 */
