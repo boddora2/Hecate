@@ -74,6 +74,15 @@ h1 {
     margin: 20px auto;
 }
 
+/* 제작자 문구 */
+.made {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    text-align: center;  /* ✅ 가운데 정렬 유지 */
+}
+
 /* 버튼 스타일 */
 button {
     font-family: 'Nanum Gothic', sans-serif;
@@ -184,6 +193,17 @@ button:hover {
     letter-spacing: 1px; /* ✅ 글자 간격(자간) 추가 */
 }
 
+/* 플레이어 주의 문구 - 아래 글씨 스타일 */
+.character-page .player-notice-text2 {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: normal;  /* 기본 글씨체 */
+    text-align: center;  /* 가운데 정렬 */
+    margin-bottom: 20px;  /* 아래쪽 여백 */
+    letter-spacing: 1px; /* ✅ 글자 간격(자간) 추가 */ 
+    color: #FFD700;  /* 골드 색상 (강조) */
+    font-weight: bold;  /* 굵게 */    
+}
+
 /* 등장인물 이름의 굵은 글씨 제거 */
 .character-page .character-info li strong {
     font-weight: normal; /* 이름의 굵은 글씨 제거 */
@@ -194,10 +214,19 @@ button:hover {
     margin-bottom: 10px;
 }
 
+/* 세부 페이지의 제작자 문구 */
+.character-page .made {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    text-align: center;  /* ✅ 가운데 정렬 유지 */
+}
+
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
-    font-family: serif;  /* 원하는 글씨체로 변경 */
-    word-spacing: 0px;
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -205,14 +234,15 @@ button:hover {
     margin-bottom: 20px;  /* 각 문단 간격 */
 }
 .character-page ul {
-    font-family: serif;  /* 원하는 글씨체로 변경 */
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 .character-page li {
-    font-family: serif;  /* 원하는 글씨체로 변경 */
-    word-spacing: 0px;
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -251,7 +281,8 @@ button:hover {
 
 /* 기존 세부 페이지처럼 스타일 적용 */
 .section-box {
-    font-family: serif;  /* 원하는 글씨체 */
+    ffont-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;
     background-color: rgba(255, 255, 255, 0.1); /* 연한 배경 추가 */
     padding: 15px;
     margin: 20px auto;
@@ -291,8 +322,8 @@ button:hover {
 
 /* 메인 페이지 2, 3의 본문 스타일을 세부 페이지와 동일하게 적용 */
 .index-page .section-box {    
-    font-family: serif;  /* 세부 페이지와 동일한 글씨체 */
-    word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;  /* 글자 간격을 좁게 조정 */
     text-align: justify;  /* 양쪽 정렬 */
     font-size: 12px;  /* 글씨 크기 동일하게 */
     line-height: 1.8;  /* 줄 간격 동일하게 */
