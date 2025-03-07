@@ -250,3 +250,52 @@ button:hover {
 }
 
 
+/* 기존 세부 페이지처럼 스타일 적용 */
+.section-box {
+    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체 */
+    background-color: rgba(255, 255, 255, 0.1); /* 연한 배경 추가 */
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 700px;
+}
+
+/* 🔹 "주의 문구"에는 배경을 적용하지 않도록 수정 */
+.main-notice {
+    background: none;  /* ✅ 기존과 동일하게 배경 없음 */
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #FFD700;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+/* 페이지 내 이미지 스타일 (1차 & 2차 대본 이미지) */
+.page-image {
+    width: 250px;  /* 기존 세부 페이지와 동일한 크기 */
+    height: auto;  
+    display: block;  
+    margin: 20px auto;  /* 가운데 정렬 */
+    border-radius: 10px;  /* 모서리 둥글게 */
+}
+
+/* 구분선 스타일 */
+.custom-hr {
+    border: none;
+    height: 2px;
+    background: white;
+    margin: 30px 0;
+    width: 100%;
+}
+
+/* 메인 페이지 2, 3의 본문 스타일을 세부 페이지와 동일하게 적용 */
+.index-page .section-box {
+    font-family: "Nanum Myeongjo", serif;  /* 세부 페이지와 동일한 글씨체 */
+    word-spacing: -8px;  /* 글자 간격을 좁게 조정 */
+    text-align: justify;  /* 양쪽 정렬 */
+    font-size: 12px;  /* 글씨 크기 동일하게 */
+    line-height: 1.8;  /* 줄 간격 동일하게 */
+    font-weight: normal;  /* 기본 폰트 굵기 맞추기 */
+}
