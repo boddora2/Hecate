@@ -186,10 +186,20 @@
             <p>...이제 곧, 봉인 강화식이 시작된다.</p>
     </section>
     <section>
-        <!-- 버튼을 담을 div 추가 -->
+        <!-- 버튼 컨테이너 (버튼을 위아래로 배치) -->
         <div class="button-container">
             <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
+            <button onclick="confirmScriptAccess()">[1차] 대본 보기</button>
         </div>
+    
+        <script>
+            function confirmScriptAccess() {
+                let answer = confirm("[도입] 자기소개가 끝나셨습니까?");
+                if (answer) {
+                    window.location.href = "../main-page-2.html"; // 1차 대본 페이지로 이동
+                }
+            }
+        </script>        
     </section>
 </body>
 </html>

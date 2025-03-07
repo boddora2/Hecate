@@ -211,12 +211,6 @@ button:hover {
     margin-bottom: 20px;  /* 각 문단 간격 */
 }
 
-/* 세부 페이지의 버튼 가운데 정렬 */
-.character-page .button-container {
-    text-align: center; /* 버튼을 가운데 정렬 */
-    margin-top: 20px; /* 버튼 위쪽 간격 */
-}
-
 /* 버튼 스타일 */
 button {
     font-family: 'Nanum Gothic', sans-serif;
@@ -236,3 +230,13 @@ button {
 button:hover {
     background-color: gray;
 }
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* 버튼을 위아래로 배치 */
+    align-items: center; /* 버튼을 가운데 정렬 */
+    gap: 12px; /* 버튼 간 간격 추가 */
+    margin-top: 20px; /* 버튼 위쪽 여백 추가 */
+}
+
+

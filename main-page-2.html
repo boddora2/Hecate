@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[1차] 대본 보기</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function confirmNextScriptAccess() {
+            let answer = confirm("[1차] 전체 토론이 끝나셨습니까?");
+            if (answer) {
+                let finalWarning = confirm("마지막 경고!\n[1차] 전체 토론이 끝나지 않았다면 큰 스포일러가 됩니다.");
+                if (finalWarning) {
+                    window.location.href = "main-page-3.html"; // 2차 대본 페이지로 이동
+                }
+            }
+        }
+    </script>      
+</head>
+<body class="index-page">
+
+    <h1>📜 [1차] 대본 보기 📜</h1>
+
+    <!-- 🟢 위쪽 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 주의 문구 -->
+    <section class="section-box main-notice">
+        <p><strong>⚠️ 주의 ⚠️<br><br>[도입] 자기소개를 끝낸 후<br><br>[1차] 대본을 확인해 주세요.</strong></p>
+    </section>
+
+    <!-- 🟢 아래쪽 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 본문 내용 (추가 가능) -->
+    <section class="section-box">
+        <h2>📖 1차 대본 진행 안내</h2>
+        <p>[1차] 대본은 캐릭터들이 처음 만나서 서로를 탐색하고,  
+        사건의 기본적인 단서를 발견하는 단계입니다.<br>  
+        각자의 역할을 숙지한 후, 자기소개를 마친 뒤 대본을 확인해 주세요.</p>
+    </section>
+
+    <!-- 🟢 아래쪽 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟡 버튼 컨테이너 -->
+    <div class="button-container">
+        <button onclick="window.location.href='index.html'">메인 페이지로 돌아가기</button>
+        <button onclick="confirmNextScriptAccess()">[2차] 대본 보기</button>
+    </div>
+
+</body>
+</html>
