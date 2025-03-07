@@ -135,7 +135,7 @@ button:hover {
 
 /* 세부 페이지 섹션 박스 */
 .character-page .section-box {
-    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    font-family: 'Nanum Gothic', sans-serif;  /* 원하는 글씨체로 변경 */
     word-spacing: 0px;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 15px;
@@ -196,7 +196,7 @@ button:hover {
 
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
-    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    font-family: serif;  /* 원하는 글씨체로 변경 */
     word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
@@ -205,12 +205,13 @@ button:hover {
     margin-bottom: 20px;  /* 각 문단 간격 */
 }
 .character-page ul {
+    font-family: serif;  /* 원하는 글씨체로 변경 */
     list-style: none;
     padding: 0;
     margin: 0;
 }
 .character-page li {
-    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
+    font-family: serif;  /* 원하는 글씨체로 변경 */
     word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
@@ -250,7 +251,7 @@ button:hover {
 
 /* 기존 세부 페이지처럼 스타일 적용 */
 .section-box {
-    font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체 */
+    font-family: serif;  /* 원하는 글씨체 */
     background-color: rgba(255, 255, 255, 0.1); /* 연한 배경 추가 */
     padding: 15px;
     margin: 20px auto;
@@ -290,7 +291,7 @@ button:hover {
 
 /* 메인 페이지 2, 3의 본문 스타일을 세부 페이지와 동일하게 적용 */
 .index-page .section-box {    
-    font-family: "Nanum Myeongjo", serif;  /* 세부 페이지와 동일한 글씨체 */
+    font-family: serif;  /* 세부 페이지와 동일한 글씨체 */
     word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
     text-align: justify;  /* 양쪽 정렬 */
     font-size: 12px;  /* 글씨 크기 동일하게 */
@@ -303,7 +304,6 @@ button:hover {
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold; /* 굵기 설정 (선택) */
 }
-        
 
 /* 🎨 캐릭터별 색상 스타일 */
 .red { color: rgba(158, 90, 95); }    /* 길라 */
