@@ -299,3 +299,12 @@ button:hover {
     line-height: 1.8;  /* 줄 간격 동일하게 */
     font-weight: normal;  /* 기본 폰트 굵기 맞추기 */
 }
+
+.red-text { color: red; font-weight: bold; }      /* 빨강 */
+.orange-text { color: orange; font-weight: bold; }  /* 주황 */
+.yellow-text { color: #FFD700; font-weight: bold; } /* 노랑 (골드 계열) */
+.green-text { color: green; font-weight: bold; }    /* 초록 */
+.blue-text { color: blue; font-weight: bold; }      /* 파랑 */
+.purple-text { color: purple; font-weight: bold; }  /* 보라 */
+.pink-text { color: #FF69B4; font-weight: bold; }   /* 분홍 (핫핑크) */
+
