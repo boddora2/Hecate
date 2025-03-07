@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대본</title>
+    <style>
+        body {
+        background-color: black; /* ✅ 기존 배경색 유지 */
+        color: white; /* ✅ 글씨 색상을 흰색으로 변경 */
+        text-align: left; /* ✅ 기본 정렬 (왼쪽 정렬) */
+        padding: 20px; /* ✅ 텍스트 여백 추가 */
+        }
+        .red { color: rgb(158, 90, 95); }       
+        .orange { color: rgb(182, 128, 78); } 
+        .yellow { color: rgb(207, 171, 72); } 
+        .green { color: rgb(73, 92, 83); }   
+        .blue { color: rgb(66, 101, 149); }     
+        .purple { color: rgb(86, 65, 91); } 
+        .pink { color: rgb(194, 130, 170); }     
+
+        .script-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 0px; /* ✅ 요소 사이 간격 없애기 */
+            margin-bottom: 10px;
+            color: white; /* ✅ 글씨 색상을 흰색으로 변경 */
+        }
+
+        .script-name {
+            font-weight: bold;
+            width: auto; /*고정 너비 제거*/
+            min-width: 50px; /*최소한의 너비만 유지*/
+            flex-shrink: 0;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .script-text {
+            flex-grow: 1;
+            text-align: left;
+            padding-left: 0px;
+            font-size: 12px; 
+            color: white; /* ✅ 글씨 색상을 흰색으로 변경 */
+        }
+    </style>
+</head>
+<body>
+    <div class="script-line">
+        <span class="script-name red">길라</span>
+        <span class="script-text">여기서 기다려!</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name orange">나린</span>
+        <span class="script-text">무슨 일인데?</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name yellow">다올</span>
+        <span class="script-text">너희 둘, 또 싸우는 거야?</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name green">라온</span>
+        <span class="script-text">이런 분위기 별로인데...</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name blue">마루</span>
+        <span class="script-text">일단 진정하자.</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name purple">벼리</span>
+        <span class="script-text">나도 무슨 일인지 궁금해.</span>
+    </div>
+    <div class="script-line">
+        <span class="script-name pink">새나</span>
+        <span class="script-text">다들 사이좋게 지내야지~</span>
+    </div>
+</body>
+</html>

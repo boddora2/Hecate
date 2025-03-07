@@ -33,14 +33,17 @@ h1 {
 }
 
 /* 메인 페이지 주의 문구 스타일 */
-.index-page .main-notice {
-    background: none;  /* 배경 없음 */
-    font-size: 1.2em;  /* 글자 크기 키우기 */
+.main-notice {
+    font-size: 20px;  /* 제목 크기 키우기 */
     font-weight: bold;  /* 굵게 */
-    color: #FFD700;  /* 옐로우 노랑 (강조) */
-    text-align: center;  /* 가운데 정렬 */
-    margin-top: 10px;
-    padding: 10px 0;
+    color: #FFD700;  /* 골드 색상 (강조) */
+    text-align: center;  /* ✅ 가운데 정렬 유지 */
+    margin-top: 20px;  /* 위쪽 여백 */
+    margin-bottom: 5px;  /* 아래쪽 여백 */
+    display: block;  /* ✅ 블록 요소로 변경 → 가운데 정렬 정상 작동 */
+    padding-bottom: 5px;  /* 구분선과 간격 */
+    width: 100%;  /* ✅ 전체 너비 차지 */
+    border-bottom: none;  /* ✅ 밑줄 제거 */
 }
 
 /* 캐릭터 개별 스타일 */
@@ -108,7 +111,7 @@ button:hover {
     padding-right: 20px;
 }
 
-/* "길라(15세, 남성)" 부분만 가운데 정렬 */
+/* "캐릭터(나이, 성별)" 부분만 가운데 정렬 */
 .character-page .character-info {
     text-align: center; /* 가운데 정렬 */
     font-size: 18px;
@@ -120,6 +123,7 @@ button:hover {
 /* 세부 페이지 제목 (h2) 왼쪽 정렬 */
 .character-page h2 {
     font-size: 22px;
+    font-family: 'Nanum Gothic', sans-serif;
     color: #FFD700;
     text-align: left;
     font-weight: bold;
@@ -132,7 +136,7 @@ button:hover {
 /* 세부 페이지 섹션 박스 */
 .character-page .section-box {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
-    word-spacing: -8px;
+    word-spacing: 0px;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 15px;
     margin: 20px auto;
@@ -150,24 +154,16 @@ button:hover {
     width: 100%;
 }
 
-/* 등장인물 정보 왼쪽 정렬 */
-.character-page .character-info {
-    text-align: left; /* 왼쪽 정렬 */
-    font-size: 18px;
-    font-weight: normal;
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
 /* "이름:" 텍스트 숨기기 */
 .character-page .character-info strong {
     display: none; /* "이름:" 텍스트 숨기기 */
 }
 
-/* 길라 플레이어 안내 - 부제목 스타일 */
+/* 플레이어 안내 - 부제목 스타일 */
 .character-page .player-notice-title {
     font-size: 20px;  /* 제목 크기 키우기 */
     font-weight: bold;  /* 굵게 */
+    font-family: 'Nanum Gothic', sans-serif;
     color: #FFD700;  /* 골드 색상 (강조) */
     text-align: center;  /* ✅ 가운데 정렬 유지 */
     margin-top: 20px;  /* 위쪽 여백 */
@@ -178,12 +174,14 @@ button:hover {
     border-bottom: none;  /* ✅ 밑줄 제거 */
 }
 
-/* 길라 플레이어 안내 - 내용 스타일 */
+/* 플레이어 안내 - 내용 스타일 */
 .character-page .player-notice-text {
     font-size: 16px;  /* 글자 크기 */
+    font-family: 'Nanum Gothic', sans-serif;
     font-weight: normal;  /* 기본 글씨체 */
     text-align: center;  /* 가운데 정렬 */
     margin-bottom: 20px;  /* 아래쪽 여백 */
+    letter-spacing: 1px; /* ✅ 글자 간격(자간) 추가 */
 }
 
 /* 등장인물 이름의 굵은 글씨 제거 */
@@ -199,7 +197,7 @@ button:hover {
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
-    word-spacing: -8px;
+    word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -213,7 +211,7 @@ button:hover {
 }
 .character-page li {
     font-family: "Nanum Myeongjo", serif;  /* 원하는 글씨체로 변경 */
-    word-spacing: -8px;
+    word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -291,20 +289,47 @@ button:hover {
 }
 
 /* 메인 페이지 2, 3의 본문 스타일을 세부 페이지와 동일하게 적용 */
-.index-page .section-box {
+.index-page .section-box {    
     font-family: "Nanum Myeongjo", serif;  /* 세부 페이지와 동일한 글씨체 */
-    word-spacing: -8px;  /* 글자 간격을 좁게 조정 */
+    word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
     text-align: justify;  /* 양쪽 정렬 */
     font-size: 12px;  /* 글씨 크기 동일하게 */
     line-height: 1.8;  /* 줄 간격 동일하게 */
     font-weight: normal;  /* 기본 폰트 굵기 맞추기 */
 }
 
-.red-text { color: red; font-weight: bold; }      /* 빨강 */
-.orange-text { color: orange; font-weight: bold; }  /* 주황 */
-.yellow-text { color: #FFD700; font-weight: bold; } /* 노랑 (골드 계열) */
-.green-text { color: green; font-weight: bold; }    /* 초록 */
-.blue-text { color: blue; font-weight: bold; }      /* 파랑 */
-.purple-text { color: purple; font-weight: bold; }  /* 보라 */
-.pink-text { color: #FF69B4; font-weight: bold; }   /* 분홍 (핫핑크) */
+/* 메인 페이지 2, 3의 제목(h2) 스타일 */
+.section-box h2 {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: bold; /* 굵기 설정 (선택) */
+}
+        
 
+/* 🎨 캐릭터별 색상 스타일 */
+.red { color: rgba(158, 90, 95); }    /* 길라 */
+.orange { color: rgb(182, 128, 78); } /* 나린 */
+.yellow { color: rgb(207, 171, 72); } /* 다올 */
+.green { color: rgb(73, 92, 83); }    /* 라온 */
+.blue { color: rgb(66, 101, 149); }   /* 마루 */
+.purple { color: rgb(86, 65, 91); }   /* 벼리 */
+.pink { color: rgb(194, 130, 170); }  /* 새나 */
+
+/* 📜 대본 스타일 */
+.script-line {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.script-name {
+    font-weight: bold;
+    width: 80px;  /* 이름 부분 고정 크기 */
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.script-text {
+    flex-grow: 1;
+    text-align: left;
+    padding-left: 10px;
+}

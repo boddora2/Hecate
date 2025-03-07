@@ -27,8 +27,8 @@
     <br>
     <br>
     <!-- 🟢 주의 문구 -->
-    <section class="section-box main-notice">
-        <p><strong>⚠️ 주의 ⚠️<br><br>[도입] 자기소개를 끝낸 후<br><br>[1차] 대본을 확인해 주세요.</strong></p>
+    <section class="main-notice">
+        <p><strong>⚠️ 주의 ⚠️<br><br>[도입] 자기소개를 끝낸 후에<br><br>[1차] 대본을 확인해 주세요.</strong></p>
     </section>
     <br>
     <br>
@@ -38,10 +38,8 @@
 
     <!-- 🟢 본문 내용 (추가 가능) -->
     <section class="section-box">
-        <h2>📖 1차 대본 진행 안내</h2>
-        <p>[1차] 대본은 캐릭터들이 처음 만나서 서로를 탐색하고,  
-        사건의 기본적인 단서를 발견하는 단계입니다.<br>  
-        각자의 역할을 숙지한 후, 자기소개를 마친 뒤 대본을 확인해 주세요.</p>
+        <h2>기숙관</h2>
+        <iframe src="script1.html" width="100%" height="1200px" style="border: none;"></iframe>
     </section>
 
     <!-- 🟢 아래쪽 구분선 -->
@@ -53,5 +51,11 @@
         <button onclick="confirmNextScriptAccess()">[2차] 대본 보기</button>
     </div>
 
+    <script>
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
+    </script>
+    
 </body>
 </html>
