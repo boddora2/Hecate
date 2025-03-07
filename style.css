@@ -221,6 +221,7 @@ button:hover {
     color: white;
     font-size: 14px;
     text-align: center;  /* ✅ 가운데 정렬 유지 */
+    word-spacing: 0px;
 }
 
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
