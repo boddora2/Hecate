@@ -338,13 +338,13 @@ button:hover {
 }
 
 /* 🎨 캐릭터별 색상 스타일 */
-.red { color: rgba(158, 90, 95); }    /* 길라 */
-.orange { color: rgb(182, 128, 78); } /* 나린 */
-.yellow { color: rgb(207, 171, 72); } /* 다올 */
-.green { color: rgb(73, 92, 83); }    /* 라온 */
-.blue { color: rgb(66, 101, 149); }   /* 마루 */
-.purple { color: rgb(86, 65, 91); }   /* 벼리 */
-.pink { color: rgb(194, 130, 170); }  /* 새나 */
+    .red { color: rgb(200, 60, 70); }       
+    .orange { color: rgb(220, 140, 80); } 
+    .yellow { color: rgb(230, 190, 90); } 
+    .green { color: rgb(100, 160, 100); }   
+    .blue { color: rgb(90, 150, 220); }     
+    .purple { color: rgb(130, 80, 160); } 
+    .pink { color: rgb(220, 140, 190); } 
 
 /* 📜 대본 스타일 */
 .script-line {
