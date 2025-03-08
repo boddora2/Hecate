@@ -57,7 +57,7 @@
     <div id="script-container"></div>
 
     <script>
-        // 대본 데이터
+        // 🎭 대본 데이터
         const scriptData = [
             "🕛 00:30 - 기숙관",
             "기숙관 중앙 탁자 위 촛불이 흔들리며 어둠을 밀어낸다. 모두가 둘러앉아 서로의 얼굴을 살핀다. 긴장된 침묵이 흐르다. 벼리가 깊은 숨을 들이쉬며 떨리는 목소리로 입을 연다.",
@@ -119,10 +119,9 @@
             "벼리: 『제가… 제가 봉인을 완성할 방법을 반드시 알아낼게요. 그리고 언니를 살해한 사람을 찾아주세요. 여차하면… 그 사람의 생명력을 이용해서라도 봉인을 완성할 겁니다.』",
             "탁자 위 촛불이 강하게 흔들리며 불꽃이 약해졌다가 다시 살아난다.",
             "라온: 『…봉인이 정말 약해지고 있는 건가?』",
-            "마루: 『서두르자. 시간이 없어.』"
-            "모두가 자리에서 일어난다. 각자의 얼굴에는 복잡한 감정이 어려 있다. 두려움, 의심, 결의, 그리고 숨겨진 비밀들…"
+            "마루: 『서두르자. 시간이 없어.』",
+            "모두가 자리에서 일어난다. 각자의 얼굴에는 복잡한 감정이 어려 있다. 두려움, 의심, 결의, 그리고 숨겨진 비밀들…",
         ];
-
 
         // 캐릭터별 색상 매핑
         const characterColors = {
@@ -135,36 +134,38 @@
             "새나": "pink"
         };
 
-        const scriptContainer = document.getElementById("script-container");
+        // 🔹 JavaScript 실행 보장 (DOMContentLoaded 사용)
+        document.addEventListener("DOMContentLoaded", function () {
+            const scriptContainer = document.getElementById("script-container");
+            if (!scriptContainer) return; // 오류 방지
 
-        scriptData.forEach(line => {
-            const scriptLine = document.createElement("div");
+            scriptData.forEach(line => {
+                const scriptLine = document.createElement("div");
 
-            // 대사인지 지문인지 구별
-            const match = line.match(/^(\S+): 『(.+)』$/);
-            if (match) {
-                const character = match[1];
-                const dialogue = match[2];
+                const match = line.match(/^([\p{L}]+): 『(.+)』$/u);
+                if (match) {
+                    const character = match[1];
+                    const dialogue = match[2];
 
-                scriptLine.classList.add("script-line");
+                    scriptLine.classList.add("script-line");
 
-                const nameSpan = document.createElement("span");
-                nameSpan.classList.add("script-name", characterColors[character] || "");
-                nameSpan.textContent = character;
+                    const nameSpan = document.createElement("span");
+                    nameSpan.classList.add("script-name", characterColors[character] || "");
+                    nameSpan.textContent = character;
 
-                const textSpan = document.createElement("span");
-                textSpan.classList.add("script-text");
-                textSpan.textContent = `: ${dialogue}`;
+                    const textSpan = document.createElement("span");
+                    textSpan.classList.add("script-text");
+                    textSpan.textContent = `: ${dialogue}`;
 
-                scriptLine.appendChild(nameSpan);
-                scriptLine.appendChild(textSpan);
-            } else {
-                // 지문(서술) 처리
-                scriptLine.classList.add("direction");
-                scriptLine.textContent = line;
-            }
+                    scriptLine.appendChild(nameSpan);
+                    scriptLine.appendChild(textSpan);
+                } else {
+                    scriptLine.classList.add("direction");
+                    scriptLine.textContent = line;
+                }
 
-            scriptContainer.appendChild(scriptLine);
+                scriptContainer.appendChild(scriptLine);
+            });
         });
     </script>
 </body>
