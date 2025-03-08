@@ -354,14 +354,27 @@ button:hover {
 }
 
 .script-name {
+    font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
+    font-size: 14px;  /* 이름도 살짝 키움 */
     width: 80px;  /* 이름 부분 고정 크기 */
+    min-width: 50px;
     flex-shrink: 0;
     text-align: left;
 }
 
 .script-text {
+    font-family: 'Nanum Gothic', sans-serif;
     flex-grow: 1;
     text-align: left;
     padding-left: 10px;
+    font-size: 14px;  /* 대사 크기 키움 */
+    color: white;
+}
+
+.direction {
+    font-style: italic;
+    color: rgb(200, 200, 200);
+    margin: 10px 0;
+    font-size: 12px;  /* 지문 크기 줄임 */
 }
