@@ -38,7 +38,7 @@
     <!-- 🟢 본문 내용 (추가 가능) -->
     <section class="section-box">
         <h2>기숙관</h2>
-        <iframe src="script1.html" width="100%" height="1200px" style="border: none;"></iframe>
+        <iframe src="script1.html?v=" + new Date().getTime()" id="scriptFrame" width="100%" height="1200px" style="border: none;" onload="resizeIframe(this)"></iframe>
     </section>
 
     <!-- 🟡 버튼 컨테이너 -->
@@ -48,9 +48,11 @@
     </div>
 
     <script>
-        function resizeIframe(obj) {
+    function resizeIframe(obj) {
+        setTimeout(() => { 
             obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-        }
+        }, 500);
+    }
     </script>
 
 <!-- 🟢 구분선 -->
