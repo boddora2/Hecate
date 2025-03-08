@@ -349,8 +349,10 @@ button:hover {
 /* 📜 대본 스타일 */
 .script-line {
     display: flex;
+    gap: 10px;  /* 대사 이름과 텍스트 사이 간격 늘림 */
     align-items: flex-start;
     margin-bottom: 10px;
+    padding: 5px 0; /* 대사 간 여백 추가 */
 }
 
 .script-name {
@@ -375,6 +377,6 @@ button:hover {
 .direction {
     font-style: italic;
     color: rgb(200, 200, 200);
-    margin: 10px 0;
+    margin: 20px 0; /* 지문 위아래 간격 더 넓힘 */
     font-size: 12px;  /* 지문 크기 줄임 */
 }
