@@ -338,13 +338,14 @@ button:hover {
 }
 
 /* 🎨 캐릭터별 색상 스타일 */
-    .red { color: rgb(200, 60, 70); }       
+    .red { color: rgb(220, 50, 60); }       
     .orange { color: rgb(220, 140, 80); } 
     .yellow { color: rgb(230, 190, 90); } 
     .green { color: rgb(100, 160, 100); }   
     .blue { color: rgb(90, 150, 220); }     
-    .purple { color: rgb(130, 80, 160); } 
-    .pink { color: rgb(220, 140, 190); } 
+    .purple { color: rgb(160, 100, 190); } 
+    .pink { color: rgb(220, 140, 190); }
+}
 
 /* 📜 대본 스타일 */
 .script-line {
