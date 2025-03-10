@@ -332,9 +332,12 @@ button:hover {
 }
 
 /* 메인 페이지 2, 3의 제목(h2) 스타일 */
-.section-box h2 {
+.main-page-2 .section-box h2 {
     font-family: 'Nanum Gothic', sans-serif;
+    word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
     font-weight: bold; /* 굵기 설정 (선택) */
+    color: #FFD700;  /* 골드 색상 (강조) */
+    font-weight: bold;  /* 굵게 */ 
 }
 
 /* 🎨 캐릭터별 색상 스타일 */
