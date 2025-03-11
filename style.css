@@ -331,20 +331,12 @@ button:hover {
     font-weight: normal;  /* 기본 폰트 굵기 맞추기 */
 }
 
-/* 메인 페이지 2의 제목(h3) 스타일 */
+/* 메인 페이지 2,3의 제목(h3) 스타일 */
 .main-section-box h3 {
     font-family: 'Nanum Gothic', sans-serif;
     word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
     font-weight: bold; /* 굵기 설정 (선택) */
     color: #FFD700;  /* 골드 색상 (강조) */
-    font-weight: bold;  /* 굵게 */ 
-}
-
-/* 메인 페이지 3의 제목(h3) 스타일 */
-.main.section-box h3 {
-    font-family: 'Nanum Gothic', sans-serif;
-    word-spacing: 0px;  /* 글자 간격을 좁게 조정 */
-    font-weight: bold; /* 굵기 설정 (선택) */
     font-weight: bold;  /* 굵게 */ 
 }
 
