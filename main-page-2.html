@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="style.css">
     <script>
         function confirmNextScriptAccess() {
-            let answer = confirm("[1차] 전체 토론이 끝나셨습니까?");
+            let answer = confirm("[2차] 밀담 단계가 끝나셨습니까?");
             if (answer) {
-                let finalWarning = confirm("마지막 경고!\n[1차] 전체 토론이 끝나지 않았다면\n큰 스포일러가 됩니다.");
+                let finalWarning = confirm("마지막 경고!\n[2차] 밀담 단계가 끝나지 않았다면\n큰 스포일러가 됩니다.");
                 if (finalWarning) {
                     window.location.href = "main-page-3.html"; // 2차 대본 페이지로 이동
                 }
