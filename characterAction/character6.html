@@ -5,106 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>벼리 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
-    <script defer src="https://docs.opencv.org/4.x/opencv.js"></script>
+
     <style>
-        .upload-section {
-            background: black;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-            width: 90%;
-            max-width: 400px;
-            margin: 20px auto;
-            text-align: center;
+        /* ✅ 입력칸과 버튼을 가운데 정렬 */
+        .answer-section {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
-        .image-preview {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border: 2px solid white;
-            border-radius: 10px;
-            margin-top: 10px;
+
+        /* ✅ 입력칸 크기 키우기 */
+        .answer-input {
+            width: 80%; /* 너비 키우기 */
+            max-width: 300px; /* 최대 너비 제한 */
+            padding: 10px; /* 내부 여백 추가 */
+            font-size: 18px; /* 글자 크기 키우기 */
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px;
         }
-        .button {
-            background-color: #4CAF50;
-            color: white;
+
+        /* ✅ 확인 버튼 스타일 변경 */
+        .answer-button {
+            background-color: #4CAF50; /* 초록색 배경 */
+            color: white; /* 흰색 글씨 */
             border: none;
-            padding: 10px 15px;
-            margin-top: 10px;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            max-width: 200px;
-            disabled: true;
+            width: 120px; /* 버튼 폭 줄이기 */
+            text-align: center;
         }
-        .button:hover {
-            background-color: #45a049;
+
+        .answer-button:hover {
+            background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
     </style>
 </head>
-<body>
+<body class="character-page">
+
     <h1>벼리 중간 행동</h1>
-    
-    <section class="upload-section">
-        <h3>📷 본인 확인</h3>
-        <img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
-        <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
-        <img id="preview2" class="image-preview" src="" alt="변신한 인물 이미지">
-        <button class="button" id="compareButton" onclick="startImageComparison()" disabled>본인 확인</button>
+    <img src="../assets/images/길라.jpg" alt="길라"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
+    <br><br>
+
+    <!-- 🟢 안내 문구 -->
+    <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
+    <br>
+    <section class="player-notice-text2">자신의 행동 차례에만<br><br>주술 행동 해주세요.</section>
+    <br><br><br>
+
+    <!-- 🟢 주술 행동 -->
+    <section class="section-box">
+        <h2>변신술</h2>
+        <p>소요 비용 : 체력 큐브 개, 생명력 큐브 개</p>
+        <p>[주의] 체력 큐브가 0개가 되면 행동할 수 없습니다.</p>
+        <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
+    </section>
+
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 정답 입력 기능 추가 -->
+    <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
+        <h2>변신술을 사용하여 변할 인물</h2>
+        <p>정확한 이름을 입력하세요.<br>띄어쓰기 지켜주세요.</p>
+        <input type="text" id="answer" class="answer-input" placeholder="입력칸"> <!-- ✅ 클래스 추가 -->
+        <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
     <script>
-        let opencvReady = false;
+        function checkAnswer() {
+            const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
+            const answers = {
+                "아리아": "히든카드 4,5,6,7을 확인하세요.",
+            };
 
-        window.onload = function () {
-            if (typeof cv !== "undefined") {
-                console.log("✅ OpenCV.js 로드 완료!");
-                opencvReady = true;
-                document.getElementById("compareButton").disabled = true;
+            if (answers[userInput]) {
+                alert(`본인 확인에 성공하였습니다!\n${answers[userInput]}`);
             } else {
-                console.error("❌ OpenCV.js 로드 실패!");
+                alert("본인 확인에 실패하였습니다.");
             }
-        };
-
-        function previewImage(input, previewId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById(previewId).src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        document.getElementById("imageUpload2").addEventListener("change", function () {
-            if (this.files.length > 0 && opencvReady) {
-                document.getElementById("compareButton").disabled = false;
-            } else {
-                document.getElementById("compareButton").disabled = true;
-            }
-        });
-
-        function startImageComparison() {
-            if (!opencvReady) {
-                alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-                return;
-            }
-
-            if (typeof cv === "undefined" || !cv.imread) {
-                alert("❌ OpenCV.js가 아직 완전히 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-                document.getElementById("compareButton").disabled = true;
-                return;
-            }
-
-            alert("✅ OpenCV.js가 정상적으로 로드되었습니다! (테스트)");
         }
     </script>
-    
+
     <!-- 🟢 구분선 -->
     <hr class="custom-hr">
 
