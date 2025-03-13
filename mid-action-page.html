@@ -6,13 +6,13 @@
     <title>중간 행동</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        function confirmCharacter(characterName, characterPage) {
-            let answer = confirm(characterName + " 담당 플레이어가 맞습니까?");
-            if (answer) {
-                window.location.href = 'character/' + characterPage; // 해당 캐릭터 페이지로 이동
-            }
+    function confirmCharacter(characterName, characterPage) {
+        let answer = confirm(characterName + " 담당 플레이어가 맞습니까?");
+        if (answer) {
+            window.location.href = 'characterActionPage/' + characterPage; // 변경된 경로
         }
-    </script>      
+    }
+</script>
 </head>
 <body class="mid-action-page">  <!-- 🟢 여기 class="mid-action-page" 추가! -->
 
