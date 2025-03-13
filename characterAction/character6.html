@@ -81,116 +81,123 @@
     <canvas id="canvas1" class="hidden-canvas"></canvas>
     <canvas id="canvas2" class="hidden-canvas"></canvas>
 
+
     <script>
-        let opencvReady = false;
+    let opencvReady = false;
 
-        function onOpenCvReady() {
-            console.log("✅ OpenCV.js 로드 완료!");
-            opencvReady = true;
-            document.getElementById("compareButton").disabled = false; // 버튼 활성화
-        }
+    function onOpenCvReady() {
+        console.log("✅ OpenCV.js 로드 완료!");
+        opencvReady = true;
+        document.getElementById("compareButton").disabled = false; // 버튼 활성화
+    }
 
-        function onOpenCvFail() {
-            alert("❌ OpenCV.js 로드에 실패했습니다. 다시 시도해 주세요.");
-        }
+    function onOpenCvFail() {
+        console.error("❌ OpenCV.js 로드 실패!");
+        alert("❌ OpenCV.js 로드에 실패했습니다. 다시 시도해 주세요.");
+    }
 
-        function previewImage(input, previewId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById(previewId).src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function startImageComparison() {
-            if (!opencvReady) {
-                alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-                return;
-            }
-
-            let img2 = document.getElementById("imageUpload2").files[0];
-
-            if (!img2) {
-                alert("본인 확인을 시작해주세요!\n(이미지를 업로드하세요)");
-                return;
-            }
-
-            let fixedImage = document.getElementById("fixedImage");
-            let canvas1 = document.getElementById("canvas1");
-            let canvas2 = document.getElementById("canvas2");
-            let ctx1 = canvas1.getContext("2d");
-            let ctx2 = canvas2.getContext("2d");
-
-            let image1 = new Image();
-            let image2 = new Image();
-
-            image1.onload = function () {
-                canvas1.width = 200;
-                canvas1.height = 200;
-                ctx1.drawImage(image1, 0, 0, 200, 200);
-
-                image2.onload = function () {
-                    canvas2.width = 200;
-                    canvas2.height = 200;
-                    ctx2.drawImage(image2, 0, 0, 200, 200);
-
-                    setTimeout(() => {
-                        let mat1 = cv.imread(canvas1);
-                        let mat2 = cv.imread(canvas2);
-
-                        console.log("🟢 이미지 로드 확인:", !mat1.empty(), !mat2.empty());
-
-                        if (mat1.empty() || mat2.empty()) {
-                            alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
-                            return;
-                        }
-
-                        compareImages(mat1, mat2);
-                    }, 500);
-                };
-                image2.src = URL.createObjectURL(img2);
+    function previewImage(input, previewId) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById(previewId).src = e.target.result;
             };
-            image1.src = fixedImage.src;
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function startImageComparison() {
+        if (!opencvReady) {
+            alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
+            return;
         }
 
-        function compareImages(mat1, mat2) {
-            console.log("🟢 본인 확인 시작");
+        let img2File = document.getElementById("imageUpload2").files[0];
 
-            let orb = new cv.ORB();
-            let keypoints1 = new cv.KeyPointVector();
-            let keypoints2 = new cv.KeyPointVector();
-            let descriptors1 = new cv.Mat();
-            let descriptors2 = new cv.Mat();
-
-            orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
-            orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
-
-            let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
-            let matches = new cv.DMatchVector();
-            bf.match(descriptors1, descriptors2, matches);
-
-            console.log("🟢 매칭된 특징점 개수:", matches.size());
-
-            let matchThreshold = 15;
-            if (matches.size() === 0) {
-                alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
-            } else if (matches.size() > matchThreshold) {
-                alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
-            } else {
-                alert("❌ 본인 확인에 실패하였습니다.");
-            }
-
-            mat1.delete();
-            mat2.delete();
-            descriptors1.delete();
-            descriptors2.delete();
-            keypoints1.delete();
-            keypoints2.delete();
-            matches.delete();
+        if (!img2File) {
+            alert("본인 확인을 시작해주세요!\n(이미지를 업로드하세요)");
+            return;
         }
+
+        let fixedImage = document.getElementById("fixedImage");
+        let canvas1 = document.getElementById("canvas1");
+        let canvas2 = document.getElementById("canvas2");
+        let ctx1 = canvas1.getContext("2d");
+        let ctx2 = canvas2.getContext("2d");
+
+        function loadImageToCanvas(imageSrc, canvas, ctx) {
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.onload = function () {
+                    canvas.width = 200;
+                    canvas.height = 200;
+                    ctx.drawImage(img, 0, 0, 200, 200);
+                    resolve();
+                };
+                img.onerror = reject;
+                img.src = imageSrc;
+            });
+        }
+
+        // 두 개의 이미지를 순서대로 로드한 후 비교 실행
+        Promise.all([
+            loadImageToCanvas(fixedImage.src, canvas1, ctx1),
+            loadImageToCanvas(URL.createObjectURL(img2File), canvas2, ctx2)
+        ])
+        .then(() => {
+            setTimeout(() => { // OpenCV가 처리할 수 있도록 딜레이 추가
+                let mat1 = cv.imread(canvas1);
+                let mat2 = cv.imread(canvas2);
+
+                if (mat1.empty() || mat2.empty()) {
+                    alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
+                    return;
+                }
+
+                compareImages(mat1, mat2);
+            }, 500);
+        })
+        .catch(() => {
+            alert("❌ 이미지 로드 중 오류가 발생했습니다.");
+        });
+    }
+
+    function compareImages(mat1, mat2) {
+        console.log("🟢 본인 확인 시작");
+
+        let orb = new cv.ORB();
+        let keypoints1 = new cv.KeyPointVector();
+        let keypoints2 = new cv.KeyPointVector();
+        let descriptors1 = new cv.Mat();
+        let descriptors2 = new cv.Mat();
+
+        orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
+        orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
+
+        let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
+        let matches = new cv.DMatchVector();
+        bf.match(descriptors1, descriptors2, matches);
+
+        console.log("🟢 매칭된 특징점 개수:", matches.size());
+
+        let matchThreshold = 15;
+        if (matches.size() === 0) {
+            alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
+        } else if (matches.size() > matchThreshold) {
+            alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
+        } else {
+            alert("❌ 본인 확인에 실패하였습니다.");
+        }
+
+        mat1.delete();
+        mat2.delete();
+        descriptors1.delete();
+        descriptors2.delete();
+        keypoints1.delete();
+        keypoints2.delete();
+        matches.delete();
+    }
     </script>
     
     <!-- 🟢 구분선 -->
