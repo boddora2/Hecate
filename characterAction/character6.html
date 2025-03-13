@@ -78,38 +78,32 @@
         <button class="button" id="compareButton" onclick="startImageComparison()" disabled>본인 확인</button>
     </section>
 
-    <canvas id="canvas1" class="hidden-canvas"></canvas>
-    <canvas id="canvas2" class="hidden-canvas"></canvas>
-
-
-    <script>
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+<script>
     let opencvReady = false;
 
-    function onOpenCvReady() {
-        console.log("✅ OpenCV.js 로드 완료!");
+    cv.onRuntimeInitialized = function() {
+        console.log("✅ OpenCV 완전 초기화 완료!");
         opencvReady = true;
-        document.getElementById("compareButton").disabled = false; // 버튼 활성화
-    }
+        document.getElementById("compareButton").disabled = true;
+    };
 
-    function onOpenCvFail() {
-        console.error("❌ OpenCV.js 로드 실패!");
-        alert("❌ OpenCV.js 로드에 실패했습니다. 다시 시도해 주세요.");
-    }
-
-    function previewImage(input, previewId) {
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById(previewId).src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+    document.getElementById("imageUpload2").addEventListener("change", function() {
+        if (this.files.length > 0) {
+            document.getElementById("compareButton").disabled = false; // 파일 업로드하면 버튼 활성화
+        } else {
+            document.getElementById("compareButton").disabled = true;
         }
-    }
+    });
 
     function startImageComparison() {
         if (!opencvReady) {
             alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
+            return;
+        }
+
+        if (typeof cv === "undefined" || !cv.imread) {
+            alert("❌ OpenCV.js가 아직 완전히 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
             return;
         }
 
@@ -140,22 +134,26 @@
             });
         }
 
-        // 두 개의 이미지를 순서대로 로드한 후 비교 실행
         Promise.all([
             loadImageToCanvas(fixedImage.src, canvas1, ctx1),
             loadImageToCanvas(URL.createObjectURL(img2File), canvas2, ctx2)
         ])
         .then(() => {
-            setTimeout(() => { // OpenCV가 처리할 수 있도록 딜레이 추가
-                let mat1 = cv.imread(canvas1);
-                let mat2 = cv.imread(canvas2);
+            setTimeout(() => {
+                try {
+                    let mat1 = cv.imread(canvas1);
+                    let mat2 = cv.imread(canvas2);
 
-                if (mat1.empty() || mat2.empty()) {
-                    alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
-                    return;
+                    if (mat1.empty() || mat2.empty()) {
+                        alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
+                        return;
+                    }
+
+                    compareImages(mat1, mat2);
+                } catch (e) {
+                    console.error("❌ OpenCV 오류 발생:", e);
+                    alert("❌ 이미지 비교 중 오류가 발생했습니다.");
                 }
-
-                compareImages(mat1, mat2);
             }, 500);
         })
         .catch(() => {
@@ -198,7 +196,8 @@
         keypoints2.delete();
         matches.delete();
     }
-    </script>
+</script>
+
     
     <!-- 🟢 구분선 -->
     <hr class="custom-hr">
