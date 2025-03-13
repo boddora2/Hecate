@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>길라 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* ✅ 입력칸과 버튼을 가운데 정렬 */
+        .answer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ✅ 입력칸 크기 키우기 */
+        .answer-input {
+            width: 80%; /* 너비 키우기 */
+            max-width: 300px; /* 최대 너비 제한 */
+            padding: 10px; /* 내부 여백 추가 */
+            font-size: 18px; /* 글자 크기 키우기 */
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* ✅ 확인 버튼 스타일 변경 */
+        .answer-button {
+            background-color: #4CAF50; /* 초록색 배경 */
+            color: white; /* 흰색 글씨 */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 120px; /* 버튼 폭 줄이기 */
+            text-align: center;
+        }
+
+        .answer-button:hover {
+            background-color: #45a049; /* 마우스 올릴 때 색 변경 */
+        }
+    </style>
 </head>
 <body class="character-page">
 
@@ -30,11 +69,11 @@
     <hr class="custom-hr">
 
     <!-- 🟢 정답 입력 기능 추가 -->
-    <section class="section-box">
+    <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
         <h2>해독술을 사용할 장소/물건</h2>
         <p>정확한 명칭을 입력하세요.<br>띄어쓰기 지켜주세요.</p>
-        <input type="text" id="answer" placeholder="입력칸">
-        <button onclick="checkAnswer()">확인</button>
+        <input type="text" id="answer" class="answer-input" placeholder="입력칸"> <!-- ✅ 클래스 추가 -->
+        <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
     <script>
@@ -46,7 +85,7 @@
             };
 
             if (answers[userInput]) {
-                alert(`숨거진 기록이 존재합니다!\n${answers[userInput]}`);
+                alert(`숨겨진 기록이 존재합니다!\n${answers[userInput]}`);
             } else {
                 alert("숨겨진 기록이 없습니다.");
             }
