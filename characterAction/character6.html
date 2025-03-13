@@ -8,10 +8,11 @@
     <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
     <style>
         .upload-section {
-            background: white;
+            background: black; /* 🔹 배경 검은색으로 변경 */
+            color: white; /* 텍스트를 흰색으로 변경 */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
             width: 90%;
             max-width: 400px;
             margin: 20px auto;
@@ -24,7 +25,7 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
-            border: 2px solid #ccc;
+            border: 2px solid white; /* 🔹 테두리 흰색 */
             border-radius: 10px;
             margin-top: 10px;
         }
@@ -86,6 +87,10 @@
     <canvas id="canvas2" class="hidden-canvas"></canvas>
 
     <script>
+        function onOpenCvReady() {
+            console.log("✅ OpenCV.js 로드 완료!");
+        }
+
         function previewImage(input, previewId) {
             const file = input.files[0];
             if (file) {
@@ -97,10 +102,6 @@
             }
         }
 
-        function onOpenCvReady() {
-            console.log("OpenCV.js 로드 완료!");
-        }
-
         function startImageComparison() {
             let img2 = document.getElementById("imageUpload2").files[0];
 
@@ -109,7 +110,7 @@
                 return;
             }
 
-            let fixedImageSrc = document.getElementById("fixedImage").src;
+            let fixedImage = document.getElementById("fixedImage");
             let canvas1 = document.getElementById("canvas1");
             let canvas2 = document.getElementById("canvas2");
             let ctx1 = canvas1.getContext("2d");
@@ -128,14 +129,15 @@
                     canvas2.height = image2.height;
                     ctx2.drawImage(image2, 0, 0);
 
-                    let mat1 = cv.imread(canvas1);
-                    let mat2 = cv.imread(canvas2);
-
-                    compareImages(mat1, mat2);
+                    setTimeout(() => {
+                        let mat1 = cv.imread(canvas1);
+                        let mat2 = cv.imread(canvas2);
+                        compareImages(mat1, mat2);
+                    }, 500);
                 };
                 image2.src = URL.createObjectURL(img2);
             };
-            image1.src = fixedImageSrc;
+            image1.src = fixedImage.src;
         }
 
         function compareImages(mat1, mat2) {
@@ -152,12 +154,12 @@
             let matches = new cv.DMatchVector();
             bf.match(descriptors1, descriptors2, matches);
 
-            console.log("매칭된 특징점 개수:", matches.size());
+            console.log("🟢 매칭된 특징점 개수:", matches.size());
 
-            let matchThreshold = 15; // 유사한 특징점 개수 기준
+            let matchThreshold = 15; // 특징점 개수 기준
             if (matches.size() > matchThreshold) {
-                alert("✅ 본인 확인이 완료되었습니다!<br>잠금이 해제됩니다.");
-                window.location.href = "../next-page/character6.html"; // 원하는 페이지로 이동
+                alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
+                window.location.href = "../next-page/character6.html";
             } else {
                 alert("❌ 본인 확인에 실패하였습니다.");
             }
