@@ -363,6 +363,22 @@ button:hover {
     border-bottom: none;  /* ✅ 밑줄 제거 */
 }
 
+.mid-action-page .section-box {    
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    word-spacing: -8px;
+    text-align: justify;
+    font-size: 12px;
+    line-height: 1.8;
+    font-weight: normal;
+}
+
+.mid-action-page h3 {
+    font-family: 'Nanum Gothic', sans-serif;
+    word-spacing: 0px;
+    font-weight: bold;
+    color: #FFD700;
+}
+
 /* 캐릭터 개별 스타일 */
 .mid-action-page .character {
     width: 250px;
