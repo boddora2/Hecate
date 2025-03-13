@@ -157,9 +157,10 @@
             console.log("🟢 매칭된 특징점 개수:", matches.size());
 
             let matchThreshold = 15; // 특징점 개수 기준
-            if (matches.size() > matchThreshold) {
-                alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
-                window.location.href = "../next-page/character6.html";
+            if (matches.size() === 0) {
+                alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
+            } else if (matches.size() > matchThreshold) {
+                alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
             } else {
                 alert("❌ 본인 확인에 실패하였습니다.");
             }
