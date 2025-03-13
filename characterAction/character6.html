@@ -63,86 +63,78 @@
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
 
-    <!-- 🟢 이미지 비교 기능 추가 -->
-    <section class="upload-section">
-        <h3>📷 이미지 비교 테스트</h3>
-        <input type="file" id="imageUpload1" accept="image/*" onchange="previewImage(this, 'preview1')">
-        <br>
-        <img id="preview1" class="image-preview" src="" alt="이미지 1 미리보기">
-        <br><br>
-        <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
-        <br>
-        <img id="preview2" class="image-preview" src="" alt="이미지 2 미리보기">
-        <br><br>
-        <button class="button" onclick="compareImages()">이미지 비교</button>
-    </section>
+    <!-- 기준 이미지 (고정) -->
+<img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
 
-    <canvas id="canvas1" class="hidden-canvas"></canvas>
-    <canvas id="canvas2" class="hidden-canvas"></canvas>
+<!-- 업로드할 비교 이미지 -->
+<input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
+<br>
+<img id="preview2" class="image-preview" src="" alt="업로드한 이미지">
+<br><br>
+<button class="button" onclick="compareImages()">본인 확인</button>
 
-    <script>
-        // 🔹 이미지 미리보기 함수
-        function previewImage(input, previewId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById(previewId).src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function compareImages() {
-            let img1 = document.getElementById("imageUpload1").files[0];
-            let img2 = document.getElementById("imageUpload2").files[0];
-
-            if (!img1 || !img2) {
-                alert("두 개의 이미지를 업로드해주세요!");
-                return;
-            }
-
-            let canvas1 = document.getElementById("canvas1");
-            let canvas2 = document.getElementById("canvas2");
-            let ctx1 = canvas1.getContext("2d");
-            let ctx2 = canvas2.getContext("2d");
-
-            let image1 = new Image();
-            let image2 = new Image();
-
-            image1.onload = function () {
-                canvas1.width = image1.width;
-                canvas1.height = image1.height;
-                ctx1.drawImage(image1, 0, 0);
-
-                image2.onload = function () {
-                    canvas2.width = image2.width;
-                    canvas2.height = image2.height;
-                    ctx2.drawImage(image2, 0, 0);
-
-                    let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
-                    let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
-
-                    let diff = 0;
-                    for (let i = 0; i < data1.length; i++) {
-                        if (data1[i] !== data2[i]) diff++;
-                    }
-
-                    let similarity = 1 - diff / data1.length;
-                    console.log("유사도:", similarity);
-
-                    if (similarity > 0.99) { // 99% 이상 같으면 다음 페이지로 이동
-                        alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
-                        window.location.href = "../next-page/character6.html";
-                    } else {
-                        alert("❌ 본인 확인에 실패하였습니다.");
-                    }
-                };
-                image2.src = URL.createObjectURL(img2);
+<script>
+    function previewImage(input, previewId) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById(previewId).src = e.target.result;
             };
-            image1.src = URL.createObjectURL(img1);
+            reader.readAsDataURL(file);
         }
-    </script>
+    }
+
+    function compareImages() {
+        let img2 = document.getElementById("imageUpload2").files[0];
+
+        if (!img2) {
+            alert("본인 확인을 시작해주세요!");
+            return;
+        }
+
+        let fixedImageSrc = document.getElementById("fixedImage").src;
+        let canvas1 = document.createElement("canvas");
+        let canvas2 = document.createElement("canvas");
+        let ctx1 = canvas1.getContext("2d");
+        let ctx2 = canvas2.getContext("2d");
+
+        let image1 = new Image();
+        let image2 = new Image();
+
+        image1.onload = function () {
+            canvas1.width = image1.width;
+            canvas1.height = image1.height;
+            ctx1.drawImage(image1, 0, 0);
+
+            image2.onload = function () {
+                canvas2.width = image2.width;
+                canvas2.height = image2.height;
+                ctx2.drawImage(image2, 0, 0);
+
+                let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
+                let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
+
+                let diff = 0;
+                for (let i = 0; i < data1.length; i++) {
+                    if (data1[i] !== data2[i]) diff++;
+                }
+
+                let similarity = 1 - diff / data1.length;
+                console.log("유사도:", similarity);
+
+                if (similarity > 0.99) {
+                    alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
+                    window.location.href = "../next-page/character6.html";
+                } else {
+                    alert("❌ 본인 확인에 실패하였습니다.");
+                }
+            };
+            image2.src = URL.createObjectURL(img2);
+        };
+        image1.src = fixedImageSrc;
+    }
+</script>
 
     <section>
         <!-- 버튼 컨테이너 -->
