@@ -5,20 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>벼리 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        .upload-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            margin-top: 20px;
+            width: 90%;
+        }
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .hidden-canvas {
+            display: none;
+        }
+    </style>
 </head>
 <body class="character-page">
 
     <h1>벼리 중간 행동</h1>
     <img src="../assets/images/벼리.jpg" alt="벼리"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
-    <br>
-    <br>
+    <br><br>
+
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <br>
-    <section class="player-notice-text2">자신의 행동 차례에만<br><br>주술 행동 해주세요.</section>
-    <br>
-    <br>
-    <br>  
+    <section class="player-notice-text2">
+        자신의 행동 차례에만<br><br>주술 행동 해주세요.
+    </section>
+    <br><br><br>  
+
     <!-- 🟢 주술 행동 -->
     <section class="section-box">
         <h2>변신술</h2>
@@ -27,8 +63,89 @@
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
 
+    <!-- 🟢 이미지 비교 기능 추가 -->
+    <section class="upload-section">
+        <h3>📷 이미지 비교 테스트</h3>
+        <input type="file" id="imageUpload1" accept="image/*" onchange="previewImage(this, 'preview1')">
+        <br>
+        <img id="preview1" class="image-preview" src="" alt="이미지 1 미리보기">
+        <br><br>
+        <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
+        <br>
+        <img id="preview2" class="image-preview" src="" alt="이미지 2 미리보기">
+        <br><br>
+        <button class="button" onclick="compareImages()">이미지 비교</button>
+    </section>
+
+    <canvas id="canvas1" class="hidden-canvas"></canvas>
+    <canvas id="canvas2" class="hidden-canvas"></canvas>
+
+    <script>
+        // 🔹 이미지 미리보기 함수
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(previewId).src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function compareImages() {
+            let img1 = document.getElementById("imageUpload1").files[0];
+            let img2 = document.getElementById("imageUpload2").files[0];
+
+            if (!img1 || !img2) {
+                alert("두 개의 이미지를 업로드해주세요!");
+                return;
+            }
+
+            let canvas1 = document.getElementById("canvas1");
+            let canvas2 = document.getElementById("canvas2");
+            let ctx1 = canvas1.getContext("2d");
+            let ctx2 = canvas2.getContext("2d");
+
+            let image1 = new Image();
+            let image2 = new Image();
+
+            image1.onload = function () {
+                canvas1.width = image1.width;
+                canvas1.height = image1.height;
+                ctx1.drawImage(image1, 0, 0);
+
+                image2.onload = function () {
+                    canvas2.width = image2.width;
+                    canvas2.height = image2.height;
+                    ctx2.drawImage(image2, 0, 0);
+
+                    let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
+                    let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
+
+                    let diff = 0;
+                    for (let i = 0; i < data1.length; i++) {
+                        if (data1[i] !== data2[i]) diff++;
+                    }
+
+                    let similarity = 1 - diff / data1.length;
+                    console.log("유사도:", similarity);
+
+                    if (similarity > 0.99) { // 99% 이상 같으면 다음 페이지로 이동
+                        alert("✅ 이미지가 일치합니다! 다음 페이지로 이동합니다.");
+                        window.location.href = "../next-page.html";
+                    } else {
+                        alert("❌ 이미지가 다릅니다.");
+                    }
+                };
+                image2.src = URL.createObjectURL(img2);
+            };
+            image1.src = URL.createObjectURL(img1);
+        }
+    </script>
+
     <section>
-        <!-- 버튼 컨테이너 (버튼을 위아래로 배치) -->
+        <!-- 버튼 컨테이너 -->
         <div class="button-container">
             <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
             <button onclick="location.href='../main-page-2.html'">[1차] 대본 보기</button>
@@ -37,11 +154,11 @@
         </div>
     </section>
     
-<!-- 🟢 구분선 -->
-<hr class="custom-hr">
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
 
-<!-- 🟢 제작자 문구 -->
-<section class="made2">&copy; Copyright 2025. 보또 All rights reserved. </section>
+    <!-- 🟢 제작자 문구 -->
+    <section class="made2">&copy; Copyright 2025. 보또 All rights reserved.</section>
 
 </body>
 </html>
