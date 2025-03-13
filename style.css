@@ -456,11 +456,14 @@ button:hover {
 }
 
 .upload-section input[type="file"] {
-    margin: 10px 0; /* 위아래 간격 추가 */
-    text-align: center; /* 일부 브라우저에서는 필요 */
+    display: block;  /* ✅ 블록 요소로 변경 (중앙 정렬) */
+    margin: 10px auto;  /* ✅ 자동 마진으로 가운데 정렬 */
+    text-align: center;
 }
 
 .upload-section .button {
     width: 100%; /* 버튼 크기 조정 */
     max-width: 200px; /* 너무 길어지지 않도록 제한 */
+    display: block; /* ✅ 블록 요소로 변경 */
+    margin: 10px auto; /* ✅ 자동 마진으로 중앙 정렬 */
 }
