@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>벼리 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
-    <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
+    <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();" onerror="onOpenCvFail();"></script>
     <style>
         .upload-section {
             background: black;
@@ -39,6 +39,7 @@
             cursor: pointer;
             font-size: 16px;
             max-width: 200px;
+            disabled: true; /* 초기에는 비활성화 */
         }
         .button:hover {
             background-color: #45a049;
@@ -74,15 +75,23 @@
         <img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
         <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
         <img id="preview2" class="image-preview" src="" alt="변신한 인물 이미지">
-        <button class="button" onclick="startImageComparison()">본인 확인</button>
+        <button class="button" id="compareButton" onclick="startImageComparison()" disabled>본인 확인</button>
     </section>
 
     <canvas id="canvas1" class="hidden-canvas"></canvas>
     <canvas id="canvas2" class="hidden-canvas"></canvas>
 
     <script>
+        let opencvReady = false;
+
         function onOpenCvReady() {
             console.log("✅ OpenCV.js 로드 완료!");
+            opencvReady = true;
+            document.getElementById("compareButton").disabled = false; // 버튼 활성화
+        }
+
+        function onOpenCvFail() {
+            alert("❌ OpenCV.js 로드에 실패했습니다. 다시 시도해 주세요.");
         }
 
         function previewImage(input, previewId) {
@@ -97,7 +106,7 @@
         }
 
         function startImageComparison() {
-            if (typeof cv === "undefined" || !cv.imread) {
+            if (!opencvReady) {
                 alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
                 return;
             }
