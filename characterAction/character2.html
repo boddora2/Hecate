@@ -5,27 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나린 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* ✅ 입력칸과 버튼을 가운데 정렬 */
+        .answer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ✅ 입력칸 크기 키우기 */
+        .answer-input {
+            width: 80%; /* 너비 키우기 */
+            max-width: 300px; /* 최대 너비 제한 */
+            padding: 10px; /* 내부 여백 추가 */
+            font-size: 18px; /* 글자 크기 키우기 */
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* ✅ 확인 버튼 스타일 변경 */
+        .answer-button {
+            background-color: #4CAF50; /* 초록색 배경 */
+            color: white; /* 흰색 글씨 */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 120px; /* 버튼 폭 줄이기 */
+            text-align: center;
+        }
+
+        .answer-button:hover {
+            background-color: #45a049; /* 마우스 올릴 때 색 변경 */
+        }
+    </style>
 </head>
 <body class="character-page">
 
     <h1>나린 중간 행동</h1>
     <img src="../assets/images/나린.jpg" alt="나린"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
-    <br>
-    <br>
+    <br><br>
+
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <br>
     <section class="player-notice-text2">자신의 행동 차례에만<br><br>주술 행동 해주세요.</section>
-    <br>
-    <br>
-    <br>  
+    <br><br><br>
+
     <!-- 🟢 주술 행동 -->
     <section class="section-box">
         <h2>괴력술</h2>
-        <p>소요 비용 : 체력 큐브 0개, 생명력 큐브 0개</p>
+        <p>소요 비용 : 없음</p>
         <p>[주의] 체력 큐브가 0개가 되면 행동할 수 없습니다.</p>
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
+
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 정답 입력 기능 추가 -->
+    <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
+        <h2>괴력술을 사용할 장소/물건</h2>
+        <p>정확한 명칭을 입력하세요.<br>띄어쓰기 지켜주세요.</p>
+        <input type="text" id="answer" class="answer-input" placeholder="입력칸"> <!-- ✅ 클래스 추가 -->
+        <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
+    </section>
+
+    <script>
+        function checkAnswer() {
+            const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
+            const answers = {
+                "제단 밑 바닥": "아리아의 비밀 일기장 발견\n 아리아 본인만 열 수 있는 주술이 걸려있다.",
+            };
+
+            if (answers[userInput]) {
+                alert(`숨겨진 공간이 등장합니다!\n${answers[userInput]}`);
+            } else {
+                alert("모든 게 부셔졌으나\n숨겨진 공간은 보이지 않는다.");
+            }
+        }
+    </script>
+
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
 
     <section>
         <!-- 버튼 컨테이너 (버튼을 위아래로 배치) -->
@@ -37,11 +104,11 @@
         </div>
     </section>
     
-<!-- 🟢 구분선 -->
-<hr class="custom-hr">
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
 
-<!-- 🟢 제작자 문구 -->
-<section class="made2">&copy; Copyright 2025. 보또 All rights reserved. </section>
+    <!-- 🟢 제작자 문구 -->
+    <section class="made2">&copy; Copyright 2025. 보또 All rights reserved. </section>
 
 </body>
 </html>
