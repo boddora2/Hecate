@@ -340,6 +340,47 @@ button:hover {
     font-weight: bold;  /* 굵게 */ 
 }
 
+/* 중간 행동 단계 가로 정렬 */
+.mid-action-page .character-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+/* 중간 행동 단계 주의 문구 스타일 */
+.mid-action-page .main-notice {
+    font-size: 20px;  /* 제목 크기 키우기 */
+    font-weight: bold;  /* 굵게 */
+    color: #FFD700;  /* 골드 색상 (강조) */
+    text-align: center;  /* ✅ 가운데 정렬 유지 */
+    margin-top: 20px;  /* 위쪽 여백 */
+    margin-bottom: 5px;  /* 아래쪽 여백 */
+    display: block;  /* ✅ 블록 요소로 변경 → 가운데 정렬 정상 작동 */
+    padding-bottom: 5px;  /* 구분선과 간격 */
+    width: 100%;  /* ✅ 전체 너비 차지 */
+    border-bottom: none;  /* ✅ 밑줄 제거 */
+}
+
+/* 캐릭터 개별 스타일 */
+.mid-action-page .character {
+    width: 250px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 캐릭터 이미지 스타일 */
+.mid-action-page .character img {
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
 /* 🎨 캐릭터별 색상 스타일 */
     .red { color: rgb(220, 50, 60); }       
     .orange { color: rgb(220, 140, 80); } 
