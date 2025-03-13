@@ -8,8 +8,8 @@
     <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
     <style>
         .upload-section {
-            background: black; /* 🔹 배경 검은색으로 변경 */
-            color: white; /* 텍스트를 흰색으로 변경 */
+            background: black;
+            color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
@@ -25,7 +25,7 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
-            border: 2px solid white; /* 🔹 테두리 흰색 */
+            border: 2px solid white;
             border-radius: 10px;
             margin-top: 10px;
         }
@@ -54,14 +54,12 @@
     <img src="../assets/images/벼리.jpg" alt="벼리">
     <br><br>
 
-    <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <section class="player-notice-text2">
         자신의 행동 차례에만<br><br>주술 행동을 해주세요.
     </section>
     <br><br>
 
-    <!-- 🟢 주술 행동 -->
     <section class="section-box">
         <h2>변신술</h2>
         <p>소요 비용 : 체력 큐브 개, 생명력 큐브 개</p>
@@ -69,20 +67,13 @@
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
 
-    <!-- 🟢 구분선 -->
     <hr class="custom-hr">
-    
-    <!-- 🟢 본인 확인 (OpenCV.js 이미지 비교) -->
+
     <section class="upload-section">
         <h3>📷 본인 확인</h3>
-
-        <!-- 기준 이미지 (고정) -->
         <img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
-
-        <!-- 업로드할 비교 이미지 -->
         <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
         <img id="preview2" class="image-preview" src="" alt="변신한 인물 이미지">
-
         <button class="button" onclick="startImageComparison()">본인 확인</button>
     </section>
 
@@ -90,118 +81,107 @@
     <canvas id="canvas2" class="hidden-canvas"></canvas>
 
     <script>
-        <script>
-    function onOpenCvReady() {
-        console.log("✅ OpenCV.js 로드 완료!");
-    }
-
-    function startImageComparison() {
-        if (typeof cv === "undefined" || !cv.imread) {
-            alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-            return;
+        function onOpenCvReady() {
+            console.log("✅ OpenCV.js 로드 완료!");
         }
 
-        let img2 = document.getElementById("imageUpload2").files[0];
-
-        if (!img2) {
-            alert("본인 확인을 시작해주세요!/n(이미지를 업로드하세요)");
-            return;
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(previewId).src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
-        let fixedImage = document.getElementById("fixedImage");
-        let canvas1 = document.getElementById("canvas1");
-        let canvas2 = document.getElementById("canvas2");
-        let ctx1 = canvas1.getContext("2d");
-        let ctx2 = canvas2.getContext("2d");
+        function startImageComparison() {
+            if (typeof cv === "undefined" || !cv.imread) {
+                alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
+                return;
+            }
 
-        let image1 = new Image();
-        let image2 = new Image();
+            let img2 = document.getElementById("imageUpload2").files[0];
 
-        image1.onload = function () {
-            canvas1.width = 200;
-            canvas1.height = 200;
-            ctx1.drawImage(image1, 0, 0, 200, 200);
+            if (!img2) {
+                alert("본인 확인을 시작해주세요!\n(이미지를 업로드하세요)");
+                return;
+            }
 
-            image2.onload = function () {
-                canvas2.width = 200;
-                canvas2.height = 200;
-                ctx2.drawImage(image2, 0, 0, 200, 200);
+            let fixedImage = document.getElementById("fixedImage");
+            let canvas1 = document.getElementById("canvas1");
+            let canvas2 = document.getElementById("canvas2");
+            let ctx1 = canvas1.getContext("2d");
+            let ctx2 = canvas2.getContext("2d");
 
-                setTimeout(() => {
-                    let mat1 = cv.imread(canvas1);
-                    let mat2 = cv.imread(canvas2);
+            let image1 = new Image();
+            let image2 = new Image();
 
-                    console.log("🟢 이미지 로드 확인:", !mat1.empty(), !mat2.empty());
-                    console.log("mat1 empty:", mat1.empty(), "mat2 empty:", mat2.empty());
+            image1.onload = function () {
+                canvas1.width = 200;
+                canvas1.height = 200;
+                ctx1.drawImage(image1, 0, 0, 200, 200);
 
-                    if (mat1.empty() || mat2.empty()) {
-                        alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
-                        return;
-                    }
+                image2.onload = function () {
+                    canvas2.width = 200;
+                    canvas2.height = 200;
+                    ctx2.drawImage(image2, 0, 0, 200, 200);
 
-                    compareImages(mat1, mat2);
-                }, 500);
+                    setTimeout(() => {
+                        let mat1 = cv.imread(canvas1);
+                        let mat2 = cv.imread(canvas2);
+
+                        console.log("🟢 이미지 로드 확인:", !mat1.empty(), !mat2.empty());
+
+                        if (mat1.empty() || mat2.empty()) {
+                            alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
+                            return;
+                        }
+
+                        compareImages(mat1, mat2);
+                    }, 500);
+                };
+                image2.src = URL.createObjectURL(img2);
             };
-            image2.src = URL.createObjectURL(img2);
-        };
-        image1.src = fixedImage.src;
-    }
-
-    function compareImages(mat1, mat2) {
-        console.log("🟢 본인 확인 시작");
-
-        let orb = new cv.ORB();
-        let keypoints1 = new cv.KeyPointVector();
-        let keypoints2 = new cv.KeyPointVector();
-        let descriptors1 = new cv.Mat();
-        let descriptors2 = new cv.Mat();
-
-        orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
-        orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
-
-        let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
-        let matches = new cv.DMatchVector();
-        bf.match(descriptors1, descriptors2, matches);
-
-        console.log("🟢 매칭된 특징점 개수:", matches.size());
-
-        let matchThreshold = 15; // 특징점 개수 기준
-        if (matches.size() === 0) {
-            alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
-        } else if (matches.size() > matchThreshold) {
-            alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
-        } else {
-            alert("❌ 본인 확인에 실패하였습니다.");
+            image1.src = fixedImage.src;
         }
 
-        mat1.delete();
-        mat2.delete();
-        descriptors1.delete();
-        descriptors2.delete();
-        keypoints1.delete();
-        keypoints2.delete();
-        matches.delete();
-    }
-</script>
+        function compareImages(mat1, mat2) {
+            console.log("🟢 본인 확인 시작");
 
-    <!-- 🟢 구분선 -->
-    <hr class="custom-hr">
-    
-    <!-- 🟢 버튼 컨테이너 -->
-    <section>
-        <div class="button-container">
-            <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
-            <button onclick="location.href='../main-page-2.html'">[1차] 대본 보기</button>
-            <button onclick="location.href='../main-page-2.html'">[2차] 대본 보기</button>
-            <button onclick="location.href='../mid-action-page.html'">[중간] 행동 하기</button>
-        </div>
-    </section>
-    
-    <!-- 🟢 구분선 -->
-    <hr class="custom-hr">
+            let orb = new cv.ORB();
+            let keypoints1 = new cv.KeyPointVector();
+            let keypoints2 = new cv.KeyPointVector();
+            let descriptors1 = new cv.Mat();
+            let descriptors2 = new cv.Mat();
 
-    <!-- 🟢 제작자 문구 -->
-    <section class="made2">&copy; Copyright 2025. 보또 All rights reserved.</section>
+            orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
+            orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
 
+            let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
+            let matches = new cv.DMatchVector();
+            bf.match(descriptors1, descriptors2, matches);
+
+            console.log("🟢 매칭된 특징점 개수:", matches.size());
+
+            let matchThreshold = 15;
+            if (matches.size() === 0) {
+                alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
+            } else if (matches.size() > matchThreshold) {
+                alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
+            } else {
+                alert("❌ 본인 확인에 실패하였습니다.");
+            }
+
+            mat1.delete();
+            mat2.delete();
+            descriptors1.delete();
+            descriptors2.delete();
+            keypoints1.delete();
+            keypoints2.delete();
+            matches.delete();
+        }
+    </script>
 </body>
 </html>
