@@ -48,21 +48,25 @@
 <body class="character-page">
 
     <h1>나린 중간 행동</h1>
-    <img src="../assets/images/나린.jpg" alt="나린"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
+    <img src="../assets/images/나린 가문.jpg" alt="나린"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
     <br><br>
 
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <br>
-    <section class="player-notice-text2">자신의 행동 차례에만<br><br>주술 행동 해주세요.</section>
+    <section class="player-notice-text2">체력이 0이 되면 행동할 수 없습니다.<br><br>생명력이 0이 되면 당신은 사망합니다.</section>
     <br><br><br>
+
 
     <!-- 🟢 주술 행동 -->
     <section class="section-box">
-        <h2>괴력술</h2>
-        <p>소요 비용 : 없음</p>
-        <p>[주의] 체력 큐브가 0개가 되면 행동할 수 없습니다.</p>
-        <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
+        <h2>사용 가능한 가문의 주술</h2>
+        <br>
+        <p><strong>순서</strong> : 4번</p>
+        <p><strong>주술</strong> : 괴력술</p>
+        <p><strong>내용</strong> : 강력한 괴력을 내는 마족 고유의 힘</p>
+        <p><strong>비용</strong> : 힘 1번당 체력 큐브 1개 소모</p>
+        <p>[참고] 원하는 만큼 사용 가능합니다(주술 능력이 아니므로 복제는 불가합니다).</p>
     </section>
 
     <!-- 🟢 구분선 -->
@@ -70,9 +74,10 @@
 
     <!-- 🟢 정답 입력 기능 추가 -->
     <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
-        <h2>괴력술을 사용할 장소/물건</h2>
-        <p>정확한 명칭을 입력하세요.<br>띄어쓰기 지켜주세요.</p>
-        <input type="text" id="answer" class="answer-input" placeholder="입력칸"> <!-- ✅ 클래스 추가 -->
+        <h2>괴력술을 사용할 장소</h2>
+        <br><br>
+        <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)"> <!-- ✅ 클래스 추가 -->
+        <br><br>
         <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
@@ -82,6 +87,15 @@
             const answers = {
                 "제단 밑 바닥": "아리아의 비밀 일기장 발견\n 아리아 본인만 열 수 있는 주술이 걸려있다.",
             };
+
+            // 특정 캐릭터 이름이 있는지 확인
+            const restrictedNames = ["아리아", "길라", "다올", "라온", "마루", "벼리", "새나"]; // 제한할 캐릭터 이름 목록
+            const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
+
+             if (hasRestrictedName) {
+            alert("인물에게는 괴력을 사용할 수 없습니다./n나린은 착한 아이입니다.");
+            return; // 함수 종료
+            }
 
             if (answers[userInput]) {
                 alert(`숨겨진 공간이 등장합니다!\n${answers[userInput]}`);

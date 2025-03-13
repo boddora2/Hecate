@@ -364,7 +364,7 @@ button:hover {
 }
 
 .mid-action-page .section-box {    
-    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    font-family: 'Nanum Gothic', sans-serif;
     word-spacing: -8px;
     text-align: justify;
     font-size: 12px;
@@ -377,6 +377,15 @@ button:hover {
     word-spacing: 0px;
     font-weight: bold;
     color: #FFD700;
+}
+
+/* 주술 행동 설명 */
+.action-box {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+    text-align: justify;  /* ✅ 양쪽 정렬 유지 */
 }
 
 /* 캐릭터 개별 스타일 */
