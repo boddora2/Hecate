@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>벼리 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
+    <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
     <style>
         .upload-section {
             background: white;
@@ -12,12 +13,12 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 90%;
-            max-width: 400px; /* 적절한 너비 설정 */
-            margin: 20px auto; /* 가운데 정렬 */
-            text-align: center; /* 텍스트와 인라인 요소 가운데 정렬 */
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center; /* 내부 요소 가운데 정렬 */
+            align-items: center;
         }
         .image-preview {
             width: 150px;
@@ -36,7 +37,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            max-width: 200px; /* 버튼 최대 크기 제한 */
+            max-width: 200px;
         }
         .button:hover {
             background-color: #45a049;
@@ -49,13 +50,13 @@
 <body class="character-page">
 
     <h1>벼리 중간 행동</h1>
-    <img src="../assets/images/벼리.jpg" alt="벼리"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
+    <img src="../assets/images/벼리.jpg" alt="벼리">
     <br><br>
 
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <section class="player-notice-text2">
-        자신의 행동 차례에만<br><br>주술 행동 해주세요.
+        자신의 행동 차례에만<br><br>주술 행동을 해주세요.
     </section>
     <br><br>
 
@@ -67,7 +68,7 @@
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
 
-    <!-- 🟢 본인 확인 (이미지 비교) -->
+    <!-- 🟢 본인 확인 (OpenCV.js 이미지 비교) -->
     <section class="upload-section">
         <h3>📷 본인 확인</h3>
 
@@ -78,8 +79,11 @@
         <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
         <img id="preview2" class="image-preview" src="" alt="업로드한 이미지">
 
-        <button class="button" onclick="compareImages()">본인 확인</button>
+        <button class="button" onclick="startImageComparison()">본인 확인</button>
     </section>
+
+    <canvas id="canvas1" class="hidden-canvas"></canvas>
+    <canvas id="canvas2" class="hidden-canvas"></canvas>
 
     <script>
         function previewImage(input, previewId) {
@@ -93,7 +97,11 @@
             }
         }
 
-        function compareImages() {
+        function onOpenCvReady() {
+            console.log("OpenCV.js 로드 완료!");
+        }
+
+        function startImageComparison() {
             let img2 = document.getElementById("imageUpload2").files[0];
 
             if (!img2) {
@@ -102,8 +110,8 @@
             }
 
             let fixedImageSrc = document.getElementById("fixedImage").src;
-            let canvas1 = document.createElement("canvas");
-            let canvas2 = document.createElement("canvas");
+            let canvas1 = document.getElementById("canvas1");
+            let canvas2 = document.getElementById("canvas2");
             let ctx1 = canvas1.getContext("2d");
             let ctx2 = canvas2.getContext("2d");
 
@@ -120,27 +128,47 @@
                     canvas2.height = image2.height;
                     ctx2.drawImage(image2, 0, 0);
 
-                    let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
-                    let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
+                    let mat1 = cv.imread(canvas1);
+                    let mat2 = cv.imread(canvas2);
 
-                    let diff = 0;
-                    for (let i = 0; i < data1.length; i++) {
-                        if (data1[i] !== data2[i]) diff++;
-                    }
-
-                    let similarity = 1 - diff / data1.length;
-                    console.log("유사도:", similarity);
-
-                    if (similarity > 0.99) {
-                        alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
-                        window.location.href = "../next-page/character6.html";
-                    } else {
-                        alert("❌ 본인 확인에 실패하였습니다.");
-                    }
+                    compareImages(mat1, mat2);
                 };
                 image2.src = URL.createObjectURL(img2);
             };
             image1.src = fixedImageSrc;
+        }
+
+        function compareImages(mat1, mat2) {
+            let orb = new cv.ORB();
+            let keypoints1 = new cv.KeyPointVector();
+            let keypoints2 = new cv.KeyPointVector();
+            let descriptors1 = new cv.Mat();
+            let descriptors2 = new cv.Mat();
+
+            orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
+            orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
+
+            let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
+            let matches = new cv.DMatchVector();
+            bf.match(descriptors1, descriptors2, matches);
+
+            console.log("매칭된 특징점 개수:", matches.size());
+
+            let matchThreshold = 15; // 유사한 특징점 개수 기준
+            if (matches.size() > matchThreshold) {
+                alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
+                window.location.href = "../next-page/character6.html"; // 원하는 페이지로 이동
+            } else {
+                alert("❌ 본인 확인에 실패하였습니다.");
+            }
+
+            mat1.delete();
+            mat2.delete();
+            descriptors1.delete();
+            descriptors2.delete();
+            keypoints1.delete();
+            keypoints2.delete();
+            matches.delete();
         }
     </script>
 
