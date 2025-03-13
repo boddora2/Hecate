@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>벼리 중간 행동</title>
     <link rel="stylesheet" href="../style.css">
-    <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();" onerror="onOpenCvFail();"></script>
+    <script defer src="https://docs.opencv.org/4.x/opencv.js"></script>
     <style>
         .upload-section {
             background: black;
@@ -39,37 +39,16 @@
             cursor: pointer;
             font-size: 16px;
             max-width: 200px;
-            disabled: true; /* 초기에는 비활성화 */
+            disabled: true;
         }
         .button:hover {
             background-color: #45a049;
         }
-        .hidden-canvas {
-            display: none;
-        }
     </style>
 </head>
-<body class="character-page">
-
+<body>
     <h1>벼리 중간 행동</h1>
-    <img src="../assets/images/벼리.jpg" alt="벼리">
-    <br><br>
-
-    <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
-    <section class="player-notice-text2">
-        자신의 행동 차례에만<br><br>주술 행동을 해주세요.
-    </section>
-    <br><br>
-
-    <section class="section-box">
-        <h2>변신술</h2>
-        <p>소요 비용 : 체력 큐브 개, 생명력 큐브 개</p>
-        <p>[주의] 체력 큐브가 0개가 되면 행동할 수 없습니다.</p>
-        <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
-    </section>
-
-    <hr class="custom-hr">
-
+    
     <section class="upload-section">
         <h3>📷 본인 확인</h3>
         <img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
@@ -78,126 +57,53 @@
         <button class="button" id="compareButton" onclick="startImageComparison()" disabled>본인 확인</button>
     </section>
 
-<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
-<script>
-    let opencvReady = false;
+    <script>
+        let opencvReady = false;
 
-    cv.onRuntimeInitialized = function() {
-        console.log("✅ OpenCV 완전 초기화 완료!");
-        opencvReady = true;
-        document.getElementById("compareButton").disabled = true;
-    };
+        window.onload = function () {
+            if (typeof cv !== "undefined") {
+                console.log("✅ OpenCV.js 로드 완료!");
+                opencvReady = true;
+                document.getElementById("compareButton").disabled = true;
+            } else {
+                console.error("❌ OpenCV.js 로드 실패!");
+            }
+        };
 
-    document.getElementById("imageUpload2").addEventListener("change", function() {
-        if (this.files.length > 0) {
-            document.getElementById("compareButton").disabled = false; // 파일 업로드하면 버튼 활성화
-        } else {
-            document.getElementById("compareButton").disabled = true;
-        }
-    });
-
-    function startImageComparison() {
-        if (!opencvReady) {
-            alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-            return;
-        }
-
-        if (typeof cv === "undefined" || !cv.imread) {
-            alert("❌ OpenCV.js가 아직 완전히 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
-            return;
-        }
-
-        let img2File = document.getElementById("imageUpload2").files[0];
-
-        if (!img2File) {
-            alert("본인 확인을 시작해주세요!\n(이미지를 업로드하세요)");
-            return;
-        }
-
-        let fixedImage = document.getElementById("fixedImage");
-        let canvas1 = document.getElementById("canvas1");
-        let canvas2 = document.getElementById("canvas2");
-        let ctx1 = canvas1.getContext("2d");
-        let ctx2 = canvas2.getContext("2d");
-
-        function loadImageToCanvas(imageSrc, canvas, ctx) {
-            return new Promise((resolve, reject) => {
-                let img = new Image();
-                img.onload = function () {
-                    canvas.width = 200;
-                    canvas.height = 200;
-                    ctx.drawImage(img, 0, 0, 200, 200);
-                    resolve();
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(previewId).src = e.target.result;
                 };
-                img.onerror = reject;
-                img.src = imageSrc;
-            });
+                reader.readAsDataURL(file);
+            }
         }
 
-        Promise.all([
-            loadImageToCanvas(fixedImage.src, canvas1, ctx1),
-            loadImageToCanvas(URL.createObjectURL(img2File), canvas2, ctx2)
-        ])
-        .then(() => {
-            setTimeout(() => {
-                try {
-                    let mat1 = cv.imread(canvas1);
-                    let mat2 = cv.imread(canvas2);
-
-                    if (mat1.empty() || mat2.empty()) {
-                        alert("❌ 이미지가 정상적으로 로드되지 않았습니다!");
-                        return;
-                    }
-
-                    compareImages(mat1, mat2);
-                } catch (e) {
-                    console.error("❌ OpenCV 오류 발생:", e);
-                    alert("❌ 이미지 비교 중 오류가 발생했습니다.");
-                }
-            }, 500);
-        })
-        .catch(() => {
-            alert("❌ 이미지 로드 중 오류가 발생했습니다.");
+        document.getElementById("imageUpload2").addEventListener("change", function () {
+            if (this.files.length > 0 && opencvReady) {
+                document.getElementById("compareButton").disabled = false;
+            } else {
+                document.getElementById("compareButton").disabled = true;
+            }
         });
-    }
 
-    function compareImages(mat1, mat2) {
-        console.log("🟢 본인 확인 시작");
+        function startImageComparison() {
+            if (!opencvReady) {
+                alert("❌ OpenCV.js가 아직 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
+                return;
+            }
 
-        let orb = new cv.ORB();
-        let keypoints1 = new cv.KeyPointVector();
-        let keypoints2 = new cv.KeyPointVector();
-        let descriptors1 = new cv.Mat();
-        let descriptors2 = new cv.Mat();
+            if (typeof cv === "undefined" || !cv.imread) {
+                alert("❌ OpenCV.js가 아직 완전히 로드되지 않았습니다. 잠시 후 다시 시도하세요.");
+                document.getElementById("compareButton").disabled = true;
+                return;
+            }
 
-        orb.detectAndCompute(mat1, new cv.Mat(), keypoints1, descriptors1);
-        orb.detectAndCompute(mat2, new cv.Mat(), keypoints2, descriptors2);
-
-        let bf = new cv.BFMatcher(cv.NORM_HAMMING, true);
-        let matches = new cv.DMatchVector();
-        bf.match(descriptors1, descriptors2, matches);
-
-        console.log("🟢 매칭된 특징점 개수:", matches.size());
-
-        let matchThreshold = 15;
-        if (matches.size() === 0) {
-            alert("❌ 매칭할 수 없습니다. 다시 시도하세요.");
-        } else if (matches.size() > matchThreshold) {
-            alert("✅ 본인 확인이 완료되었습니다!\n히든 카드 5,6을 공개해주세요.");
-        } else {
-            alert("❌ 본인 확인에 실패하였습니다.");
+            alert("✅ OpenCV.js가 정상적으로 로드되었습니다! (테스트)");
         }
-
-        mat1.delete();
-        mat2.delete();
-        descriptors1.delete();
-        descriptors2.delete();
-        keypoints1.delete();
-        keypoints2.delete();
-        matches.delete();
-    }
-</script>
-
+    </script>
     
     <!-- 🟢 구분선 -->
     <hr class="custom-hr">
