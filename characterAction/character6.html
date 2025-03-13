@@ -11,9 +11,13 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: inline-block;
-            margin-top: 20px;
             width: 90%;
+            max-width: 400px; /* 적절한 너비 설정 */
+            margin: 20px auto; /* 가운데 정렬 */
+            text-align: center; /* 텍스트와 인라인 요소 가운데 정렬 */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 내부 요소 가운데 정렬 */
         }
         .image-preview {
             width: 150px;
@@ -32,6 +36,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            max-width: 200px; /* 버튼 최대 크기 제한 */
         }
         .button:hover {
             background-color: #45a049;
@@ -49,11 +54,10 @@
 
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
-    <br>
     <section class="player-notice-text2">
         자신의 행동 차례에만<br><br>주술 행동 해주세요.
     </section>
-    <br><br><br>  
+    <br><br>
 
     <!-- 🟢 주술 행동 -->
     <section class="section-box">
@@ -63,81 +67,85 @@
         <p>[주의] 생명력 큐브가 0개가 되면 사망합니다.</p>
     </section>
 
-    <!-- 기준 이미지 (고정) -->
-<img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
+    <!-- 🟢 본인 확인 (이미지 비교) -->
+    <section class="upload-section">
+        <h3>📷 본인 확인</h3>
 
-<!-- 업로드할 비교 이미지 -->
-<input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
-<br>
-<img id="preview2" class="image-preview" src="" alt="업로드한 이미지">
-<br><br>
-<button class="button" onclick="compareImages()">본인 확인</button>
+        <!-- 기준 이미지 (고정) -->
+        <img id="fixedImage" class="image-preview" src="../assets/images/아리아.jpg" alt="아리아">
 
-<script>
-    function previewImage(input, previewId) {
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById(previewId).src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+        <!-- 업로드할 비교 이미지 -->
+        <input type="file" id="imageUpload2" accept="image/*" onchange="previewImage(this, 'preview2')">
+        <img id="preview2" class="image-preview" src="" alt="업로드한 이미지">
 
-    function compareImages() {
-        let img2 = document.getElementById("imageUpload2").files[0];
+        <button class="button" onclick="compareImages()">본인 확인</button>
+    </section>
 
-        if (!img2) {
-            alert("본인 확인을 시작해주세요!");
-            return;
+    <script>
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(previewId).src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
-        let fixedImageSrc = document.getElementById("fixedImage").src;
-        let canvas1 = document.createElement("canvas");
-        let canvas2 = document.createElement("canvas");
-        let ctx1 = canvas1.getContext("2d");
-        let ctx2 = canvas2.getContext("2d");
+        function compareImages() {
+            let img2 = document.getElementById("imageUpload2").files[0];
 
-        let image1 = new Image();
-        let image2 = new Image();
+            if (!img2) {
+                alert("본인 확인을 시작해주세요!");
+                return;
+            }
 
-        image1.onload = function () {
-            canvas1.width = image1.width;
-            canvas1.height = image1.height;
-            ctx1.drawImage(image1, 0, 0);
+            let fixedImageSrc = document.getElementById("fixedImage").src;
+            let canvas1 = document.createElement("canvas");
+            let canvas2 = document.createElement("canvas");
+            let ctx1 = canvas1.getContext("2d");
+            let ctx2 = canvas2.getContext("2d");
 
-            image2.onload = function () {
-                canvas2.width = image2.width;
-                canvas2.height = image2.height;
-                ctx2.drawImage(image2, 0, 0);
+            let image1 = new Image();
+            let image2 = new Image();
 
-                let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
-                let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
+            image1.onload = function () {
+                canvas1.width = image1.width;
+                canvas1.height = image1.height;
+                ctx1.drawImage(image1, 0, 0);
 
-                let diff = 0;
-                for (let i = 0; i < data1.length; i++) {
-                    if (data1[i] !== data2[i]) diff++;
-                }
+                image2.onload = function () {
+                    canvas2.width = image2.width;
+                    canvas2.height = image2.height;
+                    ctx2.drawImage(image2, 0, 0);
 
-                let similarity = 1 - diff / data1.length;
-                console.log("유사도:", similarity);
+                    let data1 = ctx1.getImageData(0, 0, canvas1.width, canvas1.height).data;
+                    let data2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height).data;
 
-                if (similarity > 0.99) {
-                    alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
-                    window.location.href = "../next-page/character6.html";
-                } else {
-                    alert("❌ 본인 확인에 실패하였습니다.");
-                }
+                    let diff = 0;
+                    for (let i = 0; i < data1.length; i++) {
+                        if (data1[i] !== data2[i]) diff++;
+                    }
+
+                    let similarity = 1 - diff / data1.length;
+                    console.log("유사도:", similarity);
+
+                    if (similarity > 0.99) {
+                        alert("✅ 본인 확인이 완료되었습니다! 잠금이 해제됩니다.");
+                        window.location.href = "../next-page/character6.html";
+                    } else {
+                        alert("❌ 본인 확인에 실패하였습니다.");
+                    }
+                };
+                image2.src = URL.createObjectURL(img2);
             };
-            image2.src = URL.createObjectURL(img2);
-        };
-        image1.src = fixedImageSrc;
-    }
-</script>
+            image1.src = fixedImageSrc;
+        }
+    </script>
 
+    <!-- 🟢 버튼 컨테이너 -->
     <section>
-        <!-- 버튼 컨테이너 -->
         <div class="button-container">
             <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
             <button onclick="location.href='../main-page-2.html'">[1차] 대본 보기</button>
