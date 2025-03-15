@@ -46,11 +46,11 @@
     </style>
 </head>
 <body class="character-page">
-s
+
     <h1>새나 중간 행동</h1>
     <img src="../assets/images/새나 가문.jpg" alt="새나"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
-    <br>
-    <br>
+    <br><br>
+
     <!-- 🟢 안내 문구 -->
     <h2 class="player-notice-title">⚠️ 주의 ⚠️</h2>
     <br>
@@ -77,39 +77,40 @@ s
             <br><br>
             <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)"> <!-- ✅ 클래스 추가 -->
             <br><br>
-            <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
+            <button onclick="checkAnswer()" class="answers-button">확인</button> <!-- ✅ 클래스 추가 -->
         </section>
     
         <script>
             function checkAnswer() {
                 const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
                 const answers = {
-                    "낡은 두루마리": "히든카드 7을 확인하세요."
+                    "낡은 두루마리": "히든카드 7을 확인하세요.",
                     "길라의 주술책": "히든카드 8을 확인하세요.",
                     "나린의 주술책": "히든카드 9를 확인하세요.",
                     "다올의 주술책": "히든카드 10을 확인하세요.",
                     "라온의 주술책": "히든카드 11을 확인하세요.",
                     "마루의 주술책": "히든카드 12를 확인하세요.",
                     "벼리의 주술책": "히든카드 13을 확인하세요.",
-                    "새나의 주술책": "히든카드 14를 확인하세요.",
+                    "새나의 주술책": "히든카드 14를 확인하세요."
                 };
-                
-            // 특정 캐릭터 이름이 있는지 확인
-            const restrictedNames = ["아리아", "길라","나린", "다올", "라온", "마루", "벼리", "새나"]; // 제한할 캐릭터 이름 목록
-            const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
-
-             if (hasRestrictedName) {
-            alert("인물에게는 복원술을 사용할 수 없습니다./n사물만 가능합니다.");
-            return; // 함수 종료
-            }
-                
-            if (answers[userInput]) {
-                alert(`복원에 성공하였습니다!\n${answers[userInput]}`);
-            } else {
-                alert("복원하였으나, 큰 도움이 되는 것 같진 않아보인다.");
-            }
+        
+                // 특정 캐릭터 이름이 있는지 확인
+                const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"]; // 제한할 캐릭터 이름 목록
+                const hasRestrictedName = restrictedNames.includes(userInput);
+        
+                if (hasRestrictedName) {
+                    alert("인물에게는 복원술을 사용할 수 없습니다.\n사물만 가능합니다.");
+                    return; // 함수 종료
+                }
+        
+                if (answers[userInput]) {
+                    alert(`복원에 성공하였습니다!\n${answers[userInput]}`);
+                } else {
+                    alert("복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.");
+                }
             }
         </script>
+        
     
         <!-- 🟢 구분선 -->
         <hr class="custom-hr">

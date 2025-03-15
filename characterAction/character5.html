@@ -84,16 +84,18 @@
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
             const answers = {
-                "제단": 주술을 해제할 수 없는데/n 제단 밑 바닥은 어떻게 내려가지?",
+                "제단": "주술을 해제할 수 없는데\n제단 밑 바닥은 어떻게 내려가지?",
             };
-
-            if (answers[userInput]) {
-                alert(`'제단 밑 바닥'에서 장소를 숨겨둔 주술이 느껴졌다.\n${answers[userInput]}`);
+    
+            const normalizedInput = userInput.trim(); // 공백 제거 후 비교
+    
+            if (answers[normalizedInput]) {
+                alert(`'제단 밑 바닥'에서 장소를 숨겨둔 주술이 느껴졌다.\n${answers[normalizedInput]}`);
             } else {
                 alert("장소를 숨겨둔 것 같은 주술은 느껴지지 않는다.");
             }
         }
-    </script>
+    </script>    
 
     <!-- 🟢 구분선 -->
     <hr class="custom-hr">

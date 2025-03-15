@@ -64,8 +64,8 @@
         <p><strong>순서</strong> : 7번</p>
         <p><strong>주술</strong> : 복제술</p>
         <p><strong>내용</strong> : 다른 이의 주술을 복제하는 주술</p>
-        <p><strong>비용</strong> : [기본] 주술 1번당 체력 큐브 2개 소모 + [상대방 주술의 비용]</p>
-        <p>[참고] 중간+최종 행동을 합쳐서 2번만 사용 가능합니다.</p>
+        <p><strong>비용</strong> : [기본] 체력 큐브 2개 소모 + [상대 주술 비용]</p>
+        <p>[참고] 1번만 사용할 수 있습니다.<br>복제할 상대 지목 후 주술 비용을 냅니다.</p>
     </section>
 
     <!-- 🟢 구분선 -->
@@ -90,22 +90,28 @@
                 "벼리": "벼리의 변신술을 사용합니다.",
                 "새나": "새나의 복원술을 사용합니다.",
             };
-
+    
             // 특정 캐릭터 이름이 있는지 확인
             const restrictedNames = ["나린"]; // 제한할 캐릭터 이름 목록
-            const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
-
-             if (hasRestrictedName) {
-            alert("나린의 주술을 복제하는 데 실패했다./n주술이 복제가 안 될 수가 있나?");
-            return; // 함수 종료
+            const hasRestrictedName = restrictedNames.includes(userInput);
+    
+            if (hasRestrictedName) {
+                alert("나린의 주술을 복제하는 데 실패했다.\n주술이 복제가 안 될 수가 있나?");
+                return; // 함수 종료
             }
-
+    
+            // 라온 입력 시 다른 메시지 출력
+            if (userInput === "라온") {
+                alert("나 자신의 주술은 복제할 수 없다.");
+                return; // 함수 종료
+            }
+    
             if (answers[userInput]) {
                 alert(`주술 복제에 성공했습니다!\n${answers[userInput]}`);
             } else {
                 alert("내가 모르는 이의 주술은 복제할 수 없다.");
             }
-        }
+        }    
     </script>
 
     <!-- 🟢 구분선 -->
