@@ -84,13 +84,14 @@
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
             const answers = {
-                "제단": "어떻게 들어가지? 정상적인 방법으로는 못 들어갈 것 같은데.",
+                "제단": "비밀의 공간은 찾았으나 들어갈 방법을 모르겠다. 어떻게 들어가지?\n정상적인 방법으로는 못 들어갈 것 같은데.",
+                "제단실": "비밀의 공간은 찾았으나 들어갈 방법을 모르겠다. 어떻게 들어가지?\n정상적인 방법으로는 못 들어갈 것 같은데.",
             };
     
             const normalizedInput = userInput.trim(); // 공백 제거 후 비교
     
             if (answers[normalizedInput]) {
-                alert(`'제단 밑 바닥'에서 비밀의 공간을 숨겨둔 주술이 느껴졌다. 비밀의 공간은 찾았으나 들어갈 방법을 모르겠다.\n${answers[normalizedInput]}`);
+                alert(`'제단 밑 바닥'에서 비밀의 공간을 숨겨둔 주술이 느껴졌다.\n${answers[normalizedInput]}`);
             } else {
                 alert("비밀의 공간을 숨겨둔 것 같은 주술은 느껴지지 않는다.");
             }
