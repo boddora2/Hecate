@@ -85,7 +85,7 @@
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
             const answers = {
-                "제단 밑 바닥": "아리아의 비밀 일기장을 발견했습니다.\n아리아 본인만 열 수 있는 주술이 걸려있다.",
+                "제단 밑 바닥": "아리아의 비밀 일기장을 발견했습니다.\n앗! 아리아 본인만 열 수 있는 주술이 걸려있네.",
             };
 
             // 특정 캐릭터 이름이 있는지 확인
@@ -98,7 +98,7 @@
             }
 
             if (answers[userInput]) {
-                alert(`숨겨진 공간이 등장합니다!\n${answers[userInput]}`);
+                alert(`바닥을 완벽히 파.괴.하.였.습.니.다.\n${answers[userInput]}`);
             } else {
                 alert("모든 게 부셔졌으나\n숨겨진 공간은 보이지 않는다.");
             }
