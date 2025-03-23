@@ -1,4 +1,4 @@
-/* 폰트 */
+ㄹ/* 폰트 */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
@@ -227,7 +227,7 @@ button:hover {
 /* 세부 페이지의 본문 글씨체와 양쪽 정렬 적용 */
 .character-page p {
     font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
-    word-spacing: -8px;
+    word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -236,14 +236,14 @@ button:hover {
 }
 .character-page ul {
     font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
-    word-spacing: -8px;
+    word-spacing: 0px;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 .character-page li {
     font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
-    word-spacing: -8px;
+    word-spacing: 0px;
     text-align: justify;  /* 양쪽 정렬 */
     font-weight: normal;  /* 기본 글씨체 */
     font-size: 12px;  /* 기본 글씨 크기 */
@@ -283,7 +283,7 @@ button:hover {
 /* 기존 세부 페이지처럼 스타일 적용 */
 .section-box {
     ffont-family: 'Nanum Myeongjo', 'Times New Roman', serif;
-    word-spacing: -8px;
+    word-spacing: 0px;
     background-color: rgba(255, 255, 255, 0.1); /* 연한 배경 추가 */
     padding: 15px;
     margin: 20px auto;
@@ -324,7 +324,7 @@ button:hover {
 /* 메인 페이지 2, 3의 본문 스타일을 세부 페이지와 동일하게 적용 */
 .index-page .section-box {    
     font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
-    word-spacing: -8px;  /* 글자 간격을 좁게 조정 */
+    word-spacing:0px;  /* 글자 간격을 좁게 조정 */
     text-align: justify;  /* 양쪽 정렬 */
     font-size: 12px;  /* 글씨 크기 동일하게 */
     line-height: 1.8;  /* 줄 간격 동일하게 */
@@ -365,7 +365,7 @@ button:hover {
 
 .mid-action-page .section-box {    
     font-family: 'Nanum Gothic', sans-serif;
-    word-spacing: -8px;
+    word-spacing: 0px;
     text-align: justify;
     font-size: 12px;
     line-height: 1.8;
