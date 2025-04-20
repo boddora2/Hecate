@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔딩북</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function startEnding() {
+      const confirm1 = confirm("모든 플레이어가 [최종 행동]을 끝마쳤습니까?");
+      if (confirm1) {
+        const confirm2 = confirm("마지막 경고!\n[최종 행동]이 끝나지 않았다면\n이 페이지를 닫고 돌아가세요.\n\n⚠️ 큰 스포일러가 됩니다.");
+        if (confirm2) {
+          alert("엔딩 확인은 [길라]플레이어가 진행합니다.");
+          window.location.href = "ending_select1.html";
+        }
+      }
+    }
+  </script>
+</head>
+<body class="index-page">
+
+  <h1>엔딩북</h1>
+
+  <!-- 🟡 주의 문구 -->
+  <section class="main-notice">
+    <p><strong>⚠️ 주의 ⚠️<br><br>최종 행동 단계가 끝났다면<br><br>[엔딩 확인] 버튼을 눌러 주세요.</strong></p>
+  </section>
+
+  <!-- 🟡 이미지 (스타일 통일) -->
+  <img src="assets/images/엔딩북.jpg" alt="엔딩북 표지" class="page-image">
+
+  <!-- 🟡 버튼 -->
+  <button onclick="startEnding()">엔딩 확인</button>
+
+  <!-- 🟡 구분선 -->
+  <hr class="custom-hr">
+
+  <!-- 🟡 제작자 문구 -->
+  <section>
+    <p class="made"> &copy; Copyright 2025. 보또 All rights reserved. </p>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>엔딩 A</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .section-box { font-family: 'Nanum Gothic', sans-serif !important; }
+    .action-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .action-row label {
+      width: 50px;
+    }
+    .action-select {
+      margin-right: 10px;
+    }
+    .hp-input,
+    .life-input {
+      width: 90px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body class="index-page">
+
+  <h1>최종 엔딩 - A</h1>
+  <img src="assets/images/엔딩북.jpg" alt="엔딩 이미지" class="page-image"/>
+
+  <!-- 엔딩 설명 -->
+  <div class="section-box">
+    <p>
+      모두의 노력 끝에, 요괴에 대한 진실은 밝혀졌다.<br><br>
+      이제 아이들은 세상의 거짓을 바로잡기 위해 나아간다.<br>
+      주술의 시대는 막을 내리고, 요괴와 인간은 새로운 관계를 맺는다.<br><br>
+      <strong>“더 이상 두려워하지 않아도 돼. 우리는 진실을 마주했으니까.”</strong>
+    </p>
+  </div>
+
+  <!-- 1번: 아리아 사인 선택 -->
+  <div class="section-box">
+    <p><strong>1. 투표 결과 결정된 아리아의 사인은?</strong></p>
+
+    <!-- 타살 -->
+    <div style="margin-bottom: 10px;">
+      <label><input type="radio" name="cause" value="타살" onclick="updateDropdown(this)"> 타살</label>
+      <select id="select-타살-1" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>범인 선택</option>
+        <option>길라</option><option>나린</option><option>다올</option><option>라온</option>
+        <option>마루</option><option>벼리</option><option>새나</option>
+      </select>
+      <select id="select-타살-2" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>재투표 결과 선택</option>
+        <option>처벌</option><option>불완전 용서</option><option>용서</option>
+      </select>
+    </div>
+
+    <!-- 자살 -->
+    <div style="margin-bottom: 10px;">
+      <label><input type="radio" name="cause" value="자살" onclick="updateDropdown(this)"> 자살</label>
+      <select id="select-자살" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>최종행동 제외된 인물 선택</option>
+        <option>길라</option><option>나린</option><option>다올</option><option>라온</option>
+        <option>마루</option><option>벼리</option><option>새나</option><option>없음</option>
+      </select>
+    </div>
+
+    <!-- 사고사 -->
+    <div style="margin-bottom: 10px;">
+      <label><input type="radio" name="cause" value="사고사" onclick="updateDropdown(this)"> 사고사</label>
+      <select id="select-사고사" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>최종행동 제외된 인물 선택</option>
+        <option>길라</option><option>나린</option><option>다올</option><option>라온</option>
+        <option>마루</option><option>벼리</option><option>새나</option><option>없음</option>
+      </select>
+    </div>
+
+    <!-- 자연사 -->
+    <div style="margin-bottom: 10px;">
+      <label><input type="radio" name="cause" value="자연사" onclick="updateDropdown(this)"> 자연사</label>
+      <select id="select-자연사" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>최종행동 제외된 인물 선택</option>
+        <option>길라</option><option>나린</option><option>다올</option><option>라온</option>
+        <option>마루</option><option>벼리</option><option>새나</option><option>없음</option>
+      </select>
+    </div>
+
+    <!-- 동률 -->
+    <div style="margin-bottom: 10px;">
+      <label><input type="radio" name="cause" value="동률" onclick="updateDropdown(this)"> 동률</label>
+      <select id="select-동률" class="cause-select" style="display: none; margin-left: 10px;">
+        <option disabled selected>최종행동 제외된 인물 선택</option>
+        <option>길라</option><option>나린</option><option>다올</option><option>라온</option>
+        <option>마루</option><option>벼리</option><option>새나</option><option>없음</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 2번: 주술책 여부 -->
+  <div class="section-box">
+    <p><strong>2. 아리아의 주술책을 찾으셨습니까?</strong></p>
+    <label><input type="radio" name="bookFound" value="yes" onclick="updateActionOptions()"> 예</label>
+    <label><input type="radio" name="bookFound" value="no" onclick="updateActionOptions()"> 아니오</label>
+  </div>
+
+  <!-- 3번: 7인의 선택 -->
+  <div class="section-box">
+    <p><strong>3. 7명의 아이들이 선택한 최종 행동 결과</strong></p>
+    <div id="finalActions">
+        <div class="action-row">
+            <label>길라</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>나린</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>다올</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>라온</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>마루</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>벼리</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>
+          
+          <div class="action-row">
+            <label>새나</label>
+            <select class="action-select">
+              <option disabled selected>행동 선택</option>
+              <option value="봉인">요괴 봉인술</option>
+              <option value="해제">요괴 봉인 해제술</option>
+              <option value="포기">주술 행동 포기</option>
+            </select>
+            <input type="number" placeholder="체력" class="hp-input" min="0" max="20">
+            <input type="number" placeholder="생명력" class="life-input" min="0" max="7">
+            <span class="warning-message" style="color: red; display: none;">행동 불가</span>
+          </div>          
+    </div>
+  </div>
+
+  <!-- 버튼 영역 -->
+  <div class="button-container">
+    <button onclick="showResult()">결과 확인</button>
+    <button onclick="location.href='ending_select1.html'">엔딩 선택 페이지</button>
+    <button onclick="location.href='ending.html'">엔딩 페이지로 돌아가기</button>
+  </div>
+
+  <hr class="custom-hr">
+  <section><p class="made">&copy; 2025. 보또 All rights reserved.</p></section>
+
+  <!-- 스크립트 -->
+  <script>
+    function updateDropdown(radio) {
+      document.querySelectorAll('.cause-select').forEach(sel => sel.style.display = 'none');
+      const show1 = document.getElementById('select-' + radio.value);
+      const show1_alt = document.getElementById('select-' + radio.value + '-1');
+      const show2_alt = document.getElementById('select-' + radio.value + '-2');
+      if (show1) show1.style.display = 'inline-block';
+      if (show1_alt) show1_alt.style.display = 'inline-block';
+      if (show2_alt) show2_alt.style.display = 'inline-block';
+    }
+
+    function updateActionOptions() {
+  const found = document.querySelector('input[name="bookFound"]:checked')?.value;
+  document.querySelectorAll('.action-select').forEach(select => {
+    const 봉인옵션 = [...select.options].find(opt => opt.value === "봉인");
+    if (봉인옵션) 봉인옵션.disabled = (found === 'no'); // 아니오면 봉인 막기!
+  });
+}
+
+    function getExcludedNameFromCause() {
+      const cause = document.querySelector('input[name="cause"]:checked')?.value;
+      if (!cause) return null;
+      if (cause === "타살") {
+        const 범인 = document.getElementById("select-타살-1")?.value;
+        const 재투표 = document.getElementById("select-타살-2")?.value;
+        return (재투표 === "처벌") ? 범인 : null;
+      } else {
+        return document.getElementById("select-" + cause)?.value || null;
+      }
+    }
+
+    function resetActionRows() {
+      document.querySelectorAll('.action-row').forEach(row => {
+        row.querySelector('.action-select').disabled = false;
+        row.querySelector('.hp-input').disabled = false;
+        row.querySelector('.life-input').disabled = false;
+        row.style.opacity = "1";
+        row.querySelector('.warning-message').style.display = "none";
+      });
+    }
+
+    function disableExcludedActionRow() {
+      const excludedName = getExcludedNameFromCause();
+      if (!excludedName || excludedName === "없음") return;
+      document.querySelectorAll('.action-row').forEach(row => {
+        const label = row.querySelector('label').textContent.trim();
+        if (label === excludedName) {
+          row.querySelector('.action-select').disabled = true;
+          row.querySelector('.hp-input').disabled = true;
+          row.querySelector('.life-input').disabled = true;
+          row.style.opacity = "0.6";
+          const warning = row.querySelector('.warning-message');
+          warning.textContent = "행동 불가";
+          warning.style.display = "inline";
+        }
+      });
+    }
+
+    function calculateLifeTotals() {
+      let 봉인합 = 0, 해제합 = 0;
+      document.querySelectorAll('.action-row').forEach(row => {
+        const select = row.querySelector('.action-select');
+        const hp = parseInt(row.querySelector('.hp-input').value) || 0;
+        const life = parseInt(row.querySelector('.life-input').value) || 0;
+        const 추가 = Math.floor((hp - 1) / 2);
+        const total = life + (추가 > 0 ? 추가 : 0);
+        if (select.disabled || select.value === "포기") return;
+        if (select.value === "봉인") 봉인합 += total;
+        else if (select.value === "해제") 해제합 += total;
+      });
+      if (해제합 >= 봉인합 + 10) return { type: "해제", 봉인합, 해제합 };
+      else if (봉인합 >= 10) return { type: "봉인", 봉인합, 해제합 };
+      else return { type: "실패", 봉인합, 해제합 };
+    }
+
+    function showResult() {
+      const causeRadio = document.querySelector('input[name="cause"]:checked');
+      if (!causeRadio) return alert("사인을 선택해주세요!");
+      const cause = causeRadio.value;
+      let resultText = `선택한 사인: ${cause}\n`;
+
+      if (cause === "타살") {
+        const 범인 = document.getElementById("select-타살-1")?.value || "(범인 선택 안됨)";
+        const 재투표 = document.getElementById("select-타살-2")?.value || "(재투표 결과 선택 안됨)";
+        resultText += `범인: ${범인}\n재투표 결과: ${재투표}`;
+      } else {
+        const 제외자 = document.getElementById("select-" + cause)?.value || "(선택 안됨)";
+        resultText += `최종행동 제외된 인물: ${제외자}`;
+      }
+
+      resetActionRows();
+      disableExcludedActionRow();
+
+      const result = calculateLifeTotals();
+      resultText += `\n\n🔍 생명력 합산 결과\n- 봉인: ${result.봉인합}\n- 해제: ${result.해제합}\n`;
+      resultText += (result.type === "해제")
+        ? "✅ 요괴 봉인 해제술이 발동됩니다!"
+        : (result.type === "봉인")
+        ? "✅ 요괴 봉인술이 발동됩니다!"
+        : "❌ 생명력이 부족하여 주술이 실패했습니다.";
+
+      alert(resultText);
+    }
+
+    window.onload = function() {
+      document.querySelectorAll('.action-select').forEach((select, index) => {
+        select.addEventListener('change', function () {
+          const hp = document.querySelectorAll('.hp-input')[index];
+          const life = document.querySelectorAll('.life-input')[index];
+          const isDisabled = this.value === "포기";
+          hp.disabled = isDisabled;
+          life.disabled = isDisabled;
+        });
+      });
+    };
+  </script>
+</body>
+</html>

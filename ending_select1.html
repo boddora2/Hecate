@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최종 엔딩 조건 선택</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .section-box {
+      font-family: 'Nanum Gothic', sans-serif !important;
+    }
+  </style>
+
+  <script>
+    function checkEnding() {
+      const c1 = document.querySelector('input[name="cond1"]:checked').value;
+      const c2 = document.querySelector('input[name="cond2"]:checked').value;
+      const c3 = document.querySelector('input[name="cond3"]:checked').value;
+
+      // 하나라도 'yes'면 Ending_A.html, 전부 'no'면 Ending_B.html
+      if (c1 === "yes" || c2 === "yes" || c3 === "yes") {
+        window.location.href = "Ending_A.html";
+      } else {
+        window.location.href = "Ending_B.html";
+      }
+    }
+  </script>
+</head>
+<body class="index-page">
+
+  <h1>최종 엔딩 확인 절차</h1>
+
+  <!-- 📷 이미지 -->
+  <img src="assets/images/최종주술.jpg" alt="최종 주술 이미지" class="page-image">
+
+  <!-- 📌 안내 문구 -->
+  <section class="main-notice">
+  </section>
+
+  <!-- ✅ 조건 선택지 -->
+<!-- ✅ 1번&2번 질문 박스 -->
+<div class="section-box">
+    <div style="margin-bottom: 20px;">
+      <p style="font-size: 15px; color: #FFD700; font-weight: bold;">
+        [길라] 플레이어가 공개된 모든 [히든 카드]를 확인합니다.
+      </p>
+      <p><strong>1번. 가리사의 목걸이 / 라움의 목걸이 / 아리아의 일기장 중에 2개 이상 찾았나요?</strong></p>
+      <label><input type="radio" name="cond1" value="yes"> 예</label><br>
+      <label><input type="radio" name="cond1" value="no" checked> 아니오</label>
+    </div>
+  
+    <div>
+      <p><strong>2번. 길라/나린/다올/라온/마루/새나의 주술책 또는 낡은 두루마리 중 3개 이상 복원했나요?</strong></p>
+      <label><input type="radio" name="cond2" value="yes"> 예</label><br>
+      <label><input type="radio" name="cond2" value="no" checked> 아니오</label>
+    </div>
+  </div>
+  
+  
+  <!-- ✅ 3번 질문 박스 -->
+  <div class="section-box">
+    <div style="margin-bottom: 20px;">
+      <p style="font-size: 15px; color: #FFD700; font-weight: bold;">
+         [길라] 플레이어가 [벼리] 플레이어에게 '요괴는 사악한 괴물인가요?'라고 질문합니다
+      </p>
+      <p><strong>3번. [벼리] 플레이어로부터 '요괴는 사악한 괴물이 아니다'라는 의미의 답변을 들었나요?</strong></p>
+      <label><input type="radio" name="cond3" value="yes"> 예</label><br>
+      <label><input type="radio" name="cond3" value="no" checked> 아니오</label>
+  </div>
+  
+  
+    <!-- 🔘 버튼: 가운데 정렬 -->
+    <div class="button-container">
+      <button onclick="checkEnding()">결과 확인</button>
+    </div>
+    <!-- ✅ 엔딩 페이지로 돌아가기 버튼 -->
+    <div class="button-container">
+    <button onclick="location.href='ending.html'">엔딩 페이지로 돌아가기</button>
+  </div>
+  
+  </div>
+  
+
+  <!-- ✅ 하단 구분선 + 제작자 문구 -->
+  <hr class="custom-hr">
+  <section>
+    <p class="made"> &copy; Copyright 2025. 보또 All rights reserved. </p>
+  </section>
+
+</body>
+</html>
