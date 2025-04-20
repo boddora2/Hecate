@@ -33,10 +33,6 @@
   <!-- 엔딩 설명 -->
   <div class="section-box">
     <p>
-      모두의 노력 끝에, 요괴에 대한 진실은 밝혀졌다.<br><br>
-      이제 아이들은 세상의 거짓을 바로잡기 위해 나아간다.<br>
-      주술의 시대는 막을 내리고, 요괴와 인간은 새로운 관계를 맺는다.<br><br>
-      <strong>“더 이상 두려워하지 않아도 돼. 우리는 진실을 마주했으니까.”</strong>
     </p>
   </div>
 
@@ -203,6 +199,17 @@
     </div>
   </div>
 
+<!-- 결과 모달 -->
+<div id="resultModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <p id="modalText"></p>
+    <div class="modal-buttons">
+      <button onclick="goToEndingResult()">엔딩 확인</button>
+      <button onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div> 
+
   <!-- 버튼 영역 -->
   <div class="button-container">
     <button onclick="showResult()">결과 확인</button>
@@ -239,7 +246,7 @@
       if (cause === "타살") {
         const 범인 = document.getElementById("select-타살-1")?.value;
         const 재투표 = document.getElementById("select-타살-2")?.value;
-        return (재투표 === "처벌") ? 범인 : null;
+        return (재투표 === "처벌" || 재투표 === "불완전 용서") ? 범인 : null;
       } else {
         return document.getElementById("select-" + cause)?.value || null;
       }
@@ -273,20 +280,31 @@
     }
 
     function calculateLifeTotals() {
-      let 봉인합 = 0, 해제합 = 0;
-      document.querySelectorAll('.action-row').forEach(row => {
-        const select = row.querySelector('.action-select');
-        const hp = parseInt(row.querySelector('.hp-input').value) || 0;
-        const life = parseInt(row.querySelector('.life-input').value) || 0;
-        const 추가 = Math.floor((hp - 1) / 2);
-        const total = life + (추가 > 0 ? 추가 : 0);
-        if (select.disabled || select.value === "포기") return;
-        if (select.value === "봉인") 봉인합 += total;
-        else if (select.value === "해제") 해제합 += total;
-      });
-      if (해제합 >= 봉인합 + 10) return { type: "해제", 봉인합, 해제합 };
-      else if (봉인합 >= 10) return { type: "봉인", 봉인합, 해제합 };
-      else return { type: "실패", 봉인합, 해제합 };
+    let 봉인합 = 0, 해제합 = 0;
+    document.querySelectorAll('.action-row').forEach(row => {
+    const select = row.querySelector('.action-select');
+    const hp = parseInt(row.querySelector('.hp-input').value) || 0;
+    const life = parseInt(row.querySelector('.life-input').value) || 0;
+    const 추가 = Math.floor((hp - 1) / 2);
+    const total = life + (추가 > 0 ? 추가 : 0);
+
+    if (select.disabled || select.value === "포기") return;
+    if (select.value === "봉인") 봉인합 += total;
+    else if (select.value === "해제") 해제합 += total;
+    });
+
+    // ✅ 해제술이 봉인술보다 10 이상 많으면 해제 성공
+    if (해제합 >= 봉인합 + 10) {
+    return { type: "해제", 봉인합, 해제합 };
+    }
+
+    // ❗ 봉인술은 총합 10 이상이어야 발동 가능
+    if (봉인합 >= 10) {
+    return { type: "봉인", 봉인합, 해제합 };
+    }
+
+    // 그 외에는 실패
+    return { type: "실패", 봉인합, 해제합 };
     }
 
     function showResult() {
@@ -299,23 +317,84 @@
         const 범인 = document.getElementById("select-타살-1")?.value || "(범인 선택 안됨)";
         const 재투표 = document.getElementById("select-타살-2")?.value || "(재투표 결과 선택 안됨)";
         resultText += `범인: ${범인}\n재투표 결과: ${재투표}`;
+        localStorage.setItem("selectedKiller", 범인);
       } else {
         const 제외자 = document.getElementById("select-" + cause)?.value || "(선택 안됨)";
         resultText += `최종행동 제외된 인물: ${제외자}`;
       }
-
-      resetActionRows();
-      disableExcludedActionRow();
+      // 최종 행동 저장
+      const finalActions = [];
+        document.querySelectorAll('.action-row').forEach(row => {
+        const name = row.querySelector('label').textContent.trim();
+        const action = row.querySelector('.action-select').value;
+        if (action !== "포기") {
+            finalActions.push({ name, action });
+        }
+      });
 
       const result = calculateLifeTotals();
-      resultText += `\n\n🔍 생명력 합산 결과\n- 봉인: ${result.봉인합}\n- 해제: ${result.해제합}\n`;
+      resultText += `\n\n생명력 합산 결과\n- 봉인: ${result.봉인합}\n- 해제: ${result.해제합}\n`;
       resultText += (result.type === "해제")
         ? "✅ 요괴 봉인 해제술이 발동됩니다!"
         : (result.type === "봉인")
         ? "✅ 요괴 봉인술이 발동됩니다!"
         : "❌ 생명력이 부족하여 주술이 실패했습니다.";
 
-      alert(resultText);
+      // 아리아의 사인 저장  
+      localStorage.setItem("ariasCause", cause);
+
+
+      // 책 여부 저장
+      const bookFound = document.querySelector('input[name="bookFound"]:checked')?.value;
+      localStorage.setItem("bookFound", bookFound || "아니오");
+
+      // 최종 행동 타입 저장
+      localStorage.setItem("finalAction", result.type); // result.type은 봉인 / 해제 / 실패 중 하나
+      
+      // 저장
+      localStorage.setItem("finalActions", JSON.stringify(finalActions));
+
+      // 제외된 인물 저장
+      const excludedName = getExcludedNameFromCause();
+      localStorage.setItem("excluded", excludedName || "없음");
+
+      // 금기술 사용자 (길라 포함 + 해제술 선택자)
+      const forbiddenNames = finalActions
+      .filter(a => a.action === "해제")
+      .map(a => a.name);
+      localStorage.setItem("forbiddenNames", JSON.stringify(forbiddenNames));
+
+      // 벼리에게 힘을 보탠 자들 (봉인술 + 벼리 제외)
+      const supportBbyori = finalActions
+      .filter(a => a.action === "봉인" && a.name !== "벼리")
+      .map(a => a.name);
+      localStorage.setItem("supportBbyori", JSON.stringify(supportBbyori));
+
+      // 길라에게 힘을 보탠 자들 (해제술 + 길라 제외)
+      const supportGill = finalActions
+      .filter(a => a.action === "해제" && a.name !== "길라")
+      .map(a => a.name);
+      localStorage.setItem("supportGill", JSON.stringify(supportGill));
+
+      // 요괴 봉인술 택한 캐릭터 전체 (벼리 포함)
+      const sealUsers = finalActions
+      .filter(a => a.action === "봉인")
+      .map(a => a.name);
+      localStorage.setItem("sealUsers", JSON.stringify(sealUsers));
+
+      resetActionRows();
+      disableExcludedActionRow();
+
+        document.getElementById("modalText").innerText = resultText;
+        document.getElementById("resultModal").style.display = "flex";
+
+    }
+    function goToEndingResult() {
+      window.location.href = "Ending_A_RESULT.html";
+    }
+
+    function closeModal() {
+    document.getElementById("resultModal").style.display = "none";
     }
 
     window.onload = function() {
