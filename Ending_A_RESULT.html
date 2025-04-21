@@ -2,81 +2,57 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-widt
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <title>엔딩 A 결과</title>
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
   <style>
     body {
       background-color: #111;
-      color: #fff;
-      font-family: 'Nanum Gothic', sans-serif;
-      text-align: center;
-      padding: 40px 20px; 
+      padding: 40px 20px;
     }
+
     .result-box {
       background-color: #222;
       padding: 30px;
       border-radius: 12px;
-      max-width: 800px; 
+      max-width: 800px;
       margin: 0 auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
+
     .result-box h2 {
       margin-bottom: 20px;
       color: #FFD700;
     }
+
     .result-code {
       font-size: 24px;
       font-weight: bold;
       margin-top: 10px;
     }
+
     .result-message {
       font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
       word-spacing: 0px;
-      text-align: justify;        /* 양쪽 정렬 */
-      font-weight: normal;        /* 일반체 */
-      font-size: 14px;            /* 글씨 크기 */
-      line-height: 1.8;           /* 줄 간격 */
-      margin-bottom: 20px;        /* 문단 간격 */
-      white-space: pre-line;      /* 줄바꿈 유지 */
+      text-align: justify;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      white-space: pre-line;
     }
-  button {
-    font-family: 'Nanum Gothic', sans-serif;
-    font-weight: bold;
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 250px;
-    transition: background-color 0.3s ease;
-  }
-
-  /* 버튼 그룹 정렬 */
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-top: 40px;
-  }
-
-  /* 제작자 문구 스타일 */
-  .made {
-    font-family: 'Nanum Gothic', sans-serif;
-    font-weight: bold;
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    letter-spacing: 0.5px;
-    margin-top: 20px;
-  }
+    
+    hr.custom-hr {
+      border: none;
+      height: 2px;
+      background: white;
+      margin: 30px 0;
+      width: 100%;
+    }
   </style>
 </head>
-<body>
+  <body class="index-page">
   <div class="result-box">
     <h2>최종 엔딩 결과</h2>
     <div class="result-code" id="endingCode">엔딩 코드 불러오는 중...</div>
