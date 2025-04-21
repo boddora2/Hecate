@@ -35,52 +35,45 @@
       word-spacing: 0px;
       text-align: justify;        /* 양쪽 정렬 */
       font-weight: normal;        /* 일반체 */
-      font-size: 13px;            /* 글씨 크기 */
+      font-size: 14px;            /* 글씨 크기 */
       line-height: 1.8;           /* 줄 간격 */
       margin-bottom: 20px;        /* 문단 간격 */
       white-space: pre-line;      /* 줄바꿈 유지 */
     }
-
-    button {
+  button {
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
     background-color: white;
     color: black;
     border: none;
-    padding: 10px;
-    font-size: 14px;
+    padding: 12px 20px;
+    font-size: 16px;
     cursor: pointer;
-    margin-top: 10px;
-    width: 80%;
-    max-width: 200px;
     border-radius: 8px;
-    }
-    button:hover {
-    background-color: gray;
-    }
-    .button-container {
+    width: 90%;
+    max-width: 250px;
+    transition: background-color 0.3s ease;
+  }
+
+  /* 버튼 그룹 정렬 */
+  .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-top: 30px;
-    }
+    gap: 12px;
+    margin-top: 40px;
+  }
 
-    .custom-hr {
-    border: none;
-    height: 2px;
-    background: white;
-    margin: 30px 0;
-    width: 100%;
-    }
-    .made {
+  /* 제작자 문구 스타일 */
+  .made {
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
-    word-spacing: 0px;
-    }
+    letter-spacing: 0.5px;
+    margin-top: 20px;
+  }
   </style>
 </head>
 <body>
