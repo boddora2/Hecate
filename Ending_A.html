@@ -316,6 +316,7 @@
         const 재투표 = document.getElementById("select-타살-2")?.value || "(재투표 결과 선택 안됨)";
         resultText += `범인: ${범인}\n재투표 결과: ${재투표}`;
         localStorage.setItem("selectedKiller", 범인);
+        localStorage.setItem("reVoteResult", 재투표); 
       } else {
         const 제외자 = document.getElementById("select-" + cause)?.value || "(선택 안됨)";
         resultText += `최종행동 제외된 인물: ${제외자}`;
@@ -379,6 +380,10 @@
       .filter(a => a.action === "봉인")
       .map(a => a.name);
       localStorage.setItem("sealUsers", JSON.stringify(sealUsers));
+
+      // 벼리의 선택 저장
+      const bbyoriAction = finalActions.find(a => a.name === "벼리")?.action || "";
+      localStorage.setItem("actions_bbyori", bbyoriAction);
 
       resetActionRows();
       disableExcludedActionRow();
