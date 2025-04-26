@@ -220,6 +220,16 @@
 
   <!-- 스크립트 -->
   <script>
+	const nameMap = {
+		"길라": "gilla",
+		"다올": "daol",
+		"라온": "raon",
+		"마루": "maru",
+		"벼리": "bbyori",
+		"새나": "saena",
+		"나린": "narin"
+		};
+		
     function updateDropdown(radio) {
       document.querySelectorAll('.cause-select').forEach(sel => sel.style.display = 'none');
       const show1 = document.getElementById('select-' + radio.value);
@@ -326,9 +336,7 @@
         document.querySelectorAll('.action-row').forEach(row => {
         const name = row.querySelector('label').textContent.trim();
         const action = row.querySelector('.action-select').value;
-        if (action !== "포기") {
-            finalActions.push({ name, action });
-        }
+        finalActions.push({ name, action }); 
       });
 
       const result = calculateLifeTotals();
@@ -341,7 +349,6 @@
 
       // 아리아의 사인 저장  
       localStorage.setItem("ariasCause", cause);
-
 
       // 책 여부 저장
       const bookFound = document.querySelector('input[name="bookFound"]:checked')?.value;
@@ -384,6 +391,22 @@
       // 벼리의 선택 저장
       const bbyoriAction = finalActions.find(a => a.name === "벼리")?.action || "";
       localStorage.setItem("actions_bbyori", bbyoriAction);
+	  
+      // 새나의 선택 저장
+      const saenaAction = finalActions.find(a => a.name === "새나")?.action || "";
+      localStorage.setItem("actions_saena", saenaAction);
+
+      // 주술 행동을 포기한 캐릭터 전체
+      const giveUpNames = finalActions
+      .filter(a => a.action === "포기")
+      .map(a => a.name);
+      localStorage.setItem("giveUpNames", JSON.stringify(giveUpNames));
+
+      // 요괴 봉인 해제술을 택한 캐릭터 전체
+      const openNames = finalActions
+      .filter(a => a.action === "해제")
+      .map(a => a.name);
+      localStorage.setItem("openNames", JSON.stringify(openNames));
 
       resetActionRows();
       disableExcludedActionRow();

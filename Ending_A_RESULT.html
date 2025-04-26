@@ -60,6 +60,12 @@
   </div>
 
   <script>
+  const nameMap = {
+  "길라": "gilla",  "다올": "daol",  "라온": "raon",
+  "마루": "maru",  "벼리": "bbyori", "새나": "saena",
+  "나린": "narin"
+  };
+  
     const cause = localStorage.getItem("ariasCause");
     const killer = localStorage.getItem("selectedKiller") || "";
     const reVote = localStorage.getItem("reVoteResult") || "";
@@ -78,15 +84,16 @@
     const supportBbyori = JSON.parse(localStorage.getItem("supportBbyori") || "[]");
     const supportGill = JSON.parse(localStorage.getItem("supportGill") || "[]");
     const sealUsers = JSON.parse(localStorage.getItem("sealUsers") || "[]");
+    const giveUpNames = JSON.parse(localStorage.getItem("giveUpNames") || "[]");
+    const openNames = JSON.parse(localStorage.getItem("openNames") || "[]");
 
-
-    // 조건 키 생성
-    const key = (cause === "타살")
-      ? `${cause}|${killer}|${reVote}|${book}|${action}`
-      : `${cause}|${excluded}|${book}|${action}`;
+  // 조건 키 생성
+  const key = (cause === "타살")
+    ? `${cause}|${killer}|${reVote}|${book}|${action}`
+    : `${cause}|${excluded}|${book}|${action}`;
 
     // 엔딩 로직 맵
-    const logicMap = {
+  const logicMap = {
     "자살|길라|예|요괴 봉인술": "A-01",
     "자살|나린|예|요괴 봉인술": "A-01",
     "자살|다올|예|요괴 봉인술": "A-01",
@@ -261,13 +268,13 @@
     "타살|마루|처벌|예|요괴 봉인해제술": "A-12",
     "타살|벼리|처벌|예|요괴 봉인해제술": "A-06",
     "타살|새나|처벌|예|요괴 봉인해제술": "A-18",
-    "타살|길라|처벌|예|주술 실패": "C-02",
-    "타살|나린|처벌|예|주술 실패": "C-02",
-    "타살|다올|처벌|예|주술 실패": "C-02",
-    "타살|라온|처벌|예|주술 실패": "C-02",
-    "타살|마루|처벌|예|주술 실패": "C-02",
-    "타살|벼리|처벌|예|주술 실패": "C-02",
-    "타살|새나|처벌|예|주술 실패": "C-02",
+    "타살|길라|처벌|예|주술 실패": "C-01",
+    "타살|나린|처벌|예|주술 실패": "C-01",
+    "타살|다올|처벌|예|주술 실패": "C-01",
+    "타살|라온|처벌|예|주술 실패": "C-01",
+    "타살|마루|처벌|예|주술 실패": "C-01",
+    "타살|벼리|처벌|예|주술 실패": "C-01",
+    "타살|새나|처벌|예|주술 실패": "C-01",
     "타살|길라|처벌|아니오|요괴 봉인해제술": "A-06",
     "타살|나린|처벌|아니오|요괴 봉인해제술": "A-06",
     "타살|다올|처벌|아니오|요괴 봉인해제술": "A-06",
@@ -296,13 +303,13 @@
     "타살|마루|불완전 용서|예|요괴 봉인해제술": "A-14",
     "타살|벼리|불완전 용서|예|요괴 봉인해제술": "A-08",
     "타살|새나|불완전 용서|예|요괴 봉인해제술": "A-20",
-    "타살|길라|불완전 용서|예|주술 실패": "C-02",
-    "타살|나린|불완전 용서|예|주술 실패": "C-02",
-    "타살|다올|불완전 용서|예|주술 실패": "C-02",
-    "타살|라온|불완전 용서|예|주술 실패": "C-02",
-    "타살|마루|불완전 용서|예|주술 실패": "C-02",
-    "타살|벼리|불완전 용서|예|주술 실패": "C-02",
-    "타살|새나|불완전 용서|예|주술 실패": "C-02",
+    "타살|길라|불완전 용서|예|주술 실패": "C-01",
+    "타살|나린|불완전 용서|예|주술 실패": "C-01",
+    "타살|다올|불완전 용서|예|주술 실패": "C-01",
+    "타살|라온|불완전 용서|예|주술 실패": "C-01",
+    "타살|마루|불완전 용서|예|주술 실패": "C-01",
+    "타살|벼리|불완전 용서|예|주술 실패": "C-01",
+    "타살|새나|불완전 용서|예|주술 실패": "C-01",
     "타살|길라|불완전 용서|아니오|요괴 봉인해제술": "A-08",
     "타살|나린|불완전 용서|아니오|요괴 봉인해제술": "A-08",
     "타살|다올|불완전 용서|아니오|요괴 봉인해제술": "A-08",
@@ -317,20 +324,27 @@
     "타살|마루|불완전 용서|아니오|주술 실패": "C-02",
     "타살|벼리|불완전 용서|아니오|주술 실패": "C-02",
     "타살|새나|불완전 용서|아니오|주술 실패": "C-02",
-    "타살|길라|용서|예|요괴 봉인해제술": "A-09",
-    "타살|나린|용서|예|요괴 봉인해제술": "A-09",
-    "타살|다올|용서|예|요괴 봉인해제술": "A-09",
-    "타살|라온|용서|예|요괴 봉인해제술": "A-09",
-    "타살|마루|용서|예|요괴 봉인해제술": "A-15",
-    "타살|벼리|용서|예|요괴 봉인해제술": "A-09",
-    "타살|새나|용서|예|요괴 봉인해제술": "A-21",
-    "타살|길라|용서|예|주술 실패": "C-02",
-    "타살|나린|용서|예|주술 실패": "C-02",
-    "타살|다올|용서|예|주술 실패": "C-02",
-    "타살|라온|용서|예|주술 실패": "C-02",
-    "타살|마루|용서|예|주술 실패": "C-02",
-    "타살|벼리|용서|예|주술 실패": "C-02",
-    "타살|새나|용서|예|주술 실패": "C-02",
+    "타살|길라|용서|예|요괴 봉인술": "A-09",
+    "타살|나린|용서|예|요괴 봉인술": "A-09",
+    "타살|다올|용서|예|요괴 봉인술": "A-09",
+    "타살|라온|용서|예|요괴 봉인술": "A-09",
+    "타살|마루|용서|예|요괴 봉인술": "A-15",
+    "타살|벼리|용서|예|요괴 봉인술": "A-09",
+    "타살|새나|용서|예|요괴 봉인술": "A-21",
+    "타살|길라|용서|예|요괴 봉인해제술": "A-10",
+    "타살|나린|용서|예|요괴 봉인해제술": "A-10",
+    "타살|다올|용서|예|요괴 봉인해제술": "A-10",
+    "타살|라온|용서|예|요괴 봉인해제술": "A-10",
+    "타살|마루|용서|예|요괴 봉인해제술": "A-16",
+    "타살|벼리|용서|예|요괴 봉인해제술": "A-10",
+    "타살|새나|용서|예|요괴 봉인해제술": "A-22",
+    "타살|길라|용서|예|주술 실패": "C-01",
+    "타살|나린|용서|예|주술 실패": "C-01",
+    "타살|다올|용서|예|주술 실패": "C-01",
+    "타살|라온|용서|예|주술 실패": "C-01",
+    "타살|마루|용서|예|주술 실패": "C-01",
+    "타살|벼리|용서|예|주술 실패": "C-01",
+    "타살|새나|용서|예|주술 실패": "C-01",
     "타살|길라|용서|아니오|요괴 봉인해제술": "A-10",
     "타살|나린|용서|아니오|요괴 봉인해제술": "A-10",
     "타살|다올|용서|아니오|요괴 봉인해제술": "A-10",
@@ -346,23 +360,33 @@
     "타살|벼리|용서|아니오|주술 실패": "C-02",
     "타살|새나|용서|아니오|주술 실패": "C-02",
 };
-console.log("🔥 key:", key);
-console.log("🧩 logicMap[key]:", logicMap[key]);
 
-    const endingCode = logicMap[key];
+  const endingCode = logicMap[key];
 
-    const messageMap = {
-      "A-01": ({ excluded, forbiddenNames, supportBbyori = "" }) => {
+  const messageMap = {
+    "A-01": ({ excluded, forbiddenNames, supportBbyori = "" }) => {
         
         function getPronoun(name) {
          const male = ["길라", "다올", "라온", "마루"];
         return male.includes(name) ? "그" : "그녀";
         }
 
+      const causePhrase = prettyCause(cause);
+      function prettyCause(cause) {
+      switch (cause) {
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+      case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
+      case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
+      default:      return "";
+        }
+      }
+
         let excludedText = "";
 
         if (excluded) {
-        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다. 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 수상한 행동을 보이며 비협조적이라고 여긴 아이들은 ${getPronoun(excluded)}를 제압해 주술 행동에서 배제시키기로 했다.`;
+        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
         if (excluded === "길라") {
         excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
         }
@@ -388,16 +412,16 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         길라는 죄 없는 요괴들을 언제까지 고통받게 할 것이냐며 강하게 반발했지만, 의견 차이는 좁혀지지 않았다.
         
         ${excludedText}
-        
-        그 후 주술진 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 생각대로 주술을 사용했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 주술이 성공했고, 그 결과 요괴 봉인이 더욱 강화되었다.
+		
+		    주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
         ${forbiddenBlock}
 
-        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 ‘사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다.
+        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
         `;
         },
 
-      "A-02": ({ excluded, forbiddenNames = "" }) => {
+    "A-02": ({ excluded, forbiddenNames = "" }) => {
 
         let bbyoriAction = localStorage.getItem("actions_bbyori");
 
@@ -411,10 +435,22 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         return male.includes(name) ? "그" : "그녀";
         }
 
+        const causePhrase = prettyCause(cause);
+        function prettyCause(cause) {
+        switch (cause) {
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
+        case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
+        default:      return "";
+        }
+        }
+
         let excludedText = "";
 
         if (excluded) {
-        excludedText = ` 혼란 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다. 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 수상한 행동을 보이며 비협조적이라고 여긴 아이들은 ${getPronoun(excluded)}를 제압해 주술 행동에서 배제시키기로 했다.`;
+        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
         if (excluded === "길라") {
         excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
         }
@@ -423,7 +459,7 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         const forbiddenNamesWithoutExcluded = forbiddenNames.filter(name => name !== excluded);
 
         const supportTarget = excluded === "길라" ? "라온" : "길라";
-        const supportLine = `그 후 주술진 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 생각대로 주술을 사용했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "이" : "가"} 요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.`;
+        const supportLine = `주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "이" : "가"} 요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.`;
 
         let reunionText = "";
         if (excluded !== "길라") {
@@ -431,7 +467,7 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         }
         return `
         모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 이제 아리아의 죽음보다 더 중요한 문제는 요괴의 봉인을 유지할 것인지 해제할 것인지였다.
-
+        
         요계에서 10년을 보낸 라온은 요괴들이 여전히 인간을 친구로 여긴다며 봉인 해제를 주장했다. 
 
         그때 길라가 갑자기 훌쩍이며 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날을 위해 금기술(요괴 봉인 해제술)이 대대로 전해져 왔으며, 자신이 그 방법을 알고 있으니 힘을 보태달라고 호소했다.
@@ -444,12 +480,38 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
 
         잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.
 
-        모든 진실이 밝혀진 주술 마을에는 이날 이후 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지기 시작했다.
+        이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
         `;
         },
-
-      "A-03": ({ excluded, forbiddenNames, supportBbyori = "" }) => {
+		
+		"A-03": ({ excluded, forbiddenNames, supportBbyori = "" }) => {
         
+        function getPronoun(name) {
+         const male = ["길라", "다올", "라온", "마루"];
+        return male.includes(name) ? "그" : "그녀";
+        }
+
+        const causePhrase = prettyCause(cause);
+        function prettyCause(cause) {
+        switch (cause) {
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
+        case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
+        default:      return "";
+        }
+        }
+
+        let excludedText = "";
+
+        if (excluded) {
+        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다. 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
+        if (excluded === "길라") {
+        excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
+        }
+        }
+        const forbiddenNamesWithoutExcluded = forbiddenNames.filter(name => name !== excluded);
 
         let forbiddenBlock = "";
         if (forbiddenNames.length > 0) {
@@ -469,17 +531,17 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
 
         길라는 죄 없는 요괴들을 언제까지 고통받게 할 것이냐며 강하게 반발했지만, 의견 차이는 좁혀지지 않았다.
         
-        깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다. 
-        
-        그 후 주술진 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 생각대로 주술을 사용했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 주술이 성공했고, 그 결과 요괴 봉인이 더욱 강화되었다.
+        깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase}
+		
+		    주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
         ${forbiddenBlock}
 
-        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 ‘사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다.
+        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
         `;
         },
-
-      "A-04": ({ excluded, forbiddenNames = "" }) => {
+        
+		"A-04": ({ excluded, forbiddenNames = "" }) => {
 
         let bbyoriAction = localStorage.getItem("actions_bbyori");
 
@@ -487,34 +549,55 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         if (bbyoriAction === "봉인") {
         bbyoriLine = `길라의 말을 들은 벼리가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 지금처럼 유지하자는 의견을 냈다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
         }
-      
+
+        function getPronoun(name) {
+        const male = ["길라", "다올", "라온", "마루"];
+        return male.includes(name) ? "그" : "그녀";
+        }
+
+        const causePhrase = prettyCause(cause);
+        function prettyCause(cause) {
+        switch (cause) {
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
+        case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
+        default:      return "";
+        }
+        }
+
         const forbiddenNamesWithoutExcluded = forbiddenNames.filter(name => name !== excluded);
 
         const supportTarget = excluded === "길라" ? "라온" : "길라";
-        const supportLine = `그 후 주술진 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 생각대로 주술을 사용했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "이" : "가"} 요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.`;
+        const supportLine = `주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutExcluded .join(", ")}${(forbiddenNamesWithoutExcluded .join(", ").charCodeAt(forbiddenNamesWithoutExcluded .join(", ").length - 1) - 44032) % 28 ? "이" : "가"} 요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.`;
 
+        let reunionText = "";
+        if (excluded !== "길라") {
+        reunionText = ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다. 그리고 그 사이,`;
+        }
+        
         return `
         모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 이제 아리아의 죽음보다 더 중요한 문제는 요괴의 봉인을 유지할 것인지 해제할 것인지였다.
-
+        
         요계에서 10년을 보낸 라온은 요괴들이 여전히 인간을 친구로 여긴다며 봉인 해제를 주장했다. 
 
         그때 길라가 갑자기 훌쩍이며 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날을 위해 금기술(요괴 봉인 해제술)이 대대로 전해져 왔으며, 자신이 그 방법을 알고 있으니 힘을 보태달라고 호소했다.
 
         ${bbyoriLine}
         
-        혼란 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다.
+        혼란 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase}
 
         ${supportLine}
 
-        잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.
+        잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.
 
-        모든 진실이 밝혀진 주술 마을에는 이날 이후 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지기 시작했다.
+        이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
         `;
         },
-        
-      "A-05": ({ forbiddenNames, supportBbyori = "" }) => {
+		
+    "A-05": ({ forbiddenNames, supportBbyori = "" }) => {
 
-        console.log(localStorage.getItem("selectedKiller"));
         let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
         function getPronoun(name) {
@@ -525,12 +608,14 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         let killerLine = selectedKiller === "길라" ? "라온" : "길라";
         
         const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+		
+		    const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
 
         let forbiddenBlock = "";
         if (forbiddenNames.length > 0) {
-        const forbiddenText = ` 이에 ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+        const forbiddenText = ` 이에 ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
         const supportText = supportBbyori.length > 0
-        ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 아이들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+        ? `그러자 벼리와 ${supportBbyoriWithoutKilled.join(", ")}${(supportBbyoriWithoutKilled.join(", ").charCodeAt(supportBbyoriWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
         : "";
         forbiddenBlock = `${forbiddenText} ${supportText}`;
         }
@@ -540,332 +625,1128 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
         
         혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
 
-        ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다.
-
-        대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
+        ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+				
+		    이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
 
         침묵이 이어지는 가운데 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
 
         벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
         
-        그 후 주술진 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 생각대로 주술을 사용했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 주술이 성공했고, 그 결과 요괴 봉인이 더욱 강화되었다.
+        주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
         ${forbiddenBlock}
 
-        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 ‘사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다.
+        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
         `;
         },
+		
+		"A-06": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      "A-06":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 [지목당한 캐릭터 이름]에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+        let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      [지목당한 캐릭터 이름]은/는 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 그/그녀의 외침을 외면했다. 몇몇은 그/그녀가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 [지목당한 캐릭터 이름]을/를 제압한 후 처벌 방안을 논의했다.
+        function getPronoun(name) {
+         const male = ["길라", "다올", "라온", "마루"];
+        return male.includes(name) ? "그" : "그녀";
+        }
+        
+        let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+        
+        const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+		
+		    let killerSpeech = "";
 
-      대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 [지목당한 캐릭터 이름]을/를 무참히 찔렀다. 그리고 그/그녀의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
+		    if (killerLine === "길라") {
+		    killerSpeech = `침묵이 이어지는 가운데 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "이" : "가"} 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.`;
+	    	}
+		    else if (killerLine === "라온") {
+		    killerSpeech = `침묵이 이어지는 가운데 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "이" : "가"} 조용히 입을 열었다. 그는 자신이 요계에서 보낸 10년에 대해 설명했으며, 여전히 요괴들은 인간을 친구로 여긴다며 봉인을 해제하자고 주장했다. 다행히 자신이 길라의 주술을 복제해뒀다며 자신에게 힘을 보태달라고 했다.`;
+		    }
 
+        let bbyoriAction = localStorage.getItem("actions_bbyori");
+        let saenaAction = localStorage.getItem("actions_saena");
+
+		    let speaker = "";
+        if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+        speaker = "벼리";
+        } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+        speaker = "새나";
+        }
+
+        let bbyoriLine2 = "";
+        if (speaker) {
+        bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+        }
+		
+		    let reunionText = "";
+        if (selectedKiller !== "길라") {
+        reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+        }
+
+		  let reunionText2 = "";
+        if (selectedKiller !== "라온") {
+        reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 씁쓸하게 바라보았다.`;	
+        }
+
+        return `
+        모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
+        
+        혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
+
+        ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+				
+	  	  이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
+
+        ${killerSpeech}
+		
+		    ${bbyoriLine2}
+		
+		    주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
+		
+	    	잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+        이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+        `;
+        },
+		
+    "A-07": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
+
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
+
+      ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+
+      이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 일부는 목숨은 목숨으로 갚아야 한다며 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 죽여 ${getPronoun(selectedKiller)}생명력을 주술에 이용하자고 주장했다. 하지만 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득한 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 사용하지 않기로 했다. 다만 ${getPronoun(selectedKiller)}를 신뢰할 수 없다는 이유로 주술 의식에는 참여시키지 않기로 했다.
+
+      잠시 침묵이 흐르는 가운데 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
+
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
+
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
+
+      ${forbiddenBlock}
+
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
+		
+    "A-08": ({ forbiddenNames, supportBbyori = "" }) => {
+
+        let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+        function getPronoun(name) {
+         const male = ["길라", "다올", "라온", "마루"];
+        return male.includes(name) ? "그" : "그녀";
+        }
+        
+        let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+        
+        const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+		
+		    let killerSpeech = "";
+
+		    if (killerLine === "길라") {
+		    killerSpeech = `침묵이 이어지는 가운데 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "이" : "가"} 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.`;
+	    	}
+		    else if (killerLine === "라온") {
+		    killerSpeech = `침묵이 이어지는 가운데 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "이" : "가"} 조용히 입을 열었다. 그는 자신이 요계에서 보낸 10년에 대해 설명했으며, 여전히 요괴들은 인간을 친구로 여긴다며 봉인을 해제하자고 주장했다. 다행히 자신이 길라의 주술을 복제해뒀다며 자신에게 힘을 보태달라고 했다.`;
+		    }
+		
+        let bbyoriAction = localStorage.getItem("actions_bbyori");
+        let saenaAction = localStorage.getItem("actions_saena");
+
+		    let speaker = "";
+        if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+        speaker = "벼리";
+        } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+        speaker = "새나";
+        }
+
+        let bbyoriLine2 = "";
+        if (speaker) {
+        bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+        }
+		
+		    let reunionText = "";
+        if (selectedKiller !== "길라") {
+        reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+        }
+
+		  let reunionText2 = "";
+        if (selectedKiller !== "라온") {
+        reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;
+        }
+
+        return `
+        모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
+
+        혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
+
+        ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+
+        이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 일부는 목숨은 목숨으로 갚아야 한다며 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 죽여 ${getPronoun(selectedKiller)}생명력을 주술에 이용하자고 주장했다. 하지만 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득한 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 사용하지 않기로 했다. 다만 ${getPronoun(selectedKiller)}를 신뢰할 수 없다는 이유로 주술 의식에는 참여시키지 않기로 했다.
+
+        ${killerSpeech}
+		
+		    ${bbyoriLine2}
+		
+        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다.${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
+		
+	    	잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+        이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+        `;
+        },
+		
+    "A-09": ({ forbiddenNames, supportBbyori = "" }) => {
+
+        let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+        function getPronoun(name) {
+        const male = ["길라", "다올", "라온", "마루"];
+        return male.includes(name) ? "그" : "그녀";
+        }
+
+        let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+        const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+        let forbiddenBlock = "";
+        if (forbiddenNames.length > 0) {
+        const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+        const supportText = supportBbyori.length > 0
+        ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 아이들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+        : "";
+        forbiddenBlock = `${forbiddenText} ${supportText}`;
+        }
+
+        return `
+        모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
+
+        혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
+
+        ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+		
+		    이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 일부는 목숨은 목숨으로 갚아야 한다며 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 죽여 ${getPronoun(selectedKiller)}생명력을 주술에 이용하자고 주장했다. 하지만 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득했고, 아이들은 진정한 악인이 누구인지를 고민하며 죽은 아리아와 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 바라보다 고민 끝에 ${getPronoun(selectedKiller)}를 용서하기로 했다.
+        
+        잠시 침묵이 흐르는 가운데 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
+
+        벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
+
+        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
+
+        ${forbiddenBlock}
+
+        진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+        `;
+        },
+		
+		"A-10": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;	
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 ${selectedKiller}에 의해 살해당했다고 결론지었다.
+
+      ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
+		
+		  이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 일부는 목숨은 목숨으로 갚아야 한다며 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 죽여 ${getPronoun(selectedKiller)}생명력을 주술에 이용하자고 주장했다. 하지만 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득했고, 아이들은 진정한 악인이 누구인지를 고민하며 죽은 아리아와 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 바라보다 고민 끝에 ${getPronoun(selectedKiller)}를 용서하기로 했다.
+        
       침묵이 이어지는 가운데 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      ${bbyoriLine2}
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다.
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다.${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
       
-      "A-07":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 [지목당한 캐릭터 이름]에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+    "A-11": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      [지목당한 캐릭터 이름]은/는 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 그/그녀의 외침을 외면했다. 몇몇은 그/그녀가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 [지목당한 캐릭터 이름]을/를 제압한 후 처벌 방안을 논의했다.
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      봉인을 위해 [지목당한 캐릭터 이름]의 생명력을 이용하자는 의견이 나왔지만, 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득한 끝에 제물로서 사용하지는 않기로 했다. 하지만 [지목당한 캐릭터 이름]이/가 어떤 행동을 할 지 모르기에 주술 행동에는 참여시키지 않기로 했다.
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
 
-      잠시 침묵이 이어지는 가운데 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
 
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyoriWithoutKilled.join(", ")}${(supportBbyoriWithoutKilled.join(", ").charCodeAt(supportBbyoriWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
       
-      "A-08":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 [지목당한 캐릭터 이름]에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
 
-      [지목당한 캐릭터 이름]은/는 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 그/그녀의 외침을 외면했다. 몇몇은 그/그녀가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 [지목당한 캐릭터 이름]을/를 제압한 후 처벌 방안을 논의했다.
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
 
-      봉인을 위해 [지목당한 캐릭터 이름]의 생명력을 이용하자는 의견이 나왔지만, 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득한 끝에 제물로서 사용하지는 않기로 했다. 하지만 [지목당한 캐릭터 이름]이/가 어떤 행동을 할 지 모르기에 주술 행동에는 참여시키지 않기로 했다.
-
-      잠시 침묵이 이어지는 가운데 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
-
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
-
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
-
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루는 제단용 칼을 들어 자신의 복부를 깊숙이 찔렀다.
       
-      "A-09":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 [지목당한 캐릭터 이름]에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      피를 흘리며 쓰러진 그는 마지막 힘으로 아이들을 바라보며, 자신이 모든 죗값을 치를 테니 새나만큼은 꼭 살려달라고 부탁했다. 그리고 마지막으로 새나를 바라보며 희미하게 미소 짓고는, 천천히 눈을 감았다.
 
-      [지목당한 캐릭터 이름]은/는 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 그/그녀의 외침을 외면했다. 몇몇은 그/그녀가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 [지목당한 캐릭터 이름]을/를 제압한 후 처벌 방안을 논의했다.
+      새나의 절규 속에서 벼리는 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
 
-      봉인을 위해 [지목당한 캐릭터 이름]의 생명력을 이용하자는 의견이 나왔지만, 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득했다. 아이들은 진정한 악인은 누구인지를 되물었고, [지목당한 캐릭터 이름]을/를 바라보다 그/그녀를 용서하기로 했다. 
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
 
-      잠시 침묵이 이어지는 가운데 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      ${forbiddenBlock}
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
-
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
       
-      "A-10":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 [지목당한 캐릭터 이름]에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+    "A-12": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      [지목당한 캐릭터 이름]은/는 자신이 아리아를 죽이지 않았다며 주장했으나, 모두 그/그녀의 외침을 외면했다. 몇몇은 그/그녀가 아리아를 살해하지 않았다는 사실을 알고 있었지만, 자신이 지키고 싶은 것을 위해 침묵을 선택했다. 이후 아이들은 [지목당한 캐릭터 이름]을/를 제압한 후 처벌 방안을 논의했다.
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      봉인을 위해 [지목당한 캐릭터 이름]의 생명력을 이용하자는 의견이 나왔지만, 마루가 지금은 모두가 힘을 모아 주술을 펼쳐야 할 때라며 설득했다. 아이들은 진정한 악인은 누구인지를 되물었고, [지목당한 캐릭터 이름]을/를 바라보다 그/그녀를 용서하기로 했다. 
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
 
-      잠시 침묵이 이어지는 가운데 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 씁쓸하게 바라보았다.`;	
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
       
-      "A-11":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
 
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
 
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루는 제단용 칼을 들어 자신의 복부를 깊숙이 찔렀다. 피를 흘리며 쓰러진 그는 마지막 힘으로 아이들을 바라보며, 자신이 모든 죗값을 치를 테니 새나만큼은 꼭 살려달라고 간절히 부탁했다. 그리고 마지막으로 새나를 바라보며 희미하게 미소 짓고는, 천천히 눈을 감았다. 
-
-      새나의 절규 속, 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
-
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
-
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
-
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루는 제단용 칼을 들어 자신의 복부를 깊숙이 찔렀다.
       
-      "A-12":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      피를 흘리며 쓰러진 그는 마지막 힘으로 아이들을 바라보며, 자신이 모든 죗값을 치를 테니 새나만큼은 꼭 살려달라고 부탁했다. 그리고 마지막으로 새나를 바라보며 희미하게 미소 짓고는, 천천히 눈을 감았다.
 
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      새나의 절규 속에서 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루는 제단용 칼을 들어 자신의 복부를 깊숙이 찔렀다. 피를 흘리며 쓰러진 그는 마지막 힘으로 아이들을 바라보며, 자신이 모든 죗값을 치를 테니 새나만큼은 꼭 살려달라고 간절히 부탁했다. 그리고 마지막으로 새나를 바라보며 희미하게 미소 짓고는, 천천히 눈을 감았다. 
+      ${bbyoriLine2}
+		
+      주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      새나의 절규 속, 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+    "A-13": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
+
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
       
-      "A-13":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      그는 진실을 모르던 상황에서 마루가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 아이들은 깊은 고민 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 삼지 않기로 결정했다. 하지만 ${getPronoun(selectedKiller)}를 완전히 신뢰할 수는 없어서 주술 의식에는 참여시키지 않기로 했다.
 
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      안도하는 새나를 바라보며 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
 
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 마루는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 결국 마루의 목숨을 제물로 삼지는 않기로 했지만, 그가 어떤 행동을 할지 몰랐기에 주술 행동에는 참여시키지 않기로 결정했다.
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
 
-      안도하는 새나를 바라보며 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      ${forbiddenBlock}
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
-
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
       
-      "A-14":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+    "A-14": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 마루는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 결국 마루의 목숨을 제물로 삼지는 않기로 했지만, 그가 어떤 행동을 할지 몰랐기에 주술 행동에는 참여시키지 않기로 결정했다.
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
+      
+      그는 진실을 모르던 상황에서 마루가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 아이들은 깊은 고민 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 삼지 않기로 결정했다. 하지만 ${getPronoun(selectedKiller)}를 완전히 신뢰할 수는 없어서 주술 의식에는 참여시키지 않기로 했다.
 
       안도하는 새나를 바라보며 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      ${bbyoriLine2}
+		
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
+
+    "A-15": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
+
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
       
-      "A-15":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      그는 진실을 모르던 상황에서 마루가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 괴로워하는 마루와 그의 목숨을 구걸하듯 애원하는 새나를 바라보며 아이들은 진정한 악인이 누구인지를 고민했다. 그리고 깊은 고민 끝에 그들은 ${selectedKiller}를 용서하기로 했다.
 
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      안도하는 새나를 바라보며 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
 
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 마루는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 괴로워하는 마루와 그의 목숨을 구걸하듯 애원하는 새나를 바라보던 아이들은 진정한 악인이 누구인지를 되물었고, 결국 마루를 용서하기로 결정했다.
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
 
-      안도하는 새나를 바라보며 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      ${forbiddenBlock}
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
 
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+    "A-16": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 마루에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 새나는 만약 주술을 위해 생명력이 필요하다면 마루가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
       
-      "A-16":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 마루에 의해 살해당한 것이 분명하다는 결론을 내렸다.
-
-      그때, 아이들 틈에서 새나가 나섰다. 그녀는 자신이 아리아를 죽였다고 주장하며, 마루는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
-
-      새나의 외침에 마루는 고개를 저으며 아리아를 죽인 건 자신이라고 단호히 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 마루는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 괴로워하는 마루와 그의 목숨을 구걸하듯 애원하는 새나를 바라보던 아이들은 진정한 악인이 누구인지를 되물었고, 결국 마루를 용서하기로 결정했다.
+      그는 진실을 모르던 상황에서 마루가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 괴로워하는 마루와 그의 목숨을 구걸하듯 애원하는 새나를 바라보며 아이들은 진정한 악인이 누구인지를 고민했다. 그리고 깊은 고민 끝에 그들은 ${selectedKiller}를 용서하기로 했다.
 
       안도하는 새나를 바라보며 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      ${bbyoriLine2}
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
+
+    "A-17": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
+
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyoriWithoutKilled.join(", ")}${(supportBbyoriWithoutKilled.join(", ").charCodeAt(supportBbyoriWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루의 시선이 제단용 칼로 향했고 그 모습을 본 새나는 먼저 달려가 제단용 칼을 집어 들었다. 그리고 망설임 없이 자신의 복부를 깊숙이 찔렀다.
+
+      피를 흘리며 쓰러진 그녀는 아이들에게 자신이 모든 죗값을 치를 테니 마루 오빠만큼은 꼭 살려달라고 간절히 부탁하고 또 부탁한 뒤에 눈을 감았다. 
+
+      마루의 절규 속에서 벼리는 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
+
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
+
+      주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
+
+      ${forbiddenBlock}
+
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
       
-      "A-17":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+    "A-18": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루의 시선이 제단용 칼로 향했고, 그 모습을 본 새나는 먼저 달려가 제단용 칼을 집어 들었다. 그리고 망설임 없이 자신의 복부를 깊숙이 찔렀다. 피를 흘리며 쓰러진 새나는 아이들에게 자신이 모든 죗값을 치를 테니 마루 오빠만큼은 꼭 살려달라고 간절히 부탁하고 또 부탁하며 눈을 감았다. 
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
 
-      마루의 절규 속, 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
 
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 씁쓸하게 바라보았다.`;	
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루의 시선이 제단용 칼로 향했고 그 모습을 본 새나는 먼저 달려가 제단용 칼을 집어 들었다. 그리고 망설임 없이 자신의 복부를 깊숙이 찔렀다.
+
+      피를 흘리며 쓰러진 그녀는 아이들에게 자신이 모든 죗값을 치를 테니 마루 오빠만큼은 꼭 살려달라고 간절히 부탁하고 또 부탁한 뒤에 눈을 감았다. 
+
+      마루의 절규 속에서 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+
+      ${bbyoriLine2}
+
+      주술진의 상태가 더욱 위태로워진 상황에서 ${selectedKiller}의 생명력을 낭비할 수 없던 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
+
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
+     
+    "A-19": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
+
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
+
+      그는 진실을 모르던 상황에서 새나가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 아이들은 깊은 고민 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 삼지 않기로 결정했다. 하지만 ${getPronoun(selectedKiller)}를 완전히 신뢰할 수는 없어서 주술 의식에는 참여시키지 않기로 했다.
+
+      안도하는 마루를 바라보며 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
+
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
+
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
+
+      ${forbiddenBlock}
+
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
+
+    "A-20": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;
+      }
       
-      "A-18":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
 
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
 
-      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 마루의 시선이 제단용 칼로 향했고, 그 모습을 본 새나는 먼저 달려가 제단용 칼을 집어 들었다. 그리고 망설임 없이 자신의 복부를 깊숙이 찔렀다. 피를 흘리며 쓰러진 새나는 아이들에게 자신이 모든 죗값을 치를 테니 마루 오빠만큼은 꼭 살려달라고 간절히 부탁하고 또 부탁하며 눈을 감았다. 
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
 
-      마루의 절규 속, 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
-
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
-
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
-      
-      "A-19":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
-
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
-
-      마루의 외침에 새나는 고개를 저으며, 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 새나는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 결국 새나의 목숨을 제물로 삼지는 않기로 했지만, 그녀가 어떤 행동을 할지 몰랐기에 주술 행동에는 참여시키지 않기로 결정했다.
-
-      안도하는 마루를 바라보며 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
-
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
-
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
-
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
-      
-      "A-20":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
-
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
-
-      마루의 외침에 새나는 고개를 저으며, 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 새나는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 결국 새나의 목숨을 제물로 삼지는 않기로 했지만, 그녀가 어떤 행동을 할지 몰랐기에 주술 행동에는 참여시키지 않기로 결정했다.
+      그는 진실을 모르던 상황에서 새나가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 아이들은 깊은 고민 끝에 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제물로 삼지 않기로 결정했다. 하지만 ${getPronoun(selectedKiller)}를 완전히 신뢰할 수는 없어서 주술 의식에는 참여시키지 않기로 했다.
 
       안도하는 마루를 바라보며 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      ${bbyoriLine2}
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
-      
-      "A-21":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
 
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
 
-      마루의 외침에 새나는 고개를 저으며, 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 새나는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 괴로워하는 마루와 자신이 진짜 범인이라고 소리치는 새나를 바라보던 아이들은 진정한 악인이 누구인지를 되물었고, 결국 새나를 용서하기로 결정했다.
+    "A-21": ({ forbiddenNames, supportBbyori = "" }) => {
 
-      안도하는 마루를 바라보며 벼리가 입을 열었다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
-      벼리의 의견에 몇몇은 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 벼리에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인은 해제되지 않고 오히려 더 강하게 유지되었다.
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
 
-      이에 격분한 [금기술을 택한 캐릭터 이름들]은/는 주술 마을로 돌아가 모두에게 요괴에 대한 진실을 알린 뒤, 봉인을 무너뜨리겠다고 말했다. 그러나 벼리와 그녀를 지지한 [벼리에게 힘을 보탠 캐릭터 이름]이/가 그들을 제압했고, 그들의 생명력마저 이용해 봉인을 강화하는 데 사용했다.
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
-      주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들’의 이야기만 전해진다. `,
-      
-      "A-22":
-      `모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 혼란 속 다수의 아이들이 아리아는 새나에 의해 살해당한 것이 분명하다는 결론을 내렸다.
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
 
-      그때, 아이들 틈에서 마루가 나섰다. 그는 아리아를 죽인 건 자신이라고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다고 말했다. 봉인을 위해 생명력이 필요하다면 자신을 죽여 제물로 삼으라고 소리쳤다.
+      const supportBbyoriWithoutKilled = supportBbyori.filter(name => name !== selectedKiller);
 
-      마루의 외침에 새나는 고개를 저으며, 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백에 아이들이 혼란에 빠진 그 순간, 다올이 입을 열었다. 그는 진실을 모르던 상황에서, 새나는 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해달라고 설득했다. 괴로워하는 마루와 자신이 진짜 범인이라고 소리치는 새나를 바라보던 아이들은 진정한 악인이 누구인지를 되물었고, 결국 새나를 용서하기로 결정했다.
+      let forbiddenBlock = "";
+      if (forbiddenNames.length > 0) {
+      const forbiddenText = ` 이에 ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 이를 받아들일 수 없다며 주술 마을로 돌아가 요괴에 대한 진실을 알리겠다고 선언했다. `;
+      const supportText = supportBbyori.length > 0
+      ? `그러자 벼리와 ${supportBbyori.join(", ")}${(supportBbyori.join(", ").charCodeAt(supportBbyori.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 각기 다른 의도를 숨긴 채, 마을의 평화와 질서를 지킨다는 명분으로 그들을 제압했다. 그리고 진실을 영원히 묻기 위해 그들을 죽이고, 그들의 생명력마저 봉인 강화에 사용했다.`
+      : "";
+      forbiddenBlock = `${forbiddenText} ${supportText}`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
+
+      그는 진실을 모르던 상황에서 새나가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 괴로워하는 마루와 자신이 진짜 범인이라며 자기를 죽이라고 소리치는 새나를 바라보며 아이들은 진정한 악인이 누구인지를 고민했다. 그리고 깊은 고민 끝에 그들은 ${selectedKiller}를 용서하기로 했다.
+
+      안도하는 마루를 바라보며 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
+
+      벼리의 의견에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐며 반발했지만, 의견은 좁혀지지 않았다.
+
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
+
+      ${forbiddenBlock}
+
+      진실을 알게 된 이들이 모두 침묵하게 된 주술 마을에는 여전히 '사악한 괴물인 요괴를 봉인하기 위해 목숨을 바친 주술사들'의 이야기만이 전해지고 있다.
+      `;
+      },
+
+    "A-22": ({ forbiddenNames, supportBbyori = "" }) => {
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리" && bbyoriAction === "봉인") {
+      speaker = "벼리";
+      } else if (selectedKiller === "벼리" && saenaAction === "봉인") {
+      speaker = "새나";
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다. 이에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`;
+      }
+
+      let reunionText = "";
+      if (selectedKiller !== "길라") {
+      reunionText += ` 그러자 길라가 그들에게 달려가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 길라를 따뜻하게 안아주었다.`;		
+      }
+
+      let reunionText2 = "";
+      if (selectedKiller !== "라온") {
+      reunionText += ` 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 반갑게 손을 흔들며 웃었다.`;
+      }
+
+      return `
+      모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다. 
+
+      혼란 속에서 여러 단서를 토대로 아이들은 아리아가 새나에 의해 살해당했다고 결론지었다.
+
+      그때, 아이들 틈에서 마루가 나섰다. 그는 자신이 아리아를 죽였다고 주장하며, 새나는 자신의 죄를 대신 덮어쓰려 한다며 아무 잘못이 없다고 말했다. 마루는 만약 주술을 위해 생명력이 필요하다면 새나가 아닌 자신을 죽여 제물로 삼으라고 소리쳤다.
+
+      마루의 외침에 새나는 고개를 저으며 아리아를 죽인 건 자신이 맞다고 말했다. 두 사람의 엇갈린 고백으로 혼란이 깊어지던 순간, 다올이 입을 열었다.
+
+      그는 진실을 모르던 상황에서 새나가 모두를 지키기 위해 어쩔 수 없는 선택을 했다는 점을 이해해 달라고 설득했다. 괴로워하는 마루와 자신이 진짜 범인이라며 자기를 죽이라고 소리치는 새나를 바라보며 아이들은 진정한 악인이 누구인지를 고민했다. 그리고 깊은 고민 끝에 그들은 ${selectedKiller}를 용서하기로 했다.
 
       안도하는 마루를 바라보며 길라가 입을 열었다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
 
-      길라의 말에 일부는 불편한 기색을 보였고, 몇몇은 봉인이 풀리고 진실이 드러났을 때의 혼란과 주술사들이 치러야 할 대가를 걱정하며 봉인을 유지하자는 의견도 나왔다. 결국, 아이들은 각자의 신념에 따라 주술을 펼쳤고, 그중 다수가 길라에게 힘을 보태는 강화술을 사용했다. 그 결과 요괴 봉인이 마침내 해제되었다.
+      ${bbyoriLine2}
 
-      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 그 모습을 본 길라는 그들에게 다가가 오랫동안 억눌렸던 감정을 쏟아내듯 울었고, 그에게서 동족의 기운을 느낀 요괴들은 따뜻하게 안아주었다. 그리고 그 사이, 요괴 대장과 눈이 마주친 라온은 서로를 바라보며 씁쓸하게 웃었다..
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
-      이날 이후 주술 마을에는 '요괴는 인간의 친구’라는 진실과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 말이 퍼졌다. 주술사들은 선조들의 악행을 속죄하는 마음으로 주술 마을을 해체하고 곳곳으로 흩어졌다. 그리고 도움이 필요한 인간들 사이에서 '기적'이라는 이름의 주술만 사용하고 있다는 이야기가 전해진다.`,
-      
-      "C-01": ({ giveUpNames, openNames, sealNames = "" }) => {
-      const openProtestText = openNames.length > 0
-      ? `이에 ${openNames.join(", ")}은/는 죄없는 요괴들을 언제까지 고통받게 할 것이냐고 반발했고, `
+      잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
+
+      이날 이후 모든 진실이 밝혀진 주술 마을에는 '요괴는 인간의 친구’라는 말과 함께 '진정한 괴물은 힘을 탐하는 욕망'이라는 이야기가 퍼지고 있다.
+      `;
+      },
+
+    "C-01": ({ forbiddenNames, supportBbyori = "" }) => {
+      const giveUpNames = JSON.parse(localStorage.getItem("giveUpNames") || "[]");
+      const openNames = JSON.parse(localStorage.getItem("openNames") || "[]");
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      const causePhrase = prettyCause(cause);
+      function prettyCause(cause) {
+      switch (cause) {
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 자살로 결론지은 뒤,";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 사고사로 결론지은 뒤,";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 자연사로 결론지은 뒤,";
+      case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지은 뒤,";
+      case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못한 채";
+      default:      return "";
+        }
+      }
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let killerSpeech = "";
+
+      if (killerLine === "길라") {
+      killerSpeech = `${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.`;
+      }
+      else if (killerLine === "라온") {
+      killerSpeech = `${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 자신이 요계에서 보낸 10년에 대해 설명했으며, 여전히 요괴들은 인간을 친구로 여긴다며 봉인을 해제하자고 주장했다. 다행히 자신이 길라의 주술을 복제해뒀다며 자신에게 힘을 보태달라고 했다.`;
+      }
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리"){
+        if (bbyoriAction === "봉인" || bbyoriAction === "포기") {
+        speaker = `벼리`;
+        }
+      } else {
+      if (saenaAction === "봉인" || saenaAction === "포기") {
+      speaker = `새나`; 
+        }
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다.`;
+      }
+
+      const giveUpText = giveUpNames.length > 0
+      ? `${giveUpNames.join(", ")}${(giveUpNames.join(", ").charCodeAt(giveUpNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 무슨 이유인지 주술 행동을 포기했고, `
       : ``;
 
-      const sealText = sealNames.length > 0
-      ? `${sealNames.join(", ")}은/는 봉인이 풀리고 진실이 드러났을 때의 혼란과 그 대가를 감당할 수 있겠냐며 맞섰다.`
+      const openProtestText = openNames.length > 0
+      ? `이에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐고 반발했고, 또한 요괴 봉인술도 사용할 줄 모르면서 어떻게 요괴 봉인을 유지할 것이냐고 물었다. `
+      : ``;
+
+      const sealText = sealUsers.length > 0
+      ? `${sealUsers.join(", ")}${(sealUsers.join(", ").charCodeAt(sealUsers.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 봉인이 풀리고 진실이 드러났을 때의 혼란과 그 대가를 감당할 수 있냐는 말에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`
       : ``;
 
       const openText = openNames.length > 0
-      ? `이 사실을 깨달은 ${openNames.join(", ")}은/는 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
+      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
       : ``;
-
+      
         return `
-        모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 아이들은 아리아의 죽음을 조사하며 요괴 봉인의 유지 여부를 두고 격렬한 논의했으나, 의견은 좁혀지지 않았다.
+        모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
 
-        그때, 길라가 나섰다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+        ${causePhrase} 요괴 봉인의 유지 여부를 두고 격렬히 논의했다.
+      
+        ${killerSpeech}
 
-        그러나 벼리는 다른 의견을 내놓았다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+        ${bbyoriLine2}
 
-        ${openProtestText}${sealText} 의견이 끝내 모이지 않은 채, 팽팽한 대립 속에서 아이들은 자신의 신념대로 주술을 펼치기로 결정했다.
+        ${openProtestText} ${sealText} 
+        
+        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. 하지만, 힘이 분산된 탓에 봉인을 강화하거나 해제하기 위한 조건을 만족시키지 못했고, 결국 주술은 둘 다 실패했다.
 
-        아이들은 각자 자신이 지지하는 주술사에게 생명력을 담아 강화술을 펼쳤다. 하지만, 힘이 분산된 탓에 봉인을 강화하거나 해제하기 위한 조건을 만족시키지 못했고, 결국 어떠한 주술도 발동되지 않았다. 하지만, 이미 상당한 생명력을 소모한 아이들은 다시 주술을 시도할 수도 없었다.
-
-        잠시 후, 요괴 봉인 주술진이 뒤틀리더니 결국 봉인이 무너져버렸다. 그러나 시간이 아무리 지나도 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다. ${openText}
+        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 기이한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
+        
+        ${openText}
 
         주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
         `;
         },
 
-      "C-02": ({ giveUpNames, openNames = "" }) => {
+    "C-02": ({ forbiddenNames, supportBbyori = "" }) => {
+      const giveUpNames = JSON.parse(localStorage.getItem("giveUpNames") || "[]");
+      const openNames = JSON.parse(localStorage.getItem("openNames") || "[]");
+
+      let selectedKiller = localStorage.getItem("selectedKiller") || "";
+
+      const causePhrase = prettyCause(cause);
+      function prettyCause(cause) {
+      switch (cause) {
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 자살로 결론지은 뒤,";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 사고사로 결론지은 뒤,";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 자연사로 결론지은 뒤,";
+      case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지은 뒤,";
+      case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못한 채";
+      default:      return "";
+        }
+      }
+
+      function getPronoun(name) {
+      const male = ["길라", "다올", "라온", "마루"];
+      return male.includes(name) ? "그" : "그녀";
+      }
+
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
+      const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+
+      let killerSpeech = "";
+
+      if (killerLine === "길라") {
+      killerSpeech = `${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.`;
+      }
+      else if (killerLine === "라온") {
+      killerSpeech = `${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 자신이 요계에서 보낸 10년에 대해 설명했으며, 여전히 요괴들은 인간을 친구로 여긴다며 봉인을 해제하자고 주장했다. 다행히 자신이 길라의 주술을 복제해뒀다며 자신에게 힘을 보태달라고 했다.`;
+      }
+
+      let bbyoriAction = localStorage.getItem("actions_bbyori");
+      let saenaAction = localStorage.getItem("actions_saena");
+
+      let speaker = "";
+      if (selectedKiller !== "벼리"){
+        if (bbyoriAction === "봉인" || bbyoriAction === "포기") {
+        speaker = `벼리`;
+        }
+      } else {
+      if (saenaAction === "봉인" || saenaAction === "포기") {
+      speaker = `새나`; 
+        }
+      }
+
+      let bbyoriLine2 = "";
+      if (speaker) {
+      bbyoriLine2 = `그의 말을 들은 ${speaker}가 고개를 저었다. 그녀는 봉인이 풀리고 진실이 드러났을 때의 혼란을 걱정했다. 또한 주술사들이 치러야 할 대가가 너무 크다며 봉인을 해제할 수는 없다고 했다.`;
+      }
+
       const giveUpText = giveUpNames.length > 0
-      ? `몇몇의 ${giveUpNames.join(", ")}은/는 무슨 이유인지 주술 행동을 포기했다. 그 결과, `
+      ? `${giveUpNames.join(", ")}${(giveUpNames.join(", ").charCodeAt(giveUpNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 무슨 이유인지 주술 행동을 포기했고, `
       : ``;
 
       const openProtestText = openNames.length > 0
-      ? `이에 ${openNames.join(", ")}은/는 죄없는 요괴들을 언제까지 고통받게 할 것이냐고 반발했고, 또한 요괴 봉인술도 사용할 줄 모르면서 어떻게 요괴 봉인을 유지할 것이냐고 물었다. `
+      ? `이에 ${killerLine}${(killerLine.charCodeAt(killerLine.length - 1) - 44032) % 28 ? "은" : "는"} 죄없는 요괴들을 언제까지 고통받게 할 것이냐고 반발했고, 또한 요괴 봉인술도 사용할 줄 모르면서 어떻게 요괴 봉인을 유지할 것이냐고 물었다. `
+      : ``;
+
+      const sealText = sealUsers.length > 0
+      ? `${sealUsers.join(", ")}${(sealUsers.join(", ").charCodeAt(sealUsers.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 봉인이 풀리고 진실이 드러났을 때의 혼란과 그 대가를 감당할 수 있냐는 말에 아이들 사이에 다툼이 일어났고, 의견 차이는 좁혀지지 않았다.`
       : ``;
 
       const openText = openNames.length > 0
-      ? `이 사실을 깨달은 ${openNames.join(", ")}은/는 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
+      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
       : ``;
       
         return `
-        모두의 조사를 통해 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 말은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓이었다. 아이들은 아리아의 죽음을 조사하며 요괴 봉인의 유지 여부를 두고 격렬한 논의했으나, 의견은 좁혀지지 않았다.
+        모두의 조사로 밝혀진 진실은 충격적이었다. '요괴는 사악한 괴물'이라는 주장은 촌장 가문과 교장 가문이 권력을 유지하기 위해 꾸며낸 거짓에 불과했다.
 
-        그때, 길라가 나섰다. 그는 자신이 요괴와 인간 사이에 태어난 아이이며, 다른 주술사들의 시선을 피해 숨어 살아왔다는 사실을 고백했다. 그리고는 더는 자신의 핏줄을 탓하며 숨어 살지 않도록 도와달라고 했다. 자신의 가문에는 요괴에 대한 진실이 밝혀지는 날, 요괴를 해방하기 위해 금기술(요괴 봉인 해제술)이 내려져 오고 있다며 자신이 그 방법을 알고 있으니 힘을 보태달라고 했다.
+        ${causePhrase} 요괴 봉인의 유지 여부를 두고 격렬히 논의했다.
+      
+        ${killerSpeech}
+        
+        ${bbyoriLine2}
 
-        그러나 벼리는 다른 의견을 내놓았다. 진실이 세상에 드러나면 주술사 사회와 인간 사회 모두 큰 혼란에 빠질 수 있다고 말했다. 봉인을 해제하면, 신비한 힘을 얻는 방법을 알게 된 인간들의 탐욕에 의해 요괴는 다시금 목숨을 위협받게 될 것이며, 힘의 근원이 노출된 주술사까지 표적이 될 수 있다고 했다. 그러므로 그녀는 평화와 안정을 위해 요괴 봉인을 유지하자고 했다.
+        ${openProtestText} ${sealText} 
+        
+        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. 하지만, ${giveUpText} ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다.
 
-        ${openProtestText} 의견이 끝내 모이지 않은 채, 아이들은 자신의 신념대로 주술을 펼치기로 결정했다.
-
-        아이들은 각자 자신이 지지하는 주술사에게 생명력을 담아 강화술을 펼쳤다. 하지만, ${giveUpText} 요괴 봉인 해제에 필요한 생명력이 모이지 않았고, 주술은 실패했다. 이미 상당한 생명력을 소모한 아이들은 다시 요괴 봉인 해제술을 시도할 수도 없었다.
-
-        잠시 후, 요괴 봉인 주술진이 뒤틀리더니 결국 봉인이 무너져버렸다. 그러나 시간이 아무리 지나도 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다. ${openText}
+        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 기이한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
+        
+        ${openText}
 
         주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
         `;
@@ -878,21 +1759,12 @@ console.log("🧩 logicMap[key]:", logicMap[key]);
     excluded,
     forbiddenNames,
     supportBbyori,
+    giveUpNames,
+    openNames,
     });
     } else if (typeof messageMap[endingCode] === "string") {
     message = messageMap[endingCode];
     }
-
-    console.log("엔딩 코드:", endingCode);
-console.log("messageMap[endingCode] 타입:", typeof messageMap[endingCode]);
-
-if (typeof messageMap[endingCode] === "function") {
-  message = messageMap[endingCode]({
-    excluded,
-    forbiddenNames,
-    supportBbyori,
-  });
-}
 
 document.getElementById("endingCode").innerText = endingCode;
 document.getElementById("endingText").innerText = message;
