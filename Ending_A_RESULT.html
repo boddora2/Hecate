@@ -374,9 +374,9 @@
       const causePhrase = prettyCause(cause);
       function prettyCause(cause) {
       switch (cause) {
-      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
-      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
-      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 자살로 결론지었다.";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 사고사로 결론지었다.";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 알던 자연사로 결론지었다.";
       case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
       case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
       default:      return "";
@@ -386,9 +386,11 @@
         let excludedText = "";
 
         if (excluded) {
-        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
+        excludedText = `깊은 갈등 속에서 아이들은 요괴의 비밀이 밝혀질 수 있었던 계기인 아리아의 사인에 대해 다시 논의했다.
+        
+        ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 수상하고 비협조적인 태도를 보이자 ${getPronoun(excluded)}를 신뢰할 수 없던 아이들은 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "을" : "를"} 제압했고, 주술 의식에도 참여시키지 않기로 결정했다.`;
         if (excluded === "길라") {
-        excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
+        excludedText += ` 길라가 제압되자 라온은 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
         }
         }
         const forbiddenNamesWithoutExcluded = forbiddenNames.filter(name => name !== excluded);
@@ -438,9 +440,9 @@
         const causePhrase = prettyCause(cause);
         function prettyCause(cause) {
         switch (cause) {
-        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
-        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
-        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 자연사로 결론지었다.";
         case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
         case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
         default:      return "";
@@ -450,9 +452,11 @@
         let excludedText = "";
 
         if (excluded) {
-        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
+        excludedText = `깊은 갈등 속에서 아이들은 요괴의 비밀이 밝혀질 수 있었던 계기인 아리아의 사인에 대해 다시 논의했다.
+        
+        ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 수상하고 비협조적인 태도를 보이자 ${getPronoun(excluded)}를 신뢰할 수 없던 아이들은 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "을" : "를"} 제압했고, 주술 의식에도 참여시키지 않기로 결정했다.`;
         if (excluded === "길라") {
-        excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
+        excludedText += ` 길라가 제압되자 라온은 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
         }
         }
       
@@ -494,9 +498,9 @@
         const causePhrase = prettyCause(cause);
         function prettyCause(cause) {
         switch (cause) {
-        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
-        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
-        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 일단 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 일단 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 일단 자연사로 결론지었다.";
         case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
         case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
         default:      return "";
@@ -506,7 +510,7 @@
         let excludedText = "";
 
         if (excluded) {
-        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. 여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 ${cause}로 결론지었다. 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
+        excludedText = ` 깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase} 그런데 이 과정에서 ${excluded}${(excluded.charCodeAt(excluded.length - 1) - 44032) % 28 ? "이" : "가"} 보인 수상하고 비협조적인 태도에 신뢰할 수 없다는 이유로 ${getPronoun(excluded)}를 제압해 주술 의식에는 참여시키지 않기로 했다.`;
         if (excluded === "길라") {
         excludedText += ` 그러자 몇몇 아이들이 길라가 없으면 요괴 봉인 해제술을 쓸 수 없다고 우려했고, 이에 라온이 자신이 길라의 주술을 복제할 수 있다며 자신에게 힘을 보태달라고 말했다.`;
         }
@@ -531,7 +535,9 @@
 
         길라는 죄 없는 요괴들을 언제까지 고통받게 할 것이냐며 강하게 반발했지만, 의견 차이는 좁혀지지 않았다.
         
-        깊어진 불신 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase}
+        깊은 갈등 속에서 아이들은 요괴의 비밀이 밝혀질 수 있었던 계기인 아리아의 사인에 대해 다시 논의했다.
+        
+        ${causePhrase}
 		
 		    주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다. 반면, 요괴 봉인술에 필요한 생명력은 충족되어 봉인은 더욱 강화되었다.
 
@@ -558,9 +564,9 @@
         const causePhrase = prettyCause(cause);
         function prettyCause(cause) {
         switch (cause) {
-        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자살로 결론지었다.";
-        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 사고사로 결론지었다.";
-        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 자연사로 결론지었다.";
+        case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 자살로 결론지었다.";
+        case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 사고사로 결론지었다.";
+        case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 미심쩍긴 했지만 일단 자연사로 결론지었다.";
         case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지었다.";
         case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못했다.";
         default:      return "";
@@ -586,7 +592,9 @@
 
         ${bbyoriLine}
         
-        혼란 속에서 아이들은 아리아의 사인을 다시 논의했다. 아리아의 죽음이 모든 비밀을 밝히는 시작점이었기 때문이다. ${causePhrase}
+        깊은 갈등 속에서 아이들은 요괴의 비밀이 밝혀질 수 있었던 계기인 아리아의 사인에 대해 다시 논의했다.
+        
+        ${causePhrase}
 
         ${supportLine}
 
@@ -627,7 +635,7 @@
 
         ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
 				
-		    이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
+		    이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼을 들어 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
 
         침묵이 이어지는 가운데 벼리가 입을 열었다. 그녀는 진실이 드러나면 주술사 사회와 인간 사회가 큰 혼란에 빠질 것이라 경고했다. 봉인이 해제되면 인간들이 신비한 힘을 얻는 방법을 알게 되고, 그 탐욕으로 요괴들은 다시 위험에 처할 것이라고 말했다. 또한 힘의 근원이 노출된 주술사들 역시 표적이 될 수 있다고 덧붙였다. 그래서 그녀는 평화와 안정을 위해 봉인 유지를 주장했다.
 
@@ -695,7 +703,7 @@
 
         ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "은" : "는"} 결백을 주장했으나, 모두가 ${getPronoun(selectedKiller)}의 외침을 외면했다. 몇몇은 ${getPronoun(selectedKiller)}가 무죄라는 사실을 알면서도 자신이 지키고 싶은 것을 위해 침묵을 선택했다.
 				
-	  	  이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼로 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
+	  	  이후 아이들은 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 제압한 후 처벌 방안을 논의했다. 대다수가 목숨은 목숨으로 갚아야 한다며 강경한 처벌을 주장했고, 이에 괴로워하던 마루가 입을 떼려던 순간, 새나가 벌떡 일어나 제단용 칼을 들어 ${selectedKiller}${(selectedKiller.charCodeAt(selectedKiller.length - 1) - 44032) % 28 ? "을" : "를"} 무참히 찔렀다. 그리고는 시간이 없다며 ${selectedKiller}의 생명력을 이용하여 서둘러 주술을 펼치자고 했다. 
 
         ${killerSpeech}
 		
@@ -814,7 +822,7 @@
 		
 		    ${bbyoriLine2}
 		
-        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다.${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
+        주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 		
 	    	잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
 
@@ -912,7 +920,7 @@
 
       ${bbyoriLine2}
 
-      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다.${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
+      주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "이" : "가"}  요괴 봉인 해제를 시도했고, 다행히 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 마침내 해제되었다.
 
       잠시 후, 요계에 틈이 열리고, 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. ${reunionText} ${reunionText2}
 
@@ -1577,9 +1585,9 @@
       const causePhrase = prettyCause(cause);
       function prettyCause(cause) {
       switch (cause) {
-      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 자살로 결론지은 뒤,";
-      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 사고사로 결론지은 뒤,";
-      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 자연사로 결론지은 뒤,";
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 자살로 결론지은 뒤,";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 사고사로 결론지은 뒤,";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 자연사로 결론지은 뒤,";
       case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지은 뒤,";
       case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못한 채";
       default:      return "";
@@ -1636,7 +1644,7 @@
       : ``;
 
       const openText = openNames.length > 0
-      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
+      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 주술 마을을 떠났다.`
       : ``;
       
         return `
@@ -1652,11 +1660,11 @@
         
         주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. 하지만, 힘이 분산된 탓에 봉인을 강화하거나 해제하기 위한 조건을 만족시키지 못했고, 결국 주술은 둘 다 실패했다.
 
-        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 기이한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
+        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 음침한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
         
         ${openText}
 
-        주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
+        봉인이 무너진 주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
         `;
         },
 
@@ -1669,9 +1677,9 @@
       const causePhrase = prettyCause(cause);
       function prettyCause(cause) {
       switch (cause) {
-      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 자살로 결론지은 뒤,";
-      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 사고사로 결론지은 뒤,";
-      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 자연사로 결론지은 뒤,";
+      case "자살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 자살로 결론지은 뒤,";
+      case "사고사": return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 사고사로 결론지은 뒤,";
+      case "자연사": return "여러 단서를 토대로 아이들은 아리아의 사인을 일단 자연사로 결론지은 뒤,";
       case "타살":  return "여러 단서를 토대로 아이들은 아리아의 사인을 타살로 결론지은 뒤,";
       case "동률":  return "여러 단서 속 의견이 갈린 아이들은 아리아의 사인을 결국 하나로 결론짓지 못한 채";
       default:      return "";
@@ -1728,7 +1736,7 @@
       : ``;
 
       const openText = openNames.length > 0
-      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 마을을 떠났다.`
+      ? `이 사실을 깨달은 ${openNames.join(", ")}${(openNames.join(", ").charCodeAt(openNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴를 구할 방법을 찾겠다며 주술 마을을 떠났다.`
       : ``;
       
         return `
@@ -1744,11 +1752,11 @@
         
         주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. 하지만, ${giveUpText} ${forbiddenNames.join(", ")}${(forbiddenNames.join(", ").charCodeAt(forbiddenNames.join(", ").length - 1) - 44032) % 28 ? "은" : "는"} 요괴 봉인 해제를 시도했으나, 생명력이 충분히 모이지 않아 주술이 실패했다.
 
-        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 기이한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
+        잠시 후, 요괴 봉인 주술진은 뒤틀리더니 음침한 빛을 내며 무너졌다. 하지만 시간이 아무리 지나도 무너진 봉인 틈으로 요괴는 나타나지 않았다. 이미 힘이 약해진 요괴들은 비틀어진 균열을 넘을 수 없었던 것이다.
         
         ${openText}
 
-        주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
+        봉인이 무너진 주술 마을에는 여전히 ‘요괴는 사악한 괴물’이라는 말과 함께 ’요괴를 봉인하려 자신의 목숨을 바친 영웅, 아리아’의 이야기만이 전해지고 있다.
         `;
         },
       }
