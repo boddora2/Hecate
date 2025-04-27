@@ -989,6 +989,7 @@
       let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
       const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+      const sealUsersWithoutKilled = sealUsers.filter(name => name !== selectedKiller);
 
       let bbyoriAction = localStorage.getItem("actions_bbyori");
       let saenaAction = localStorage.getItem("actions_saena");
@@ -1091,6 +1092,7 @@
       return male.includes(name) ? "그" : "그녀";
       }
 
+      const sealUsers = JSON.parse(localStorage.getItem("sealUsers") || "[]");
       let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
       const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
@@ -1132,7 +1134,7 @@
 		
       주술진의 상태가 더욱 위태로워진 상황에서 아이들은 급하게 각자의 신념대로 주술을 시전했다. ${forbiddenNamesWithoutKilled.join(", ")}${(forbiddenNamesWithoutKilled.join(", ").charCodeAt(forbiddenNamesWithoutKilled.join(", ").length - 1) - 44032) % 28 ? "이" : "가"} 요괴 봉인 해제를 시도했고, 충분한 생명력이 모여 주술이 성공했다. 그 결과 오랜 세월 이어져 온 요괴 봉인이 해제되고 말았다.
 		
-      잠시 후, 요계에 틈이 열리고 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 요괴들은 ${sealUsersWithoutKilled.join(", ")}의 두려운 시선을 마주하며 자신들의 존재가 환영받지 못한다는 걸 느꼈다. 한껏 위축된 요괴들과 불안해하는 아이들을 본 요괴 대장은 주술 마을을 떠나 조용히 숨어살겠다고 말한 뒤 자리를 떠났다.
+      잠시 후, 요계에 틈이 열리고 그 속에 갇혀 있던 요괴들이 하나둘 모습을 드러내기 시작했다. 요괴들은 ${sealUsers.join(", ")}의 두려운 시선을 마주하며 자신들의 존재가 환영받지 못한다는 걸 느꼈다. 한껏 위축된 요괴들과 불안해하는 아이들을 본 요괴 대장은 주술 마을을 떠나 조용히 숨어살겠다고 말한 뒤 자리를 떠났다.
 
       ${reunionText} 
         
@@ -1304,6 +1306,7 @@
       let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
       const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
+      const sealUsersWithoutKilled = sealUsers.filter(name => name !== selectedKiller);
 
       let bbyoriAction = localStorage.getItem("actions_bbyori");
       let saenaAction = localStorage.getItem("actions_saena");
@@ -1406,6 +1409,7 @@
       return male.includes(name) ? "그" : "그녀";
       }
 
+      const sealUsers = JSON.parse(localStorage.getItem("sealUsers") || "[]");
       let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
       const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
