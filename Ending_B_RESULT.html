@@ -878,6 +878,9 @@
 
       let selectedKiller = localStorage.getItem("selectedKiller") || "";
 
+      const sealUsers = JSON.parse(localStorage.getItem("sealUsers") || "[]");
+      let killerLine = selectedKiller === "길라" ? "라온" : "길라";
+
       function getPronoun(name) {
       const male = ["길라", "다올", "라온", "마루"];
       return male.includes(name) ? "그" : "그녀";
@@ -982,6 +985,7 @@
       return male.includes(name) ? "그" : "그녀";
       }
 
+      const sealUsers = JSON.parse(localStorage.getItem("sealUsers") || "[]");
       let killerLine = selectedKiller === "길라" ? "라온" : "길라";
 
       const forbiddenNamesWithoutKilled = forbiddenNames.filter(name => name !== selectedKiller);
