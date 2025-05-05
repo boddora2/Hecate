@@ -93,15 +93,6 @@
                 "새나": "새나가 복원술을 사용합니다.\n거부할 수 없습니다."
             };
     
-            // 제한된 캐릭터 목록
-            const restrictedNames = ["나린"];
-    
-            // 입력된 값이 제한된 캐릭터 목록에 포함되는지 확인
-            if (restrictedNames.includes(userInput)) {
-                alert("이 캐릭터는 현혹할 수 없습니다.");
-                return; // 함수 종료
-            }
-    
             // 입력값이 정답 목록에 있는 경우
             if (answers[userInput]) {
                 alert(`현혹에 성공하였습니다.\n${answers[userInput]}`);
