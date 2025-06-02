@@ -282,7 +282,7 @@ button:hover {
 
 /* 기존 세부 페이지처럼 스타일 적용 */
 .section-box {
-    ffont-family: 'Nanum Myeongjo', 'Times New Roman', serif;
+    font-family: 'Nanum Myeongjo', 'Times New Roman', serif;
     word-spacing: 0px;
     background-color: rgba(255, 255, 255, 0.1); /* 연한 배경 추가 */
     padding: 15px;
@@ -478,15 +478,6 @@ button:hover {
     margin: 10px auto; /* ✅ 자동 마진으로 중앙 정렬 */
 }
 
-<!-- 🟢 정답 입력 기능 추가 -->
-<section class="section-box answer-section">
-    <h2>해독술을 사용할 장소/물건</h2>
-    <p>정확한 명칭을 입력하세요.<br>띄어쓰기 지켜주세요.</p>
-    <input type="text" id="answer" class="answer-input" placeholder="입력칸">
-    <button class="answer-button" onclick="checkAnswer()">확인</button>
-</section>
-
-<style>
     /* ✅ 입력칸과 버튼을 가운데 정렬 */
     .answer-section {
         display: flex;
@@ -523,7 +514,6 @@ button:hover {
     .answer-button:hover {
         background-color: #45a049; /* 마우스 올릴 때 색 변경 */
     }
-</style>
 
 .modal {
     position: fixed;
