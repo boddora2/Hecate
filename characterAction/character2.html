@@ -83,20 +83,28 @@
 
     <script>
         function checkAnswer() {
-            const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
+            const userInput = document.getElementById("answer").value.trim();
+    
             const answers = {
-                "제단 밑 바닥": "아리아의 비밀 상자를 발견했습니다.\n아리아 본인만 열 수 있는 주술이 걸려있습니다.",
+                "제단 밑 바닥":
+                    "아리아의 비밀 상자를 발견했습니다.\n아리아 본인만 열 수 있는 주술이 걸려있습니다.",
             };
-
-            // 특정 캐릭터 이름이 있는지 확인
-            const restrictedNames = ["아리아", "길라","나린", "다올", "라온", "마루", "벼리", "새나"]; // 제한할 캐릭터 이름 목록
-            const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
-
-             if (hasRestrictedName) {
-            alert("인물에게는 괴력을 사용할 수 없습니다.\n나린은 착한 아이입니다.");
-            return; // 함수 종료
+    
+            // 예외로 허용할 입력값들
+            const exceptionList = ["냄새나는 주술관"];
+    
+            // 예외 입력이면 restrictedNames 검사 스킵
+            if (!exceptionList.includes(userInput)) {
+                const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"];
+    
+                const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
+    
+                if (hasRestrictedName) {
+                    alert("인물에게는 괴력을 사용할 수 없습니다.\n나린은 착한 아이입니다.");
+                    return;
+                }
             }
-
+    
             if (answers[userInput]) {
                 alert(`바닥을 파괴하여 진입이 가능해졌습니다.\n${answers[userInput]}`);
             } else {
