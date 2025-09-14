@@ -43,6 +43,11 @@
         .answer-button:hover {
             background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
+
+        .hint-button {
+        display: block;       /* 블록 요소로 */
+        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
+        }
     </style>
 </head>
 <body class="character-page">
@@ -80,15 +85,33 @@
         <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 중간 행동 힌트 -->
+    <section class="section-box hint-section">
+        <h2>라온의 중간 행동 힌트</h2>
+        <br>
+        <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+        <p>[주의]힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+        <p>[주의]라온의 힌트는 라온 본인만 확인 가능합니다.</p>
+        <p>[주의]당신이 복제술을 사용하더라도 다른 인물의 힌트를 볼 수는 없습니다.</p>
+        <br>
+        <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
+        <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
+            🔑 [지시]: 추가 카드 22를 획득하세요.
+        </p>
+        </section>
+
     <script>
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
             const answers = {
-                "길라": "길라의 해독술을 사용합니다.",
-                "다올": "다올의 현혹술을 사용합니다.",
-                "마루": "마루의 감지술을 사용합니다.",
-                "벼리": "벼리의 변신술을 사용합니다.",
-                "새나": "새나의 복원술을 사용합니다.",
+                "길라": "길라의 해독술을 사용합니다.\n \n길라의 중간 행동 페이지를 이용하여 라온이 사용합니다.",
+                "다올": "다올의 현혹술을 사용합니다.\n \n라온의 중간 행동 페이지를 이용하여 라온이 사용합니다.",
+                "마루": "마루의 감지술을 사용합니다.\n \n마루의 중간 행동 페이지를 이용하여 라온이 사용합니다.",
+                "벼리": "벼리의 변신술을 사용합니다.\n \n벼리의 중간 행동 페이지를 이용하여 라온이 사용합니다.",
+                "새나": "새나의 복원술을 사용합니다.\n \n새나의 중간 행동 페이지를 이용하여 라온이 사용합니다.",
             };
     
             // 특정 캐릭터 이름이 있는지 확인
@@ -96,7 +119,7 @@
             const hasRestrictedName = restrictedNames.includes(userInput);
     
             if (hasRestrictedName) {
-                alert("나린의 주술을 복제하는 데 실패했다.\n주술이 복제가 안 될 수가 있나?");
+                alert("나린의 주술을 복제하는 데 실패했다.\n조건을 충족했다면 주술은 무조건 복제될텐데?\n \n설마 주술이 아닌 건가?");
                 return; // 함수 종료
             }
     
@@ -111,6 +134,11 @@
             } else {
                 alert("내가 모르는 이의 주술은 복제할 수 없다.");
             }
+        }
+
+        function showHint() {
+        const hintText = document.getElementById("hint-text");
+        hintText.style.display = "block";
         }    
     </script>
 

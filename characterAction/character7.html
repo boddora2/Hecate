@@ -43,6 +43,11 @@
         .answer-button:hover {
             background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
+
+        .hint-button {
+        display: block;       /* 블록 요소로 */
+        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
+        }
     </style>
 </head>
 <body class="character-page">
@@ -80,6 +85,23 @@
             <button onclick="checkAnswer()" class="answers-button">확인</button> <!-- ✅ 클래스 추가 -->
         </section>
     
+     <!-- 🟢 구분선 -->
+     <hr class="custom-hr">
+
+     <!-- 🟢 중간 행동 힌트 -->
+     <section class="section-box hint-section">
+         <h2>새나의 중간 행동 힌트</h2>
+         <br>
+         <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+         <p>[주의]힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+         <p>[주의]새나의 힌트는 새나 본인만 확인 가능합니다.</p>
+         <br>
+         <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
+         <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
+             🔑 [지시]: 추가 카드 20을 획득하세요.
+         </p>
+         </section>    
+        
         <script>
             function checkAnswer() {
                 const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
@@ -91,12 +113,17 @@
                     "마루의 주술책": "히든 카드 12를 확인하세요.",
                     "낡은 두루마리": "히든 카드 13을 확인하세요.",
                     "새나의 주술책": "히든 카드 14를 확인하세요.",
-                    "제단용 칼": "칼에 묻은 혈액량이 늘어났다.",
-                    "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어났다.",
+                    "제단용 칼": "칼에 묻은 혈액량이 늘어납니다.",
+                    "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어납니다.",
                     "식탁의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
                     "바닥의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
-                    "이끼 뭉치": "이끼와 풀을 엮어 만든 풀반지입니다.",
-                    "깨끗한 옷": "옷에 묻은 빵 부스러기가 나타났습니다.",
+                    "이끼 뭉치": "이끼와 풀을 엮어 만든 풀반지로 복원됩니다.",
+                    "깨끗한 마루": "옷에 묻은 빵 부스러기와 많은 피가 드러납니다.",
+                    "깨끗한 새나": "옷에 묻은 빵 부스러기가 드러납니다.",
+                    "상처가 있는 마루": "소매에 묻은 많은 피가 드러납니다.",
+                    "아리아의 시신 앞면": "왼손과 허벅지 부위에 감춰진 피가 드러납니다.",
+                    "아리아의 시신 뒷면": "등 부위에 감춰진 많은 피가 드러납니다."
+
                 };
         
                 // 특정 캐릭터 이름이 있는지 확인
@@ -113,6 +140,11 @@
                 } else {
                     alert("복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.");
                 }
+            }
+
+            function showHint() {
+            const hintText = document.getElementById("hint-text");
+            hintText.style.display = "block";
             }
         </script>
         

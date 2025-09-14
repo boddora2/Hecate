@@ -43,6 +43,11 @@
         .answer-button:hover {
             background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
+
+        .hint-button {
+        display: block;       /* 블록 요소로 */
+        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
+        }
     </style>
 </head>
 <body class="character-page">
@@ -81,13 +86,36 @@
         <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 중간 행동 힌트 -->
+    <section class="section-box hint-section">
+        <h2>나린의 중간 행동 힌트</h2>
+        <br>
+        <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+        <p>[주의]힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+        <p>[주의]나린의 힌트는 나린 본인만 확인 가능합니다.</p>
+        <br>
+        <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
+        <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
+            🔑 [지시]: 추가 카드 18을 획득하세요.
+        </p>
+        </section>
+
     <script>
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim();
     
             const answers = {
-                "제단 밑 바닥":
-                    "아리아의 비밀 상자를 발견했습니다.\n아리아 본인만 열 수 있는 주술이 걸려있습니다.",
+                "제단 밑 바닥":"바닥이 파괴되어 진입이 가능해졌습니다.\n아리아의 비밀 상자를 발견했습니다.\n아리아 본인만 열 수 있는 주술이 걸려있습니다.",
+                "번잡한 학생회실":"학생회실이 부셨졌다. 하지만 숨겨진 공간은 없다.\n불끈 쥔 주먹이 살짝 머쓱해진다.\n \n숨겨진 공간은 어디 있을까?",
+                "어지러운 교장실": "교장실이 부셨졌다. 하지만 숨겨진 공간은 없다.\n벼리 언니에게 살짝 미안하다.\n \n숨겨진 공간은 어디 있을까?",
+                "요괴 봉인 주술진": "주술진이 그려진 제단실 바닥이 부셔졌다.\n그래도 주술진의 형태는 유지되고 있다.\n주술진의 해제는 힘으로는 안 될 것 같다.",
+                "냄새나는 주술관": "주술관이 부셔졌다. 하지만 숨겨진 공간은 없다.\n주술 연습한 셈으로 치자.\n \n숨겨진 공간은 어디 있을까?",
+                "깨끗한 세탁실": "세탁실이 부셔졌다. 하지만 숨겨진 공간은 없다.\n뭐...손빨래 하면 되니까...\n \n숨겨진 공간은 어디 있을까?",
+                "깨끗한 욕실": "욕실이 부셔졌다. 하지만 숨겨진 공간은 없다.\n뭐...씻는 애들 없는 것 같던데.\n \n숨겨진 공간은 어디 있을까?",
+                "푹신한 침대": "침대가 부셔졌다. 하지만 숨겨진 공간은 없다.\n바닥에서 자는 것도 나쁘지 않아.\n\ n숨겨진 공간은 어디 있을까?"
             };
     
             // 예외로 허용할 입력값들
@@ -106,10 +134,15 @@
             }
     
             if (answers[userInput]) {
-                alert(`바닥을 파괴하여 진입이 가능해졌습니다.\n${answers[userInput]}`);
+                alert(`불끈 쥔 주먹으로 툭 건들자\n${answers[userInput]}`);
             } else {
                 alert("모든 게 부셔졌으나\n숨겨진 공간은 보이지 않는다.");
             }
+        }
+
+        function showHint() {
+        const hintText = document.getElementById("hint-text");
+        hintText.style.display = "block";
         }
     </script>
 

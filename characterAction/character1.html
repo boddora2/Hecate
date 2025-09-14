@@ -43,6 +43,11 @@
         .answer-button:hover {
             background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
+
+        .hint-button {
+        display: block;       /* 블록 요소로 */
+        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
+        }
     </style>
 </head>
 <body class="character-page">
@@ -67,7 +72,7 @@
         <p><strong>비용</strong> : 주술 1번당 체력 큐브 2개 소모</p>
         <p>[참고] 원한다면 4번까지 사용 가능합니다.<br>훈련 도구를 사용한 경우 예외적으로 5번 행동 가능합니다.<br>소지하거나 양도받은 카드에 한해서만 사용 가능합니다.</p>전체 공개된 카드에도 사용 가능합니다.</p>
     </section>
-
+    
     <!-- 🟢 구분선 -->
     <hr class="custom-hr">
 
@@ -80,12 +85,30 @@
         <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 중간 행동 힌트 -->
+    <section class="section-box hint-section">
+        <h2>길라의 중간 행동 힌트</h2>
+        <br>
+        <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+        <p>[주의]힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+        <p>[주의]길라의 힌트는 길라 본인만 확인 가능합니다.</p>
+        <br>
+        <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
+        <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
+            🔑 [지시]: 추가 카드 16을 획득하세요.
+        </p>
+        </section>
+
     <script>
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
             const answers = {
-                "가리사의 목걸이": "히든카드 6을 확인하세요.",
-                "라움의 목걸이": "히든카드 7을 확인하세요."
+                "가리사의 목걸이": "가리사가 남긴 기록이다.\n \n히든카드 6을 확인하세요.",
+                "라움의 목걸이": "라움이 남긴 기록이다.\n \n히든카드 7을 확인하세요.",
+                "낡은 사진": "길라야, 가리사야 너희는 항상 웃었으면 좋겠구나.\n \n그리운 아버지가 남긴 기록이다.\n소중히 간직해야겠다.\n \n하지만 지금 찾는 기록은 이게 아니다.",
             };
 
             if (answers[userInput]) {
@@ -93,6 +116,11 @@
             } else {
                 alert("숨겨진 기록이 없습니다.");
             }
+        }
+
+        function showHint() {
+        const hintText = document.getElementById("hint-text");
+        hintText.style.display = "block";
         }
     </script>
 

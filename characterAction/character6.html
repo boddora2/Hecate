@@ -43,6 +43,11 @@
         .answer-button:hover {
             background-color: #45a049; /* 마우스 올릴 때 색 변경 */
         }
+
+        .hint-button {
+        display: block;       /* 블록 요소로 */
+        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
+        }
     </style>
 </head>
 <body class="character-page">
@@ -82,6 +87,24 @@
         <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
     </section>
 
+    <!-- 🟢 구분선 -->
+    <hr class="custom-hr">
+
+    <!-- 🟢 중간 행동 힌트 -->
+    <section class="section-box hint-section">
+        <h2>벼리의 중간 행동 힌트</h2>
+        <br>
+        <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+        <p>[주의]힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+        <p>[주의]벼리의 힌트는 벼리 본인만 확인 가능합니다.</p>
+        <p>[주의]당신이 변신술을 사용하더라도 다른 인물의 힌트를 볼 수는 없습니다.</p>
+        <br>
+        <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
+        <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
+            🔑 [지시]: 추가 카드 19를 획득하세요.
+        </p>
+        </section>
+
     <script>
         function checkAnswer() {
             const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
@@ -91,8 +114,13 @@
             if (answers[userInput]) {
                 alert(`본인 확인에 성공하였습니다!\n${answers[userInput]}`);
             } else {
-                alert("본인 확인에 실패하였습니다.");
+                alert("본인 확인에 실패하였습니다.\n머쓱하다, 다시 내 모습으로 돌아가야지.");
             }
+        }
+
+        function showHint() {
+        const hintText = document.getElementById("hint-text");
+        hintText.style.display = "block";
         }
     </script>
 
