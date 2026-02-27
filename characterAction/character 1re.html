@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>길라 중간 행동</title>
+
+  <style>
+    :root{
+      --bg1:#0f1117;
+      --bg2:#1b2230;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.78);
+      --accent: #ffcc66;
+      --accentSoft: rgba(255,204,102,.35);
+    }
+    *{ box-sizing: border-box; }
+
+    body{
+      margin:0;
+      min-height: 100dvh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(720px 420px at 80% 18%, rgba(255,204,102,.10), transparent 60%),
+        linear-gradient(135deg, var(--bg2), var(--bg1));
+      padding: 22px 14px 56px;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .wrap{
+      width: min(760px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero{
+      text-align: center;
+      margin-top: 6px;
+    }
+    .hero h1{
+      margin: 8px 0 12px;
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .hero img{
+      display:block;
+      margin: 0 auto;
+      width: min(360px, 92%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+    }
+
+    .section-box{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* ✅ 제목: block으로 고정 (합쳐짐 방지) */
+    .section-box > h2{
+      margin: 0 0 12px;
+      text-align: center;
+      color: var(--accent);
+      font-weight: 900;
+      display: block;
+      position: static;
+    }
+    .section-box > h2::after{
+      content:"";
+      display:block;
+      height:2px;
+      width:60%;
+      margin:6px auto 0;
+      background: var(--accentSoft);
+      border-radius: 2px;
+    }
+
+    .section-box p{
+      margin: 8px auto;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .section-box strong{ color:#fff; }
+
+    .custom-hr{
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 10px 6px;
+    }
+
+    .answer-section{ text-align: center; }
+
+    .answer-input{
+      width: min(440px, 92%);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.28);
+      color:#fff;
+      font-size: 15px;
+      text-align: center;
+      outline: none;
+      display:block;        /* ✅ 혹시 모를 합쳐짐 방지 */
+      margin: 0 auto;       /* ✅ 가운데 */
+    }
+    .answer-input::placeholder{ color: rgba(255,255,255,.55); }
+
+    .answer-button{
+      margin-top: 10px;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, #ffcc66, #d4a63d);
+      color:#1b1b1b;
+      font-weight: 900;
+      cursor: pointer;
+      transition: filter .18s ease, transform .06s ease;
+    }
+    .answer-button:hover{ filter: brightness(1.05); }
+    .answer-button:active{ transform: translateY(1px); }
+
+    .result-box{
+      margin: 14px auto 0;
+      width: min(560px, 94%);
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.10);
+      border-left: 4px solid var(--accent);
+      white-space: pre-wrap;
+      text-align: left;
+      display:none;
+      max-height: 240px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .result-box.show{ display:block; }
+
+    .result-title{
+      margin: 0 0 6px;
+      font-weight: 900;
+      color:#fff;
+    }
+
+    #hint-text{
+      display:none;
+      margin-top: 14px;
+      font-weight: 900;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .made2{
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.45);
+      padding-bottom: 8px;
+    }
+
+    @media (max-width: 420px){
+      .section-box{ padding: 18px 16px; }
+      .result-box{ max-height: 220px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>길라 중간 행동</h1>
+      <img src="../assets/images/길라 가문.jpg" alt="길라">
+    </header>
+
+    <section class="section-box">
+      <h2>⚠️ 주의 (거짓말 불가)</h2>
+      <p>마나(MP)가 0이 되면 행동할 수 없습니다.</p>
+      <p>주술의 종류와 내용을 발표한 후 상의합니다.</p>
+      <p>최종 결정은 주술의 주인이 결정합니다.</p>
+      <p>원한다면 주술 행동을 포기해도 됩니다.</p>
+      <p>주술 행동 결과는 적힌 그대로 읽습니다.</p>
+    </section>
+
+    <section class="section-box">
+      <h2>사용 가능한 가문의 주술</h2>
+      <p><strong>순서</strong> : 1번</p>
+      <p><strong>주술</strong> : 해독술</p>
+      <p><strong>내용</strong> : 기록술로 숨긴 기록을 밝혀내는 주술</p>
+      <p><strong>비용</strong> : 주술 1번당 마나(MP) 2개 소모</p>
+      <p>※ 원한다면 4번까지 사용 가능합니다.<br>주술 도구를 사용한 경우 예외적으로 1번 더 행동 가능합니다.</p>
+    </section>
+
+    <hr class="custom-hr">
+
+    <section class="section-box answer-section">
+      <h2>해독술을 사용할 장소/물건</h2>
+      <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+      <button id="checkBtn" class="answer-button" type="button">확인</button>
+
+      <div id="result" class="result-box" aria-live="polite">
+        <p class="result-title" id="resultTitle"></p>
+        <div id="resultBody"></div>
+      </div>
+    </section>
+
+    <hr class="custom-hr">
+
+    <section class="section-box">
+      <h2>길라의 중간 행동 힌트</h2>
+      <p>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+      <p>힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
+      <p>[주의] 길라의 힌트는 길라 본인만 확인 가능합니다.</p>
+
+      <div style="text-align:center; margin-top: 10px;">
+        <button id="hintBtn" class="answer-button" type="button">힌트보기</button>
+        <p id="hint-text">🔑 [지시]: 추가 카드 16을 획득하세요.</p>
+      </div>
+    </section>
+
+    <section class="made2">© Copyright 2025. 보또 All rights reserved.</section>
+  </div>
+
+  <script>
+    const answers = {
+      "가리사의 목걸이": "가리사가 남긴 기록이다.\n\n히든카드 6을 확인하세요.",
+      "라움의 목걸이": "라움이 남긴 기록이다.\n\n히든카드 7을 확인하세요.",
+      "낡은 사진": "길라야, 가리사야 너희는 항상 웃었으면 좋겠구나.\n\n그리운 아버지가 남긴 기록이다.\n소중히 간직해야겠다.\n\n하지만 지금 찾는 기록은 이게 아니다."
+    };
+
+    const input = document.getElementById("answer");
+    const btn = document.getElementById("checkBtn");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBody = document.getElementById("resultBody");
+
+    function renderResult(title, body){
+      resultTitle.textContent = title;
+      resultBody.textContent = body;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function checkAnswer(){
+      const userInput = input.value.trim();
+      if (!userInput){
+        renderResult("입력 필요", "입력칸에 장소/물건 이름을 적어주세요.");
+        return;
+      }
+
+      if (answers[userInput]){
+        renderResult("숨겨진 기록이 존재합니다!", answers[userInput]);
+      } else {
+        renderResult("숨겨진 기록이 없습니다.", "다른 장소/물건을 입력해보세요.");
+        input.focus();
+        input.select();
+      }
+    }
+
+    btn.addEventListener("click", checkAnswer);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    const hintBtn = document.getElementById("hintBtn");
+    const hintText = document.getElementById("hint-text");
+    hintBtn.addEventListener("click", () => {
+      const open = hintText.style.display === "block";
+      hintText.style.display = open ? "none" : "block";
+      hintBtn.textContent = open ? "힌트보기" : "힌트닫기";
+    });
+  </script>
+</body>
+</html>
