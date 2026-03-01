@@ -1,172 +1,332 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>새나 중간 행동</title>
-    <link rel="stylesheet" href="../style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>새나 중간 행동</title>
 
-    <style>
-        /* ✅ 입력칸과 버튼을 가운데 정렬 */
-        .answer-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+  <style>
+    :root{
+      --bg1:#0f1117;
+      --bg2:#1b2230;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.78);
+      --accent: #ffcc66;
+      --accentSoft: rgba(255,204,102,.35);
+    }
+    *{ box-sizing: border-box; }
 
-        /* ✅ 입력칸 크기 키우기 */
-        .answer-input {
-            width: 80%; /* 너비 키우기 */
-            max-width: 300px; /* 최대 너비 제한 */
-            padding: 10px; /* 내부 여백 추가 */
-            font-size: 18px; /* 글자 크기 키우기 */
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    body{
+      margin:0;
+      min-height: 100dvh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(720px 420px at 80% 18%, rgba(255,204,102,.10), transparent 60%),
+        linear-gradient(135deg, var(--bg2), var(--bg1));
+      padding: 22px 14px 56px;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
 
-        /* ✅ 확인 버튼 스타일 변경 */
-        .answer-button {
-            background-color: #4CAF50; /* 초록색 배경 */
-            color: white; /* 흰색 글씨 */
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 120px; /* 버튼 폭 줄이기 */
-            text-align: center;
-        }
+    .wrap{
+      width: min(760px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
 
-        .answer-button:hover {
-            background-color: #45a049; /* 마우스 올릴 때 색 변경 */
-        }
+    .hero{
+      text-align: center;
+      margin-top: 6px;
+    }
+    .hero h1{
+      margin: 8px 0 12px;
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .hero img{
+      display:block;
+      margin: 0 auto;
+      width: min(360px, 92%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+    }
 
-        .hint-button {
-        display: block;       /* 블록 요소로 */
-        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
-        }
-    </style>
+    .section-box{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .section-box > h2{
+      margin: 0 0 12px;
+      text-align: center;
+      color: var(--accent);
+      font-weight: 900;
+      display: block;
+      position: static;
+    }
+    .section-box > h2::after{
+      content:"";
+      display:block;
+      height:2px;
+      width:60%;
+      margin:6px auto 0;
+      background: var(--accentSoft);
+      border-radius: 2px;
+    }
+
+    .section-box p{
+      margin: 8px auto;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .section-box strong{ color:#fff; }
+
+    .custom-hr{
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 10px 6px;
+    }
+
+    .answer-section{ text-align:center; }
+
+    .answer-input{
+      width: min(440px, 92%);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.28);
+      color:#fff;
+      font-size: 15px;
+      text-align: center;
+      outline: none;
+      display:block;
+      margin: 0 auto;
+    }
+    .answer-input::placeholder{ color: rgba(255,255,255,.55); }
+
+    .answer-button{
+      margin-top: 10px;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, #ffcc66, #d4a63d);
+      color:#1b1b1b;
+      font-weight: 900;
+      cursor: pointer;
+      transition: filter .18s ease, transform .06s ease;
+    }
+    .answer-button:hover{ filter: brightness(1.05); }
+    .answer-button:active{ transform: translateY(1px); }
+
+    .result-box{
+      margin: 14px auto 0;
+      width: min(560px, 94%);
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.10);
+      border-left: 4px solid var(--accent);
+      white-space: pre-wrap;
+      text-align: left;
+      display:none;
+      max-height: 260px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .result-box.show{ display:block; }
+
+    .result-title{
+      margin: 0 0 6px;
+      font-weight: 900;
+      color:#fff;
+    }
+
+    #hint-text{
+      display:none;
+      margin-top: 14px;
+      font-weight: 900;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .made2{
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.45);
+      padding-bottom: 8px;
+    }
+
+    @media (max-width: 420px){
+      .section-box{ padding: 18px 16px; }
+      .result-box{ max-height: 230px; }
+    }
+
+    .gold{
+      color: var(--accent);
+      font-weight: 900;
+    }
+    .gold-glow{
+      color: var(--accent);
+      font-weight: 900;
+      text-shadow: 0 0 6px rgba(255,204,102,.45);
+    }
+  </style>
 </head>
-<body class="character-page">
 
-    <h1>새나 중간 행동</h1>
-    <img src="../assets/images/새나 가문.jpg" alt="새나"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
-    <br><br>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>새나 중간 행동</h1>
+      <img src="../assets/images/새나 가문.jpg" alt="새나">
+    </header>
 
-    <!-- 🟢 안내 문구 -->
-    <h2 class="player-notice-title">⚠️ 주의(거짓말 불가) ⚠️</h2>
-    <br>
-    <section class="player-notice-text2">체력이 0이 되면 행동할 수 없습니다.<br><br>생명력이 0이 되면 당신은 사망합니다.<br><br><br><br>주술의 종류와 내용을 발표한 후 상의합니다.<br><br>최종 결정은 주술의 주인이 결정합니다.<br><br>원한다면 주술 행동을 포기해도 됩니다.<br><br>주술 행동 결과는 적힌 그대로 읽습니다.</section>
-    <br><br><br>
+    <section class="section-box">
+      <h2>⚠️ 주의 (거짓말 불가)</h2>
+      <p>마나(MP)가 0이 되면 행동할 수 없습니다.</p>
+      <p>주술의 종류와 내용을 발표한 후 상의합니다.</p>
+      <p>최종 결정은 주술의 주인이 결정합니다.</p>
+      <p>원한다면 주술 행동을 포기해도 됩니다.</p>
+      <p>주술 행동 결과는 적힌 그대로 읽습니다.</p>
+    </section>
 
-        <!-- 🟢 주술 행동 -->
-        <section class="section-box">
-            <h2>사용 가능한 가문의 주술</h2>
-            <br>
-            <p><strong>순서</strong> : 5번</p>
-            <p><strong>주술</strong> : 복원술</p>
-            <p><strong>내용</strong> : 사물을 기존의 상태로 복원하는 주술</p>
-            <p><strong>비용</strong> : 주술 1번당 체력 큐브 1개 소모</p>
-            <p>[참고] 원한다면 4번까지 사용 가능합니다.<br>훈련 도구를 사용한 경우 예외적으로 5번 행동 가능합니다.<br>소지하거나 양도받은 카드에 한해서만 사용 가능합니다.<br>전체 공개된 카드에도 사용 가능합니다.</p>
-        </section>
-    
-        <!-- 🟢 구분선 -->
-        <hr class="custom-hr">
-    
-        <!-- 🟢 정답 입력 기능 추가 -->
-        <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
-            <h2>복원술을 사용할 장소/물건</h2>
-            <br><br>
-            <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)"> <!-- ✅ 클래스 추가 -->
-            <br><br>
-            <button onclick="checkAnswer()" class="answers-button">확인</button> <!-- ✅ 클래스 추가 -->
-        </section>
-    
-     <!-- 🟢 구분선 -->
-     <hr class="custom-hr">
+    <hr class="custom-hr">
 
-     <!-- 🟢 중간 행동 힌트 -->
-     <section class="section-box hint-section">
-         <h2>새나의 중간 행동 힌트</h2>
-         <br>
-         <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
-         <p>힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
-         <p>[주의]새나의 힌트는 새나 본인만 확인 가능합니다.</p>
-         <br>
-         <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
-         <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
-             🔑 [지시]: 추가 카드 20을 획득하세요.
-         </p>
-         </section>    
-        
-        <script>
-            function checkAnswer() {
-                const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
-                const answers = {
-                    "길라의 주술책": "히든 카드 8을 확인하세요.",
-                    "나린의 주술책": "히든 카드 9를 확인하세요.",
-                    "다올의 주술책": "히든 카드 10을 확인하세요.",
-                    "라온의 주술책": "히든 카드 11을 확인하세요.",
-                    "마루의 주술책": "히든 카드 12를 확인하세요.",
-                    "낡은 두루마리": "히든 카드 13을 확인하세요.",
-                    "새나의 주술책": "히든 카드 14를 확인하세요.",
-                    "제단용 칼": "칼에 묻은 혈액량이 늘어납니다.",
-                    "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어납니다.",
-                    "식탁의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
-                    "바닥의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
-                    "이끼 뭉치": "이끼와 풀을 엮어 만든 풀반지로 복원됩니다.",
-                    "깨끗한 마루": "옷에 묻은 빵 부스러기와 많은 피가 드러납니다.",
-                    "깨끗한 새나": "옷에 묻은 빵 부스러기가 드러납니다.",
-                    "상처가 있는 마루": "소매에 묻은 많은 피가 드러납니다.",
-                    "아리아의 시신 앞면": "왼손과 허벅지 부위에 감춰진 피가 드러납니다.",
-                    "아리아의 시신 뒷면": "등 부위에 감춰진 많은 피가 드러납니다."
+    <section class="section-box">
+      <h2>사용 가능한 가문의 주술</h2>
+      <p><strong>순서</strong> : 5번</p>
+      <p><strong>주술</strong> : 복원술</p>
+      <p><strong>내용</strong> : 사물을 기존의 상태로 복원하는 주술</p>
+      <p><strong>비용</strong> : 주술 1번당 마나(MP) 1 소모</p>
+      <p>※ 4번만 행동할 수 있습니다.<br>주술 도구를 사용한 경우<br>예외적으로 5번까지 행동 가능합니다.</p>
+      </p>
+    </section>
 
-                };
-        
-                // 특정 캐릭터 이름이 있는지 확인
-                const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"]; // 제한할 캐릭터 이름 목록
-                const hasRestrictedName = restrictedNames.includes(userInput);
-        
-                if (hasRestrictedName) {
-                    alert("인물에게는 복원술을 사용할 수 없습니다.\n사물만 가능합니다.");
-                    return; // 함수 종료
-                }
-        
-                if (answers[userInput]) {
-                    alert(`복원에 성공하였습니다!\n${answers[userInput]}`);
-                } else {
-                    alert("복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.");
-                }
-            }
+    <hr class="custom-hr">
 
-            function showHint() {
-            const hintText = document.getElementById("hint-text");
-            hintText.style.display = "block";
-            }
-        </script>
-        
-    
-        <!-- 🟢 구분선 -->
-        <hr class="custom-hr">
-    
-        <section>
-            <!-- 버튼 컨테이너 (버튼을 위아래로 배치) -->
-            <div class="button-container">
-                <button onclick="location.href='../mid-action-page.html'">[중간] 행동 하기</button>
-                <button onclick="location.href='../main-page-2.html'">[1차] 대본 보기</button>
-                <button onclick="location.href='../main-page-2.html'">[2차] 대본 보기</button>
-                <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
-            </div>
-        </section>
-        
-        <!-- 🟢 구분선 -->
-        <hr class="custom-hr">
-    
-        <!-- 🟢 제작자 문구 -->
-        <section class="made2">&copy; Copyright 2025. 보또 All rights reserved. </section>
-    
-    </body>
-    </html>
+    <section class="section-box answer-section">
+      <h2>복원술을 사용할 장소/물건</h2>
+      <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+      <button id="checkBtn" class="answer-button" type="button">확인</button>
+
+      <div id="result" class="result-box" aria-live="polite">
+        <p class="result-title" id="resultTitle"></p>
+        <div id="resultBody"></div>
+      </div>
+    </section>
+
+    <hr class="custom-hr">
+
+    <section class="section-box">
+      <h2>새나의 중간 행동 힌트</h2>
+      <p>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+      <p>힌트 사용은 다른 인물이 강요/강제할 수 없습니다.</p>
+      <p>[주의] 새나의 힌트는 새나만 확인 가능합니다.</p>
+
+      <div style="text-align:center; margin-top:10px;">
+        <button id="hintBtn" class="answer-button" type="button">힌트보기</button>
+        <p id="hint-text">🔑 [지시]: 추가 카드 20을 획득하세요.</p>
+      </div>
+    </section>
+
+    <section class="made2">© Copyright 2025. 보또 All rights reserved.</section>
+  </div>
+
+  <script>
+    // ✅ 띄어쓰기 포함 이름 유지 + 실수 방지용 공백 정리(여러 칸 → 한 칸)
+    const normalizeSpaces = (s) => String(s).trim().replace(/\s+/g, " ");
+
+    // ✅ 인물명 비교는 공백 제거 + 소문자
+    const normalizeName = (s) => String(s).replace(/\s+/g, "").toLowerCase();
+
+    const answers = {
+      "길라의 주술책": "히든 카드 8을 확인하세요.",
+      "나린의 주술책": "히든 카드 9를 확인하세요.",
+      "다올의 주술책": "히든 카드 10을 확인하세요.",
+      "라온의 주술책": "히든 카드 11을 확인하세요.",
+      "마루의 주술책": "히든 카드 12를 확인하세요.",
+      "낡은 두루마리": "히든 카드 13을 확인하세요.",
+      "새나의 주술책": "히든 카드 14를 확인하세요.",
+      "제단용 칼": "칼에 묻은 혈액량이 늘어납니다.",
+      "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어납니다.",
+      "식탁의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
+      "바닥의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
+    };
+
+    const answersMap = Object.fromEntries(
+      Object.entries(answers).map(([k, v]) => [normalizeSpaces(k), v])
+    );
+
+    const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"];
+    const restrictedSet = new Set(restrictedNames.map(normalizeName));
+
+    const input = document.getElementById("answer");
+    const btn = document.getElementById("checkBtn");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBody = document.getElementById("resultBody");
+
+    function renderResult(title, body){
+      resultTitle.textContent = title;
+      resultBody.innerHTML = body; 
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function checkAnswer(){
+      const raw = input.value;
+      const userInput = normalizeSpaces(raw);
+
+      if (!userInput){
+        renderResult("입력 필요", "입력칸에 장소/물건 이름을 적어주세요.");
+        return;
+      }
+
+      if (restrictedSet.has(normalizeName(userInput))){
+        renderResult("사용 불가", "인물에게는 복원술을 사용할 수 없습니다.\n\n사물만 가능합니다.");
+        input.focus();
+        input.select();
+        return;
+      }
+
+      const found = answersMap[userInput];
+
+      if (found){
+        renderResult("복원에 성공하였습니다!", found);
+      } else {
+        renderResult("복원 결과", "복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.");
+        input.focus();
+        input.select();
+      }
+    }
+
+    btn.addEventListener("click", checkAnswer);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    const hintBtn = document.getElementById("hintBtn");
+    const hintText = document.getElementById("hint-text");
+    hintBtn.addEventListener("click", () => {
+      const open = hintText.style.display === "block";
+      hintText.style.display = open ? "none" : "block";
+      hintBtn.textContent = open ? "힌트보기" : "힌트닫기";
+    });
+  </script>
+</body>
+</html>

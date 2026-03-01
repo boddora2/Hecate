@@ -1,156 +1,991 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다올 중간 행동</title>
-    <link rel="stylesheet" href="../style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다올 중간 행동</title>
 
-    <style>
-        /* ✅ 입력칸과 버튼을 가운데 정렬 */
-        .answer-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+  <style>
+    :root{
+      --bg1:#0f1117;
+      --bg2:#1b2230;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.78);
+      --accent: #ffcc66;
+      --accentSoft: rgba(255,204,102,.35);
+    }
+    *{ box-sizing: border-box; }
 
-        /* ✅ 입력칸 크기 키우기 */
-        .answer-input {
-            width: 80%; /* 너비 키우기 */
-            max-width: 300px; /* 최대 너비 제한 */
-            padding: 10px; /* 내부 여백 추가 */
-            font-size: 18px; /* 글자 크기 키우기 */
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    body{
+      margin:0;
+      min-height: 100dvh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(720px 420px at 80% 18%, rgba(255,204,102,.10), transparent 60%),
+        linear-gradient(135deg, var(--bg2), var(--bg1));
+      padding: 22px 14px 56px;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
 
-        /* ✅ 확인 버튼 스타일 변경 */
-        .answer-button {
-            background-color: #4CAF50; /* 초록색 배경 */
-            color: white; /* 흰색 글씨 */
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 120px; /* 버튼 폭 줄이기 */
-            text-align: center;
-        }
+    .wrap{
+      width: min(760px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
 
-        .answer-button:hover {
-            background-color: #45a049; /* 마우스 올릴 때 색 변경 */
-        }
+    .hero{
+      text-align: center;
+      margin-top: 6px;
+    }
+    .hero h1{
+      margin: 8px 0 12px;
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .hero img{
+      display:block;
+      margin: 0 auto;
+      width: min(360px, 92%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+    }
 
-        .hint-button {
-        display: block;       /* 블록 요소로 */
-        margin: 0 auto;       /* 좌우 자동 여백 → 가운데 정렬 */
-        }
-    </style>
+    .section-box{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* ✅ 사파리(iOS/맥)에서 “블러 박스 안에 블러 박스” 중첩될 때 흰색 깨짐 방지용 */
+    .section-box.no-blur{
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 제목 */
+    .section-box > h2{
+      margin: 0 0 12px;
+      text-align: center;
+      color: var(--accent);
+      font-weight: 900;
+      display: block;
+      position: static;
+    }
+    .section-box > h2::after{
+      content:"";
+      display:block;
+      height:2px;
+      width:60%;
+      margin:6px auto 0;
+      background: var(--accentSoft);
+      border-radius: 2px;
+    }
+
+    .section-box p{
+      margin: 8px auto;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .section-box strong{ color:#fff; }
+
+    .custom-hr{
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 10px 6px;
+    }
+
+    .answer-section{ text-align:center; }
+
+    .answer-input{
+      width: min(440px, 92%);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.28);
+      color:#fff;
+      font-size: 15px;
+      text-align: center;
+      outline: none;
+      display:block;
+      margin: 0 auto;
+    }
+    .answer-input::placeholder{ color: rgba(255,255,255,.55); }
+
+    .answer-button{
+      margin-top: 10px;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, #ffcc66, #d4a63d);
+      color:#1b1b1b;
+      font-weight: 900;
+      cursor: pointer;
+      transition: filter .18s ease, transform .06s ease;
+    }
+    .answer-button:hover{ filter: brightness(1.05); }
+    .answer-button:active{ transform: translateY(1px); }
+
+    .result-box{
+      margin: 14px auto 0;
+      width: min(560px, 94%);
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.10);
+      border-left: 4px solid var(--accent);
+      white-space: pre-wrap; 
+      text-align: left;
+      display:none;
+      max-height: 260px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .result-box.show{ display:block; }
+
+    .result-title{
+      margin: 0 0 6px;
+      font-weight: 900;
+      color:#fff;
+    }
+
+    #hint-text{
+      display:none;
+      margin-top: 14px;
+      font-weight: 900;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .made2{
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.45);
+      padding-bottom: 8px;
+    }
+
+    @media (max-width: 420px){
+      .section-box{ padding: 18px 16px; }
+      .result-box{ max-height: 230px; }
+    }
+
+    /* 금빛 강조 */
+    .gold{
+      color: var(--accent);
+      font-weight: 900;
+    }
+    .gold-glow{
+      color: var(--accent);
+      font-weight: 900;
+      text-shadow: 0 0 6px rgba(255,204,102,.45);
+    }
+  </style>
 </head>
-<body class="character-page">
-    <h1>다올 중간 행동</h1>
-    <img src="../assets/images/다올 가문.jpg" alt="다올"> <!-- ✅ 이미지는 가운데 정렬 유지 -->
-    <br>
-    <br>
-    <!-- 🟢 안내 문구 -->
-    <h2 class="player-notice-title">⚠️ 주의(거짓말 불가) ⚠️</h2>
-    <br>
-    <section class="player-notice-text2">체력이 0이 되면 행동할 수 없습니다.<br><br>생명력이 0이 되면 당신은 사망합니다.<br><br><br><br>주술의 종류와 내용을 발표한 후 상의합니다.<br><br>최종 결정은 주술의 주인이 결정합니다.<br><br>원한다면 주술 행동을 포기해도 됩니다.<br><br>주술 행동 결과는 적힌 그대로 읽습니다.</section>
-    <br><br><br>
 
-    <!-- 🟢 주술 행동 -->
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>다올 중간 행동</h1>
+      <img src="../assets/images/다올 가문.jpg" alt="다올">
+    </header>
+
     <section class="section-box">
-        <h2>사용 가능한 가문의 주술</h2>
-        <br>
-        <p><strong>순서</strong> : 6번</p>
-        <p><strong>주술</strong> : 현혹술</p>
-        <p><strong>내용</strong> : 상대의 마음을 조종하는 주술<br>상대의 주술 행동(중간 행동)을 1번만 더 행하게 만듭니다.<br>상대는 거부할 수 없습니다.(원하는 대로 조종하세요)</p>
-        <p>[참고] 현혹된 상대는 자신의 주술 비용을 소모해야 합니다.</p> 
-        <p><strong>비용</strong> : [기본] 체력 큐브 2개 소모 + [상대 주술 비용]</p>
-        <p>[참고] 현혹된 상대도 자신의 주술 비용을 소모해야 합니다.<br>상대가 주술 비용을 낼 수 없다면 사용 불가입니다.</p>
-        <p>[참고] 1번만 사용할 수 있습니다.<br>훈련 도구를 사용한 경우 예외적으로 2번 행동 가능합니다.<br>이미 행동을 마친 자에게도 사용가능 합니다.<br>상대의 주술이 무엇인지 물어볼 수는 없습니다.</p>
-
+      <h2>⚠️ 주의 (거짓말 불가)</h2>
+      <p>마나(MP)가 0이 되면 행동할 수 없습니다.</p>
+      <p>주술의 종류와 내용을 발표한 후 상의합니다.</p>
+      <p>최종 결정은 주술의 주인이 결정합니다.</p>
+      <p>원한다면 주술 행동을 포기해도 됩니다.</p>
+      <p>주술 행동 결과는 적힌 그대로 읽습니다.</p>
     </section>
 
-    <!-- 🟢 구분선 -->
     <hr class="custom-hr">
 
-    <!-- 🟢 정답 입력 기능 추가 -->
-    <section class="section-box answer-section"> <!-- ✅ 정렬을 위해 클래스 추가 -->
-        <h2>현혹술을 사용할 인물</h2>
-        <br><br>
-        <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)"> <!-- ✅ 클래스 추가 -->
-        <br><br>
-        <button onclick="checkAnswer()" class="answer-button">확인</button> <!-- ✅ 클래스 추가 -->
+    <section class="section-box">
+      <h2>사용 가능한 가문의 주술</h2>
+      <p><strong>순서</strong> : 6번</p>
+      <p><strong>주술</strong> : 현혹술</p>
+      <p>
+        <strong>내용</strong> : 상대의 마음을 조종하는 주술<br>
+        상대의 주술 행동(중간 행동)을 <span class="gold-glow">1번 더</span> 행하게 만듭니다.<br>
+        상대는 거부할 수 없습니다. (원하는 대로 조종하세요)
+      </p>
+      <p><strong>비용</strong> : [기본] 마나(MP) 2 소모 + [상대 주술 비용]</p>
+      <p>[참고] 현혹된 상대는 자신의 주술 비용을 소모해야 합니다.</p>
+      <p>[참고] 상대가 주술 비용을 낼 수 없다면 사용할 수 없습니다.</p>
+      <p>※ 1번만 행동할 수 있습니다.<br>주술 도구를 사용한 경우<br>예외적으로 2번까지 행동 가능합니다.</p>
+      <p>※ 상대가 자신의 주술 제한 횟수를 다 사용했더라도,<br>당신에 의해 1회 더 주술 행동이 가능합니다.</p>
     </section>
 
-    <!-- 🟢 구분선 -->
     <hr class="custom-hr">
 
-    <!-- 🟢 중간 행동 힌트 -->
-    <section class="section-box hint-section">
-        <h2>다올의 중간 행동 힌트</h2>
-        <br>
-        <p>당신이 원한다면 승점 계산 시  <strong>[-5점]</strong>을 하고<br>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
-        <p>힌트 사용 여부는 다른 인물이 강요/강제할 수 없습니다.</p>
-        <p>[주의]다올의 힌트는 다올 본인만 확인 가능합니다.</p>
-        <p>[주의]당신이 현혹술을 사용하더라도 다른 인물의 힌트를 볼 수는 없습니다.</p>
-        <br>
-        <button onclick="showHint()" class="answer-button hint-button">힌트보기</button>
-        <p id="hint-text" style="display:none; margin-top:15px; font-weight:bold; color:yellow;">
-            🔑 [지시]: 추가 카드 21을 획득하세요.
-        </p>
-        </section>
+    <section class="section-box answer-section">
+      <h2>현혹술을 사용할 인물</h2>
+      <input type="text" id="answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+      <button id="checkBtn" class="answer-button" type="button">확인</button>
 
-    <script>
-        function checkAnswer() {
-            const userInput = document.getElementById("answer").value.trim(); // 입력값 앞뒤 공백 제거
-            const normalizedInput = userInput.toLowerCase(); // 입력값을 소문자로 변환하여 비교
-    
-            const answers = {
-                "길라": "길라가 해독술을 사용합니다.\n거부할 수 없습니다.\n \n길라의 중간 행동 페이지를 이용하여 다올이 사용합니다.",
-                "나린": "나린이 파괴술을 사용합니다.\n거부할 수 없습니다.\n \n나린의 중간 행동 페이지를 이용하여 다올이 사용합니다.",
-                "라온": "라온이 복제술을 사용합니다.\n거부할 수 없습니다.\n \n라온의 중간 행동 페이지를 이용하여 다올이 사용합니다.",
-                "마루": "마루가 감지술을 사용합니다.\n거부할 수 없습니다.\n \n마루의 중간 행동 페이지를 이용하여 다올이 사용합니다.",
-                "벼리": "벼리가 변신술을 사용합니다.\n거부할 수 없습니다.\n \n벼리의 중간 행동 페이지를 이용하여 다올이 사용합니다.",
-                "새나": "새나가 복원술을 사용합니다.\n거부할 수 없습니다.\n \n새나의 중간 행동 페이지를 이용하여 다올이 사용합니다."
-            };
-    
-            // 입력값이 정답 목록에 있는 경우
-            if (answers[userInput]) {
-                alert(`현혹에 성공하였습니다.\n${answers[userInput]}`);
-            } else {
-                alert("이곳에 존재하지 않아 현혹에 실패하였습니다.");
-            }
-        }
+      <div id="result" class="result-box" aria-live="polite">
+        <p class="result-title" id="resultTitle"></p>
+        <div id="resultBody"></div>
+      </div>
+    </section>
 
-        function showHint() {
-        const hintText = document.getElementById("hint-text");
-        hintText.style.display = "block";
-        }
-    </script>   
+    <div id="forcedArea"></div>
 
-    <!-- 🟢 구분선 -->
     <hr class="custom-hr">
 
-    <section>
-        <!-- 버튼 컨테이너 (버튼을 위아래로 배치) -->
-        <div class="button-container">
-            <button onclick="location.href='../mid-action-page.html'">[중간] 행동 하기</button>
-            <button onclick="location.href='../main-page-2.html'">[1차] 대본 보기</button>
-            <button onclick="location.href='../main-page-2.html'">[2차] 대본 보기</button>
-            <button onclick="location.href='../index.html'">메인 페이지로 돌아가기</button>
+    <section class="section-box">
+      <h2>다올의 중간 행동 힌트</h2>
+      <p>당신의 중간 행동에 대한 힌트를 받을 수 있습니다.</p>
+      <p>힌트 사용은 다른 인물이 강요/강제할 수 없습니다.</p>
+      <p>[주의] 다올의 힌트는 다올만 확인 가능합니다.</p>
+      <p>[주의] 현혹술을 사용하더라도 다른 인물의 힌트를 볼 수 없습니다.</p>
+
+      <div style="text-align:center; margin-top:10px;">
+        <button id="hintBtn" class="answer-button" type="button">힌트보기</button>
+        <p id="hint-text">🔑 [지시]: 추가 카드 21을 획득하세요.</p>
+      </div>
+    </section>
+
+    <section class="made2">© Copyright 2025. 보또 All rights reserved.</section>
+  </div>
+
+  <script>
+    // ========= 공통 유틸 =========
+    const normalize = (s) => String(s).replace(/\s+/g, "").toLowerCase();
+    const normalizeSpaces = (s) => String(s).trim().replace(/\s+/g, " ");
+
+    function escHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    // ========= 1) 다올: 현혹 대상 선택(1차) =========
+    const answers = {
+      "길라": "길라가 해독술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+      "나린": "나린이 파괴술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+      "라온": "라온이 복제술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+      "마루": "마루가 감지술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+      "벼리": "벼리가 변신술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+      "새나": "새나가 복원술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+    };
+
+    const answersMap = Object.fromEntries(
+      Object.entries(answers).map(([k, v]) => [normalize(k), v])
+    );
+
+    const input = document.getElementById("answer");
+    const btn = document.getElementById("checkBtn");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBody = document.getElementById("resultBody");
+
+    function renderResult(title, body){
+      resultTitle.textContent = title;
+      resultBody.innerHTML = body;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    // ========= 현혹 성공 후: 아래에 “상대 주술 입력창” 생성 =========
+    const forcedArea = document.getElementById("forcedArea");
+
+    function clearMount(mountEl){
+      if (!mountEl) return;
+      mountEl.innerHTML = "";
+    }
+
+    function makeForcedUI(personKeyNormalized, mountEl = forcedArea){
+      clearMount(mountEl);
+
+      const uid = `forced_${personKeyNormalized}_${Date.now()}`;
+
+      const wrap = document.createElement("section");
+      wrap.className = "section-box answer-section";
+      wrap.innerHTML = `
+        <h2 id="${uid}_h2"></h2>
+        <input type="text" id="${uid}_answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+        <button id="${uid}_btn" class="answer-button" type="button">확인</button>
+
+        <div id="${uid}_result" class="result-box" aria-live="polite">
+          <p class="result-title" id="${uid}_resultTitle"></p>
+          <div id="${uid}_resultBody"></div>
         </div>
-    </section>
-    
-    <!-- 🟢 구분선 -->
-    <hr class="custom-hr">
 
-    <!-- 🟢 제작자 문구 -->
-    <section class="made2">&copy; Copyright 2025. 보또 All rights reserved. </section>
+        <!-- ✅ 연쇄(주루루룩) 출력 영역 -->
+        <div id="${uid}_chain"></div>
+      `;
 
+      mountEl.appendChild(wrap);
+
+      const h2 = document.getElementById(`${uid}_h2`);
+      const input2 = document.getElementById(`${uid}_answer`);
+      const btn2 = document.getElementById(`${uid}_btn`);
+      const result2 = document.getElementById(`${uid}_result`);
+      const resultTitle2 = document.getElementById(`${uid}_resultTitle`);
+      const resultBody2 = document.getElementById(`${uid}_resultBody`);
+      const chain = document.getElementById(`${uid}_chain`);
+
+      function render2(title, body, mode="html"){
+        resultTitle2.textContent = title;
+        if (mode === "text") resultBody2.textContent = body;
+        else resultBody2.innerHTML = body;
+        result2.classList.add("show");
+        result2.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      // ========== 1) 길라 - 해독술 ==========
+      if (personKeyNormalized === normalize("길라")){
+        h2.textContent = "해독술을 사용할 장소/물건";
+        const answers = {
+          "가리사의 목걸이": "가리사가 남긴 기록이다.\n\n히든카드 6을 확인하세요.",
+          "라움의 목걸이": "라움이 남긴 기록이다.\n\n히든카드 7을 확인하세요.",
+          "낡은 사진": "길라야, 가리사야 너희는 항상 웃었으면 좋겠구나.\n\n그리운 아버지가 남긴 기록이다.\n\n소중히 간직해야겠다.\n\n하지만 지금 찾는 기록은 이게 아니다."
+        };
+
+        function check(){
+          const userInput = input2.value.trim();
+          if (!userInput){
+            render2("입력 필요", "입력칸에 장소/물건 이름을 적어주세요.", "text");
+            clearMount(chain);
+            return;
+          }
+          if (answers[userInput]){
+            render2("숨겨진 기록이 존재합니다!", answers[userInput], "text");
+            clearMount(chain);
+          } else {
+            render2("숨겨진 기록이 없습니다.", "다른 장소/물건을 입력해보세요.", "text");
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      // ========== 2) 나린 - 괴력술 ==========
+      if (personKeyNormalized === normalize("나린")){
+        h2.textContent = "괴력을 사용할 장소";
+        const answers = {
+          "제단 밑 바닥":"제단 밑 바닥이 파괴되었습니다.\n\n숨겨진 공간에 진입이 가능합니다.\n\n<span class='gold-glow'>아리아의 비밀 상자</span>를 발견했습니다.\n\n아리아만 열 수 있는 주술이 걸려있습니다.",
+          "번잡한 학생회실":"학생회실이 부셨졌다.\n\n하지만 숨겨진 공간은 없다.\n\n불끈 쥔 주먹이 살짝 머쓱해진다.\n\n숨겨진 공간은 어디 있을까?",
+          "어지러운 교장실":"교장실이 부셨졌다.\n\n하지만 숨겨진 공간은 없다.\n\n벼리 언니에게 살짝 미안하다.\n\n숨겨진 공간은 어디 있을까?",
+          "요괴 봉인 주술진":"주술진이 그려진 제단실 바닥이 부셔졌다.\n\n요괴 봉인 주술진은 유지되고 있다.\n\n이 방법으로 주술 해제는 안 될 것 같다.",
+          "냄새나는 주술관":"주술관이 부셔졌다.\n\n하지만 숨겨진 공간은 없다.\n\n주술 연습한 셈으로 치자.\n\n숨겨진 공간은 어디 있을까?",
+          "깨끗한 세탁실":"세탁실이 부셔졌다.\n\n하지만 숨겨진 공간은 없다.\n\n뭐...손빨래 하면 되니까...\n\n숨겨진 공간은 어디 있을까?",
+          "깨끗한 욕실":"욕실이 부셔졌다.\n\n하지만 숨겨진 공간은 없다.\n\n뭐...씻는 애들 없는 것 같던데.\n\n숨겨진 공간은 어디 있을까?",
+          "푹신한 침대":"침대가 부셔졌다.\n\n하지만 숨겨진 공간은 없다.\n\n바닥에서 자는 것도 나쁘지 않아.\n\n숨겨진 공간은 어디 있을까?"
+        };
+        const exceptionList = ["냄새나는 주술관"];
+        const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"];
+
+        function check(){
+          const userInput = input2.value.trim();
+          if (!userInput){
+            render2("입력 필요", "입력칸에 장소 이름을 적어주세요.", "text");
+            clearMount(chain);
+            return;
+          }
+
+          if (!exceptionList.includes(userInput)){
+            const hasRestrictedName = restrictedNames.some(name => userInput.includes(name));
+            if (hasRestrictedName){
+              render2("입력 불가", "인물에게는 괴력을 사용할 수 없습니다.\n\n나린은 착한 아이입니다.", "text");
+              clearMount(chain);
+              input2.focus();
+              input2.select();
+              return;
+            }
+          }
+
+          if (answers[userInput]){
+            render2("불끈 쥔 주먹으로 툭 건들자", answers[userInput], "html");
+            clearMount(chain);
+          } else {
+            render2("모든 게 부셔졌으나", "숨겨진 공간은 보이지 않는다.", "text");
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      // ========== 3) 라온 - 복제술 (✅ 다올 페이지에서도 라온 페이지처럼 “복제 → 하위 주술창 생성”) ==========
+      if (personKeyNormalized === normalize("라온")){
+        h2.textContent = "복제술을 사용할 인물";
+
+        // ✅ 다올 포함!
+        const primaryAnswers = {
+          "길라": "길라의 해독술을 사용합니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+          "다올": "다올의 현혹술을 사용합니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+          "마루": "마루의 감지술을 사용합니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+          "벼리": "벼리의 변신술을 사용합니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+          "새나": "새나의 복원술을 사용합니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+        };
+        const primaryMap = Object.fromEntries(
+          Object.entries(primaryAnswers).map(([k,v]) => [normalize(k), v])
+        );
+
+        function clearChain(){ chain.innerHTML = ""; }
+
+        function mountSubAction(which){
+          clearChain();
+
+          if (which === "다올"){
+            mountDaolNested();
+            return;
+          }
+
+          const cfgs = {
+            "길라": {
+              title: "해독술을 사용할 장소/물건",
+              mode: "space",
+              emptyMsg: "입력칸에 장소/물건 이름을 적어주세요.",
+              successTitle: "숨겨진 기록이 존재합니다!",
+              failTitle: "숨겨진 기록이 없습니다.",
+              failMsg: "다른 장소/물건을 입력해보세요.",
+              answers: {
+                "가리사의 목걸이": "가리사가 남긴 기록이다.\n\n히든카드 6을 확인하세요.",
+                "라움의 목걸이": "라움이 남긴 기록이다.\n\n히든카드 7을 확인하세요.",
+                "낡은 사진": "길라야, 가리사야 너희는 항상 웃었으면 좋겠구나.\n\n그리운 아버지가 남긴 기록이다.\n\n소중히 간직해야겠다.\n\n하지만 지금 찾는 기록은 이게 아니다."
+              }
+            },
+
+            "마루": {
+              title: "감지술을 사용할 장소/물건",
+              mode: "space",
+              emptyMsg: "입력칸에 장소/물건 이름을 적어주세요.",
+              successTitle: "감지술 결과",
+              failTitle: "감지술 결과",
+              failMsg: "사용된 주술은 없는 것 같다.",
+              answers: {
+                "제단 밑 바닥": "공간을 숨겨둔 주술이 느껴진다.\n\n어떻게하면 이곳에 들어갈 수 있을까?",
+                "어수선한 도서실": "해독술이 사용된 것 같다.\n\n숨겨진 기록이 있었을까?",
+                "번잡한 학생회실": "해독술이 사용된 것 같다.\n\n숨겨진 기록이 있었을까?",
+                "냄새나는 주술관": "여러 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+                "가리사의 목걸이": "숨겨진 기록이 있는 것 같다.\n\n해독할 수 있는 자가 있을까?",
+                "라움의 목걸이": "숨겨진 기록이 있는 것 같다.\n\n해독할 수 있는 자가 있을까?",
+                "과다 출혈?!": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+                "결계 쳐진 시신": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+                "요괴 봉인 주술진": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+                "제단용 칼": "그림자 속 감춰진 게 있는 것 같다.\n\n무엇이 숨겨져 있는 걸까?"
+              }
+            },
+
+            "벼리": {
+              title: "변신술을 사용할 인물",
+              mode: "name",
+              emptyMsg: "입력칸에 당신이 변할 인물 이름을 적어주세요.",
+              successTitle: "본인 확인에 성공하였습니다!\n\n아리아의 비밀 상자가 열립니다.",
+              failTitle: "아리아의 비밀 상자는 이 모습으로는 못 여는 것 같다.\n\n변신해도 해당 인물의 주술은 사용할 수 없다.\n\n다시 벼리로 돌아가야겠다.",
+              specialTitle: "친동생이어도 내 모습으로는 상자를 열 수 없다.",
+              specialMessages: { "벼리": "나는 벼리.\n\n내 모습으로 변할 필요는 없다." },
+              answers: { "아리아": "히든 카드 4,5를 확인하세요." }
+            },
+
+            "새나": {
+              title: "복원술을 사용할 장소/물건",
+              mode: "space",
+              emptyMsg: "입력칸에 장소/물건 이름을 적어주세요.",
+              successTitle: "복원에 성공하였습니다!",
+              failTitle: "복원 결과",
+              failMsg: "복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.",
+              restrictedTitle: "사용 불가",
+              restrictedMsg: "인물에게는 복원술을 사용할 수 없습니다.\n사물만 가능합니다.",
+              restrictedNames: ["아리아","길라","나린","다올","라온","마루","벼리","새나"],
+              answers: {
+                "길라의 주술책": "히든 카드 8을 확인하세요.",
+                "나린의 주술책": "히든 카드 9을 확인하세요.",
+                "다올의 주술책": "히든 카드 10을 확인하세요.",
+                "라온의 주술책": "히든 카드 11을 확인하세요.",
+                "마루의 주술책": "히든 카드 12을 확인하세요.",
+                "낡은 두루마리": "히든 카드 13을 확인하세요.",
+                "새나의 주술책": "히든 카드 14을 확인하세요.",
+                "제단용 칼": "칼에 묻은 혈액량이 늘어납니다.",
+                "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어납니다.",
+                "식탁의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
+                "바닥의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다."
+              }
+            }
+          };
+
+          const cfg = cfgs[which];
+          if (!cfg) return;
+
+          const uid3 = `raon_sub_${normalize(which)}_${Date.now()}`;
+          const sec = document.createElement("section");
+          sec.className = "section-box no-blur answer-section";
+          sec.innerHTML = `
+            <h2>${escHtml(cfg.title)}</h2>
+            <input type="text" id="${uid3}_answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+            <button id="${uid3}_btn" class="answer-button" type="button">확인</button>
+
+            <div id="${uid3}_result" class="result-box" aria-live="polite">
+              <p class="result-title" id="${uid3}_title"></p>
+              <div id="${uid3}_body"></div>
+            </div>
+          `;
+          chain.appendChild(sec);
+
+          const i3 = document.getElementById(`${uid3}_answer`);
+          const b3 = document.getElementById(`${uid3}_btn`);
+          const r3 = document.getElementById(`${uid3}_result`);
+          const t3 = document.getElementById(`${uid3}_title`);
+          const bd3 = document.getElementById(`${uid3}_body`);
+
+          const keyFn = (cfg.mode === "name") ? normalize : normalizeSpaces;
+
+          const map = Object.fromEntries(
+            Object.entries(cfg.answers || {}).map(([k,v]) => [keyFn(k), v])
+          );
+
+          const specialMap = cfg.specialMessages
+            ? Object.fromEntries(Object.entries(cfg.specialMessages).map(([k,v]) => [normalize(k), v]))
+            : null;
+
+          const restrictedSet = cfg.restrictedNames
+            ? new Set(cfg.restrictedNames.map((x)=>normalize(x)))
+            : null;
+
+          function render3(title, body){
+            t3.textContent = title;
+            bd3.innerHTML = body;
+            r3.classList.add("show");
+            r3.scrollIntoView({ behavior:"smooth", block:"nearest" });
+          }
+
+          function check3(){
+            const raw = i3.value;
+            const userInput = (cfg.mode === "name") ? raw.trim() : normalizeSpaces(raw);
+
+            if (!userInput){
+              render3("입력 필요", cfg.emptyMsg);
+              return;
+            }
+
+            if (restrictedSet && restrictedSet.has(normalize(userInput))){
+              render3(cfg.restrictedTitle, cfg.restrictedMsg);
+              i3.focus(); i3.select();
+              return;
+            }
+
+            if (specialMap){
+              const sp = specialMap[normalize(userInput)];
+              if (sp){
+                render3(cfg.specialTitle, sp);
+                return;
+              }
+            }
+
+            const found = map[keyFn(userInput)];
+            if (found){
+              render3(cfg.successTitle, found);
+            } else {
+              render3(cfg.failTitle, cfg.failMsg);
+              i3.focus(); i3.select();
+            }
+          }
+
+          b3.addEventListener("click", check3);
+          i3.addEventListener("keydown", (e)=>{ if(e.key==="Enter") check3(); });
+          setTimeout(()=>i3.focus(),0);
+        }
+
+        // ✅ 다올(현혹술) 2단: “체인 영역”에 대상 선택 → 그 대상 주술창 생성
+        function mountDaolNested(){
+          clearChain();
+
+          const uidD = `raon_daol_${Date.now()}`;
+          const sec = document.createElement("section");
+          sec.className = "section-box no-blur answer-section";
+          sec.innerHTML = `
+            <h2>현혹술을 사용할 인물</h2>
+            <input type="text" id="${uidD}_answer" class="answer-input" placeholder="입력칸(띄어쓰기 포함)">
+            <button id="${uidD}_btn" class="answer-button" type="button">확인</button>
+
+            <div id="${uidD}_result" class="result-box" aria-live="polite">
+              <p class="result-title" id="${uidD}_title"></p>
+              <div id="${uidD}_body"></div>
+            </div>
+
+            <div id="${uidD}_next"></div>
+          `;
+          chain.appendChild(sec);
+
+          const dInput = document.getElementById(`${uidD}_answer`);
+          const dBtn = document.getElementById(`${uidD}_btn`);
+          const dResult = document.getElementById(`${uidD}_result`);
+          const dTitle = document.getElementById(`${uidD}_title`);
+          const dBody = document.getElementById(`${uidD}_body`);
+          const dNext = document.getElementById(`${uidD}_next`);
+
+          const daolAnswers = {
+            "길라": "길라가 해독술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+            "나린": "나린이 파괴술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+            "마루": "마루가 감지술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+            "벼리": "벼리가 변신술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+            "새나": "새나가 복원술을 사용합니다.\n\n거부할 수 없습니다.\n\n아래칸에 원하는대로 입력합니다.(1회)",
+          };
+          const daolMap = Object.fromEntries(
+            Object.entries(daolAnswers).map(([k,v]) => [normalize(k), v])
+          );
+
+          function renderD(title, body){
+            dTitle.textContent = title;
+            dBody.innerHTML = body;
+            dResult.classList.add("show");
+            dResult.scrollIntoView({ behavior:"smooth", block:"nearest" });
+          }
+
+          function clearNext(){ dNext.innerHTML = ""; }
+
+          function mountNext(target){
+            clearNext();
+            // ✅ 현혹 성공하면 “그 대상 주술 UI”를 그대로 생성
+            makeForcedUI(normalize(target), dNext);
+          }
+
+          function checkD(){
+            const raw = dInput.value.trim();
+            if (!raw){
+              renderD("입력 필요", "입력칸에 인물 이름을 적어주세요.");
+              clearNext();
+              return;
+            }
+
+            const key = normalize(raw);
+
+            // ✅ 라온 본인(라온) 현혹 불가
+            if (key === normalize("라온")){
+              renderD("다시 생각하자", "굳이 이럴 필요가 있을까?\n\n다른 사람을 현혹하자.");
+              dInput.focus(); dInput.select();
+              clearNext();
+              return;
+            }
+
+            // ✅ 다올(본인) 현혹 불가
+            if (key === normalize("다올")){
+              renderD("현혹 불가", "나 자신은 현혹할 수 없습니다.");
+              dInput.focus(); dInput.select();
+              clearNext();
+              return;
+            }
+
+            const found = daolMap[key];
+            if (found){
+              renderD("현혹에 성공하였습니다.", found);
+              mountNext(raw);
+            } else {
+              renderD("현혹에 실패하였습니다.", "이곳에 존재하지 않아 현혹에 실패하였습니다.");
+              dInput.focus(); dInput.select();
+              clearNext();
+            }
+          }
+
+          dBtn.addEventListener("click", checkD);
+          dInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") checkD(); });
+          setTimeout(()=>dInput.focus(),0);
+        }
+
+        function check(){
+          const raw = input2.value.trim();
+          if (!raw){
+            render2("입력 필요", "입력칸에 복제할 인물 이름을 적어주세요.", "text");
+            clearChain();
+            return;
+          }
+
+          const key = normalize(raw);
+
+          if (key === normalize("나린")){
+            render2(
+              "복제 실패",
+              "나린의 주술을 복제하는 데 실패했다.\n\n왜지? 나린 누나의 주술은 일반적인 게 아닌 건가?",
+              "text"
+            );
+            clearChain();
+            input2.focus(); input2.select();
+            return;
+          }
+
+          if (key === normalize("라온")){
+            render2("복제 불가", "나 자신의 주술은 복제할 수 없다.", "text");
+            clearChain();
+            input2.focus(); input2.select();
+            return;
+          }
+
+          // ✅ 핵심: 다올 복제는 “성공”으로 처리하고 2단(현혹) 띄우기
+          if (key === normalize("다올")){
+            render2("주술 복제에 성공했습니다!", primaryMap[key], "text");
+            mountSubAction("다올");
+            setTimeout(() => chain.scrollIntoView({ behavior:"smooth", block:"start" }), 10);
+            return;
+          }
+
+          const found = primaryMap[key];
+          if (found){
+            render2("주술 복제에 성공했습니다!", found, "text");
+
+            const properKey = Object.keys(primaryAnswers).find(n => normalize(n) === key);
+            if (properKey) mountSubAction(properKey);
+
+            setTimeout(() => chain.scrollIntoView({ behavior:"smooth", block:"start" }), 10);
+          } else {
+            render2("복제 실패", "내가 모르는 이의 주술은 복제할 수 없다.", "text");
+            clearChain();
+            input2.focus(); input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      // ========== 4) 마루 - 감지술 ==========
+      if (personKeyNormalized === normalize("마루")){
+        h2.textContent = "감지술을 사용할 장소/물건";
+        const answers = {
+          "제단 밑 바닥": "공간을 숨겨둔 주술이 느껴진다.\n\n어떻게하면 이곳에 들어갈 수 있을까?",
+          "어수선한 도서실": "해독술이 사용된 것 같다.\n\n숨겨진 기록이 있었을까?",
+          "번잡한 학생회실": "해독술이 사용된 것 같다.\n\n숨겨진 기록이 있었을까?",
+          "냄새나는 주술관": "여러 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+          "가리사의 목걸이": "숨겨진 기록이 있는 것 같다.\n\n해독할 수 있는 자가 있을까?",
+          "라움의 목걸이": "숨겨진 기록이 있는 것 같다.\n\n해독할 수 있는 자가 있을까?",
+          "과다 출혈?!": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+          "결계 쳐진 시신": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+          "요괴 봉인 주술진": "여러 개의 주술이 사용된 것 같다.\n\n기운이 섞여 정확히는 알 수 없다",
+          "제단용 칼": "그림자 속 감춰진 게 있는 것 같다.\n\n무엇이 숨겨져 있는 걸까?",
+        };
+
+        const answersMap2 = Object.fromEntries(
+          Object.entries(answers).map(([k, v]) => [normalizeSpaces(k), v])
+        );
+
+        function check(){
+          const userInput = normalizeSpaces(input2.value);
+          if (!userInput){
+            render2("입력 필요", "입력칸에 장소/물건 이름을 적어주세요.", "text");
+            clearMount(chain);
+            return;
+          }
+
+          const found = answersMap2[userInput];
+          if (found){
+            render2(
+              "감지술 결과",
+              found +
+              "\n\n장기적인 감지술을 사용하고 있어 평소보다 주술의 위력이 약해진 상태다." +
+              "\n\n여러 주술이 사용된 경우 정확히 어떤 주술인지는 알 수 없다.",
+              "text"
+            );
+            clearMount(chain);
+          } else {
+            render2("감지술 결과", "사용된 주술은 없는 것 같다.", "text");
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      // ========== 5) 벼리 - 변신술 ==========
+      if (personKeyNormalized === normalize("벼리")){
+        h2.textContent = "변신술을 사용할 인물";
+        const answers = {
+          "아리아": "히든 카드 4,5를 확인하세요.",
+        };
+        const answersMap2 = Object.fromEntries(
+          Object.entries(answers).map(([k, v]) => [normalize(k), v])
+        );
+        const specialMessages = {
+          "벼리": "나는 벼리.\n\n내 모습으로 변할 필요는 없다."
+        };
+        const specialMap2 = Object.fromEntries(
+          Object.entries(specialMessages).map(([k, v]) => [normalize(k), v])
+        );
+
+        function check(){
+          const raw = input2.value.trim();
+          if (!raw){
+            render2("입력 필요", "입력칸에 당신이 변할 인물 이름을 적어주세요.", "text");
+            clearMount(chain);
+            return;
+          }
+
+          const key = normalize(raw);
+          const special = specialMap2[key];
+
+          if (special){
+            render2("친동생이어도 내 모습으로는 상자를 열 수 없다.", special, "text");
+            clearMount(chain);
+            return;
+          }
+
+          const found = answersMap2[key];
+          if (found){
+            render2("본인 확인에 성공하였습니다!\n\n아리아의 비밀 상자가 열립니다.", found, "text");
+            clearMount(chain);
+          } else {
+            render2(
+              "아리아의 비밀 상자는 이 모습으로는 못 여는 것 같다.\n\n변신해도 해당 인물의 주술은 사용할 수 없다.\n\n다시 벼리로 돌아가야겠다.",
+              "",
+              "text"
+            );
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      // ========== 6) 새나 - 복원술 ==========
+      if (personKeyNormalized === normalize("새나")){
+        h2.textContent = "복원술을 사용할 장소/물건";
+        const answers = {
+          "길라의 주술책": "히든 카드 8을 확인하세요.",
+          "나린의 주술책": "히든 카드 9를 확인하세요.",
+          "다올의 주술책": "히든 카드 10을 확인하세요.",
+          "라온의 주술책": "히든 카드 11을 확인하세요.",
+          "마루의 주술책": "히든 카드 12를 확인하세요.",
+          "낡은 두루마리": "히든 카드 13을 확인하세요.",
+          "새나의 주술책": "히든 카드 14를 확인하세요.",
+          "제단용 칼": "칼에 묻은 혈액량이 늘어납니다.",
+          "요괴 봉인 주술진": "주술진에 고인 혈액량이 늘어납니다.",
+          "식탁의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
+          "바닥의 쓰레기": "식관 내부카드2, 3의 효과를 얻습니다.",
+        };
+        const answersMap2 = Object.fromEntries(
+          Object.entries(answers).map(([k, v]) => [normalizeSpaces(k), v])
+        );
+
+        const restrictedNames = ["아리아", "길라", "나린", "다올", "라온", "마루", "벼리", "새나"];
+        const restrictedSet = new Set(restrictedNames.map(normalize));
+
+        function check(){
+          const userInput = normalizeSpaces(input2.value);
+
+          if (!userInput){
+            render2("입력 필요", "입력칸에 장소/물건 이름을 적어주세요.", "text");
+            clearMount(chain);
+            return;
+          }
+
+          if (restrictedSet.has(normalize(userInput))){
+            render2("사용 불가", "인물에게는 복원술을 사용할 수 없습니다.\n사물만 가능합니다.", "text");
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+            return;
+          }
+
+          const found = answersMap2[userInput];
+          if (found){
+            render2("복원에 성공하였습니다!", found, "text");
+            clearMount(chain);
+          } else {
+            render2("복원 결과", "복원하였으나, 큰 도움이 되는 것 같진 않아 보인다.", "text");
+            clearMount(chain);
+            input2.focus();
+            input2.select();
+          }
+        }
+
+        btn2.addEventListener("click", check);
+        input2.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+        setTimeout(() => input2.focus(), 0);
+        return;
+      }
+
+      h2.textContent = "추가 행동";
+      render2("오류", "지원되지 않는 인물입니다.", "text");
+      clearMount(chain);
+    }
+
+    function checkAnswer(){
+      const raw = input.value.trim();
+      if (!raw){
+        renderResult("입력 필요", "입력칸에 인물 이름을 적어주세요.");
+        clearMount(forcedArea);
+        return;
+      }
+
+      const key = normalize(raw);
+
+      // ✅ 다올(본인) 현혹 불가
+      if (key === normalize("다올")){
+        renderResult("현혹에 실패하였습니다.", "나 자신은 현혹할 수 없습니다.");
+        clearMount(forcedArea);
+        input.focus();
+        input.select();
+        return;
+      }
+
+      const found = answersMap[key];
+
+      if (found){
+        renderResult("현혹에 성공하였습니다.", found);
+        makeForcedUI(key, forcedArea);
+      } else {
+        renderResult("현혹에 실패하였습니다.", "이곳에 존재하지 않아 현혹에 실패하였습니다.");
+        clearMount(forcedArea);
+        input.focus();
+        input.select();
+      }
+    }
+
+    btn.addEventListener("click", checkAnswer);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    // 힌트 토글
+    const hintBtn = document.getElementById("hintBtn");
+    const hintText = document.getElementById("hint-text");
+    hintBtn.addEventListener("click", () => {
+      const open = hintText.style.display === "block";
+      hintText.style.display = open ? "none" : "block";
+      hintBtn.textContent = open ? "힌트보기" : "힌트닫기";
+    });
+  </script>
 </body>
 </html>
